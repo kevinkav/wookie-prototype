@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="WookieEar1">
+    <wb-module deploy-name="Ear1">
         <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
         <dependent-module archiveName="Ejb1Api.jar" deploy-path="/" handle="module:/resource/Ejb1Api/Ejb1Api">
             <dependent-object/>
@@ -9,7 +9,7 @@
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="AdminEjb1.war" deploy-path="/" handle="module:/resource/AdminEjb1/AdminEjb1">
+        <dependent-module archiveName="Admin.war" deploy-path="/" handle="module:/resource/Admin/Admin">
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>

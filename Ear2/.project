@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Ear1</name>
+	<name>Ear2</name>
 	<comment></comment>
 	<projects>
-		<project>Ejb1Api</project>
-		<project>Ejb1</project>
-		<project>Admin</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
