@@ -13,4 +13,7 @@
       <context-root>Admin</context-root>
     </web>
   </module>
+  <module>
+    <ejb>Ejb2.jar</ejb>
+  </module>
 </application>

@@ -6,6 +6,8 @@
 		<project>Ejb1Api</project>
 		<project>Ejb1</project>
 		<project>Admin</project>
+		<project>Ejb2</project>
+		<project>Ejb2Client</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
