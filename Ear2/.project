@@ -4,7 +4,8 @@
 	<comment></comment>
 	<projects>
 		<project>Ejb3</project>
-		<project>Ejb3Client</project>
+		<project>Ejb3RemoteApi</project>
+		<project>Ejb1RemoteApi</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

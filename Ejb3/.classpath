@@ -12,5 +12,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="src" path="/Ejb3RemoteApi"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Ejb1RemoteApi"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

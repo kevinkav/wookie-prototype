@@ -28,28 +28,36 @@ import my.prototype.api.Ejb1Local;
 public class WebAdmin extends HttpServlet{
 
     private static final long serialVersionUID = 1L;
-    
+
     @EJB
     Ejb1Local ejb1;
-    
+
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String country = request.getParameter("country");
-        
-        PrintWriter writer = response.getWriter();
-        writerHeader(writer);
-        
-        writer.println("<h3>Test setup - creating film...</h3>");
-        writer.println(ejb1.runTestSetup(country));
-        writer.println("<br>");
-        
-        writer.println("<h3>Modifying Country Of Origin</h3><br>");
-        writer.println(ejb1.runTest());
+        try {
+            String country = request.getParameter("country");
 
-        writeFooter(writer);
-        
+            PrintWriter writer = response.getWriter();
+            writerHeader(writer);
+
+            writer.println("<h3>Test setup - creating film...</h3>");
+            writer.println("<br>");
+
+            ejb1.setUp();
+
+            writer.println("<h3>Modifying Country Of Origin</h3><br>");
+            ejb1.runTest();
+
+            ejb1.tearDown();
+            writeFooter(writer);
+            
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     private void writeFooter(PrintWriter writer) {
@@ -63,7 +71,7 @@ public class WebAdmin extends HttpServlet{
         writer.println("<head></head>");
         writer.println("<body>");
     }
-    
+
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */

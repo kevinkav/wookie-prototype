@@ -2,16 +2,24 @@ package my.prototype;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
+//import org.hibernate.ejb.EntityManagerImpl;
 import my.prototype.api.Ejb1Local;
-import my.prototype.entity.StarWars;
+import my.prototype.api.Ejb1Remote;
+import my.prototype.entity.Film;
 
 
 /**
@@ -19,100 +27,156 @@ import my.prototype.entity.StarWars;
  */
 @Stateless
 @Local(Ejb1Local.class)
-//@EJB(name=Ejb1Local.REMOTE_JNDI, beanInterface=Ejb1Local.class)
-public class Ejb1 implements Ejb1Local {
+@EJB(name=Ejb1Remote.EJB1_REMOTE_JNDI, beanInterface=Ejb1Remote.class)
+public class Ejb1 implements Ejb1Local, Ejb1Remote {
 
     @PersistenceContext(unitName = "FilmDatabase")
     private EntityManager em;
     
-    private String getStarWars() {
-        StarWars film = findStarWars();
-        StringBuilder sb = new StringBuilder();
-        if(film != null){
-            sb.append("FilmId: " + film.getFilmId() + "<br>");
-            sb.append("Director: " + film.getDirector() + "<br>");
-            sb.append("Origin: " + film.getCountryOfOrigin() + "<br>");
-            sb.append("RunningTimeInMins: " + film.getRunningTimeMins() + "<br>");
-            sb.append("YearOfRelease: " + film.getYearOfRelease() + "<br>");
-        }
-        return sb.toString();
-    }
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private StarWars find() {
-        StarWars film = em.find(my.prototype.entity.StarWars.class, 1);
-        return film;
-    }
+    @EJB
+    Ejb2 ejb2;
     
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private StarWars findStarWars(){
-        Query q1 = em.createQuery("Select p FROM my.prototype.entity.StarWars p");
-        List<StarWars> list = q1.getResultList();
-        StarWars starWars = null;
-        if (list.size() > 0){
-            assert list.size() == 1;
-            starWars = list.get(0);
-        }
-        return starWars;
-    }
+    Film film;
     
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void persist(StarWars film){
-        em.persist(film);
-        em.flush();
-    }
+    long filmId = 1;
     
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void deleteStarWars() {
-        StarWars film = findStarWars();
-        if(film != null){
-            log("Removing old filmId=: " + film.getFilmId() + " ");
-            em.remove(film);
-        }
-    }
-    
-    private StarWars createStarWars() {
-        StarWars starWars = new StarWars();
-        starWars.setDirector("George Lucas");
-        starWars.setRunningTimeMins(122);
-        starWars.setYearOfRelease(1977);
-        return starWars;
-    }
+    @Inject
+    protected UserTransaction utx;
 
 
+    
     /* (non-Javadoc)
      * @see my.protoype.api.Ejb1Local#runTest()
      */
     @Override
-    public String runTest() {
-        modifyStarWarsCoutryOfOrigin();
-        return getStarWars();
-    }
+    public void runTest() throws Exception {
+        
+        //setUp();
+        
+        //utx.begin();
+        initialiseTestFilm();
+        
+        String localValue = null;
+        String remoteValue = null;
+        
+        log ("Initial value: " + getAttributeCountryOfOrigin(filmId));
+        
+        modifyAttributeCoutryOfOrigin();
+        log("Bean1: em.unwrap(org.hibernate.ejb.EntityManagerImpl.class).toString() : " + em.toString());
 
-    private void modifyStarWarsCoutryOfOrigin() {
-        StarWars starWars = findStarWars();
-        if(starWars != null){
-            starWars.setCountryOfOrigin("modified!");
-            persist(starWars);
+        
+        localValue = getAttributeCountryOfOrigin(filmId);
+        log("New local value: " + localValue);
+        
+        remoteValue = ejb2.runTest(filmId);
+        log ("Remote value: " + remoteValue);
+        
+        if (localValue.equals(remoteValue)){
+            log("Test passed!");
+        }else{
+            log("Test failed!");
         }
+        //tearDown();
     }
     
 
+
+    /* (non-Javadoc)
+     * @see my.prototype.api.Ejb1Remote#kickEjb1()
+     */
+    @Override
+    public void kickEjb1() {
+        log("Ejb1 kicked by Ejb3!!");
+    }
+    
+    /* (non-Javadoc)
+     * @see my.prototype.api.Ejb1Remote#getAttributeCountryOfOrigin()
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    @Override
+    public String getAttributeCountryOfOrigin(long id) {
+        log("Bean1: em.unwrap(org.hibernate.ejb.EntityManagerImpl.class).toString() : " + em.toString());
+        Film f = em.find(my.prototype.entity.Film.class, id);
+        return f.getCountryOfOrigin();
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see my.prototype.api.Ejb1Remote#setAttributeCountryOfOrigin(long)
+     */
+    @Override
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public String setAttributeCountryOfOrigin(long id) {
+        Film f = em.find(my.prototype.entity.Film.class, id);
+        f.setCountryOfOrigin("XYZ");
+        return "XYZ";
+    }
+    
+    
     /* (non-Javadoc)
      * @see my.protoype.api.Ejb1Local#runTestSetup()
      */
     @Override
-    public String runTestSetup(String country) {
-        deleteStarWars();
-        StarWars starWars = createStarWars();
-        starWars.setCountryOfOrigin(country);
-        persist(starWars);
-        return getStarWars();
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void setUp() throws Exception {
+        Film starWars = new Film();
+        starWars.setName("StarWars");
+        starWars.setDirector("George Lucas");
+        starWars.setRunningTimeMins(122);
+        starWars.setYearOfRelease(1977);
+        starWars.setCountryOfOrigin("USA");
+        em.persist(starWars);
     }
+    
+    
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void tearDown() throws Exception {
+        final Query query = em.createQuery("Select p FROM my.prototype.entity.Film p");
+        final List<Film> films = query.getResultList();
+        for (final Film film : films) {
+            log("Deleting film: " + film.getName());
+            em.remove(film);
+        }
+    }
+    
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    private void initialiseTestFilm() {       
+        Query query = em.createQuery("Select p FROM my.prototype.entity.Film p WHERE p.name LIKE :name");
+        query.setParameter("name", "StarWars");
+        final List<Film> films = query.getResultList();
+        film = films.get(0);
+        filmId = film.getId();
+        film = em.find(my.prototype.entity.Film.class, filmId);
+    }
+    
+     
+  
+    private void modifyAttributeCoutryOfOrigin() {
+        film.setCountryOfOrigin("EIRE");
+        log("Changing country of origin to EIRE");
+    }
+    
+
+    
     private void log (String str){
         System.out.println(str);
     }
+
+    
+    /*    private String printStarWars() {
+    Film film = find(filmId);
+    StringBuilder sb = new StringBuilder();
+    if(film != null){
+        sb.append("FilmId: " + film.getId() + "<br>");
+        sb.append("Director: " + film.getDirector() + "<br>");
+        sb.append("Origin: " + film.getCountryOfOrigin() + "<br>");
+        sb.append("RunningTimeInMins: " + film.getRunningTimeMins() + "<br>");
+        sb.append("YearOfRelease: " + film.getYearOfRelease() + "<br>");
+    }
+    return sb.toString();
+}*/
 
     
 }

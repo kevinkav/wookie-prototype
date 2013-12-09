@@ -7,7 +7,8 @@
 		<project>Ejb1</project>
 		<project>Admin</project>
 		<project>Ejb2</project>
-		<project>Ejb2Client</project>
+		<project>Ejb3RemoteApi</project>
+		<project>Ejb1RemoteApi</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

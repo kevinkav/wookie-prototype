@@ -5,7 +5,10 @@
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="Ejb3Client.jar" deploy-path="/" handle="module:/resource/Ejb3Client/Ejb3Client">
+        <dependent-module archiveName="Ejb3RemoteApi.jar" deploy-path="/lib" handle="module:/resource/Ejb3RemoteApi/Ejb3RemoteApi">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Ejb1RemoteApi.jar" deploy-path="/lib" handle="module:/resource/Ejb1RemoteApi/Ejb1RemoteApi">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>
