@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.UserTransaction;
 
 import my.prototype.api.Ejb1Local;
 
@@ -31,6 +32,8 @@ public class WebAdmin extends HttpServlet{
 
     @EJB
     Ejb1Local ejb1;
+    
+    protected UserTransaction utx;
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

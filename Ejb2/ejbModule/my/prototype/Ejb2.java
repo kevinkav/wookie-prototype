@@ -29,13 +29,20 @@ public class Ejb2 {
     //@EJB(lookup = Ejb3Remote.EJB3_REMOTE_JNDI)
     private Ejb3Remote ejb3;
     private String EJB3_JNDI = "java:global/Ear2/Ejb3/Ejb3!my.prototype.api.Ejb3Remote";
+    // lookup using ejb namespace
+    private String EJB3_EJB_LOOKUP = "ejb:Ear2/Ejb3//Ejb3!my.prototype.api.Ejb3Remote";
     
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public String runTest(long id){
-        log("Ejb2 calling Ejb3");
-        ejb3 = ejbLookup(EJB3_JNDI);
-        ejb3.kickEjb3();
-        return ejb3.getModifiedAttribute(id);
+    //@TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public void runTest(long id){
+        log("Ejb2 calling Ejb3 using resolveBean method");
+        //ejb3 = ejbLookup(EJB3_JNDI);
+        ejb3 = resolveBean(EJB3_EJB_LOOKUP);
+        ejb3.setModifiedAttribute(id);
+    }
+    
+    public void kickEjb3(){
+        ejb3 = resolveBean(EJB3_EJB_LOOKUP);
+        ejb3.kickEjb3("EJB2");
     }
     
     private void log (String str){
@@ -55,5 +62,18 @@ public class Ejb2 {
             e.printStackTrace();
         }
         return bean;
+    }
+    
+    public static <T> T resolveBean(final String jndiName) {
+        final Hashtable<String, String> jndiProperties = new Hashtable<String, String>();
+        jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+        try {
+            final InitialContext ctx = new InitialContext(jndiProperties);
+            @SuppressWarnings("unchecked")
+            final T bean = (T) ctx.lookup(jndiName);
+            return bean;
+        } catch (NamingException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
     }
 }

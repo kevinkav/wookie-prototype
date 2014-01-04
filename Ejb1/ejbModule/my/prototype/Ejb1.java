@@ -8,15 +8,10 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
-//import org.hibernate.ejb.EntityManagerImpl;
 import my.prototype.api.Ejb1Local;
 import my.prototype.api.Ejb1Remote;
 import my.prototype.entity.Film;
@@ -27,7 +22,7 @@ import my.prototype.entity.Film;
  */
 @Stateless
 @Local(Ejb1Local.class)
-@EJB(name=Ejb1Remote.EJB1_REMOTE_JNDI, beanInterface=Ejb1Remote.class)
+@Remote(Ejb1Remote.class)
 public class Ejb1 implements Ejb1Local, Ejb1Remote {
 
     @PersistenceContext(unitName = "FilmDatabase")
@@ -40,10 +35,6 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
     
     long filmId = 1;
     
-    @Inject
-    protected UserTransaction utx;
-
-
     
     /* (non-Javadoc)
      * @see my.protoype.api.Ejb1Local#runTest()
@@ -51,15 +42,14 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
     @Override
     public void runTest() throws Exception {
         
-        //setUp();
-        
-        //utx.begin();
-        initialiseTestFilm();
-        
         String localValue = null;
         String remoteValue = null;
         
-        log ("Initial value: " + getAttributeCountryOfOrigin(filmId));
+        ejb2.kickEjb3();
+        
+        //runTestWithTx();
+        
+/*        log ("Initial value: " + getAttributeCountryOfOrigin(filmId));
         
         modifyAttributeCoutryOfOrigin();
         log("Bean1: em.unwrap(org.hibernate.ejb.EntityManagerImpl.class).toString() : " + em.toString());
@@ -75,18 +65,36 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
             log("Test passed!");
         }else{
             log("Test failed!");
-        }
-        //tearDown();
+        }*/
     }
     
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    private void runTestWithTx(){
+        
+        initialiseStarWarsFilm();
+       
+        log("Film: " + film.getName() + " (initial)CountryOfOrigin: " + film.getCountryOfOrigin());
+        
+        log("EJB1 calling EJB2");
+        ejb2.runTest(filmId);
+        
+        Film f = em.find(my.prototype.entity.Film.class, filmId);
 
+        log("Film: " + f.getName() + " (after)CountryOfOrigin: " + f.getCountryOfOrigin());
+
+        if (film.getCountryOfOrigin().equals("EJB3")){
+            log("Test passed");
+        }else{
+            log("Test failed");
+        }
+    }
 
     /* (non-Javadoc)
      * @see my.prototype.api.Ejb1Remote#kickEjb1()
      */
     @Override
-    public void kickEjb1() {
-        log("Ejb1 kicked by Ejb3!!");
+    public void kickEjb1(String kicker) {
+        log("Ejb1 kicked by " + kicker);
     }
     
     /* (non-Javadoc)
@@ -105,11 +113,11 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
      * @see my.prototype.api.Ejb1Remote#setAttributeCountryOfOrigin(long)
      */
     @Override
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public String setAttributeCountryOfOrigin(long id) {
+    //@TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public void setAttributeCountryOfOrigin(long id, String origin) {
+        log("EJB1 called from EJB3");
         Film f = em.find(my.prototype.entity.Film.class, id);
-        f.setCountryOfOrigin("XYZ");
-        return "XYZ";
+        f.setCountryOfOrigin(origin);
     }
     
     
@@ -142,7 +150,7 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
     
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void initialiseTestFilm() {       
+    private void initialiseStarWarsFilm() {       
         Query query = em.createQuery("Select p FROM my.prototype.entity.Film p WHERE p.name LIKE :name");
         query.setParameter("name", "StarWars");
         final List<Film> films = query.getResultList();

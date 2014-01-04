@@ -13,10 +13,8 @@ package my.prototype;
 
 import java.util.Hashtable;
 
-import javax.ejb.EJB;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -24,7 +22,9 @@ import javax.naming.NamingException;
 import my.prototype.api.Ejb1Remote;
 import my.prototype.api.Ejb3Remote;
 
-@EJB(name=Ejb3Remote.EJB3_REMOTE_JNDI, beanInterface=Ejb3Remote.class)
+//@EJB(name=Ejb3Remote.EJB3_REMOTE_JNDI, beanInterface=Ejb3Remote.class)
+
+@Remote(Ejb3Remote.class)
 @Stateless
 public class Ejb3 implements Ejb3Remote{
 
@@ -32,13 +32,16 @@ public class Ejb3 implements Ejb3Remote{
     private Ejb1Remote ejb1;
     
     private String EJB1_JNDI = "java:global/Ear1/Ejb1/Ejb1!my.prototype.api.Ejb1Remote";
+    private String EJB1_EJB_JNDI = "ejb:Ear1/Ejb1//Ejb1!my.prototype.api.Ejb1Remote";
     
     /* (non-Javadoc)
      * @see my.prototype.api.Ejb3Remote#kickEjb3()
      */
     @Override
-    public void kickEjb3() {
-        log("Ejb3 was kicked remotely by Ejb2!");
+    public void kickEjb3(String kicker) {
+        log("EJB3 was kicked by " + kicker);
+        ejb1 = resolveBean(EJB1_EJB_JNDI);
+        ejb1.kickEjb1("EJB3");
     }
     
 
@@ -47,16 +50,29 @@ public class Ejb3 implements Ejb3Remote{
      */
     // In mediation-core this doesn't have TX attribute mandatory
     @Override
-    @TransactionAttribute(TransactionAttributeType.MANDATORY) 
-    public String getModifiedAttribute(long id) {
-        ejb1 = (Ejb1Remote) ejbLookup(EJB1_JNDI);
-        //ejb1.kickEjb1();
-        //String country = ejb1.getAttributeCountryOfOrigin(id);
-        String country = ejb1.setAttributeCountryOfOrigin(id);
-        log("EJB3 CountryOfOrigin: " + country);
-        return country;
+    //@TransactionAttribute(TransactionAttributeType.MANDATORY) 
+    public void setModifiedAttribute(long id) {
+        log("EJB3 called by EJB2");
+        ejb1 = resolveBean(EJB1_EJB_JNDI);
+        ejb1.kickEjb1("EJB3");
+        //ejb1.setAttributeCountryOfOrigin(id, "EJB3");
+        //log("EJB3 called EJB1 remotely and set Country Of Origin: EJB3");
     }
 
+    
+    public static <T> T resolveBean(final String jndiName) {
+        final Hashtable<String, String> jndiProperties = new Hashtable<String, String>();
+        jndiProperties.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+        try {
+            final InitialContext ctx = new InitialContext(jndiProperties);
+            @SuppressWarnings("unchecked")
+            final T bean = (T) ctx.lookup(jndiName);
+            return bean;
+        } catch (NamingException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+    
     private <T> T ejbLookup(String jndi){
         T bean = null; 
         final Hashtable<String, String> props = new Hashtable<String, String>();
