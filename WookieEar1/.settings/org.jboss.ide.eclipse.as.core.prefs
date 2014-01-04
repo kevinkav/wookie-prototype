@@ -1,2 +1,0 @@
-eclipse.preferences.version=1
-org.jboss.ide.eclipse.as.core.singledeployable.deployableList=src/com/sample/web/client/SingletonA.java\ntarget/TopologySync-ear-1.15.18-SNAPSHOT.ear\ntarget/DataPersistence-ear-1.17.29-SNAPSHOT.ear\nWebContent\n

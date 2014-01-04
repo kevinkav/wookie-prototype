@@ -45,9 +45,9 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
         String localValue = null;
         String remoteValue = null;
         
-        ejb2.kickEjb3();
+        //ejb2.kickEjb3();
         
-        //runTestWithTx();
+        runTestWithTx();
         
 /*        log ("Initial value: " + getAttributeCountryOfOrigin(filmId));
         
@@ -115,7 +115,7 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
     @Override
     //@TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void setAttributeCountryOfOrigin(long id, String origin) {
-        log("EJB1 called from EJB3");
+        log("EJB1 called from EJB3 via setAttributeCountryOfOrigin method");
         Film f = em.find(my.prototype.entity.Film.class, id);
         f.setCountryOfOrigin(origin);
     }

@@ -22,13 +22,11 @@ import javax.naming.NamingException;
 import my.prototype.api.Ejb1Remote;
 import my.prototype.api.Ejb3Remote;
 
-//@EJB(name=Ejb3Remote.EJB3_REMOTE_JNDI, beanInterface=Ejb3Remote.class)
 
 @Remote(Ejb3Remote.class)
 @Stateless
 public class Ejb3 implements Ejb3Remote{
 
-    //@EJB(lookup = Ejb1Remote.EJB1_REMOTE_JNDI)
     private Ejb1Remote ejb1;
     
     private String EJB1_JNDI = "java:global/Ear1/Ejb1/Ejb1!my.prototype.api.Ejb1Remote";
@@ -52,11 +50,10 @@ public class Ejb3 implements Ejb3Remote{
     @Override
     //@TransactionAttribute(TransactionAttributeType.MANDATORY) 
     public void setModifiedAttribute(long id) {
-        log("EJB3 called by EJB2");
+        log("EJB3 calling EJB1 remotely and set Country Of Origin: EJB3");
         ejb1 = resolveBean(EJB1_EJB_JNDI);
-        ejb1.kickEjb1("EJB3");
-        //ejb1.setAttributeCountryOfOrigin(id, "EJB3");
-        //log("EJB3 called EJB1 remotely and set Country Of Origin: EJB3");
+        //ejb1.kickEjb1("EJB3");
+        ejb1.setAttributeCountryOfOrigin(id, "EJB3");
     }
 
     

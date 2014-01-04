@@ -2,16 +2,16 @@
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:application="http://java.sun.com/xml/ns/javaee/application_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd" id="Application_ID" version="6">
   <display-name>Ear1</display-name>
   <module>
-    <ejb>Ejb1Api.jar</ejb>
-  </module>
-  <module>
-    <ejb>Ejb1.jar</ejb>
-  </module>
-  <module>
     <web>
       <web-uri>Admin.war</web-uri>
       <context-root>Admin</context-root>
     </web>
+  </module>
+  <module>
+    <ejb>Ejb1Api.jar</ejb>
+  </module>
+  <module>
+    <ejb>Ejb1.jar</ejb>
   </module>
   <module>
     <ejb>Ejb2.jar</ejb>

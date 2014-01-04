@@ -1,6 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="Ear1">
         <wb-resource deploy-path="/" source-path="/EarContent" tag="defaultRootSource"/>
+        <dependent-module archiveName="Ejb1RemoteApi.jar" deploy-path="/lib" handle="module:/resource/Ejb1RemoteApi/Ejb1RemoteApi">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="Admin.war" deploy-path="/" handle="module:/resource/Admin/Admin">
+            <dependent-object/>
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module archiveName="Ejb1Api.jar" deploy-path="/" handle="module:/resource/Ejb1Api/Ejb1Api">
             <dependent-object/>
             <dependency-type>uses</dependency-type>
@@ -9,18 +17,11 @@
             <dependent-object/>
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="Admin.war" deploy-path="/" handle="module:/resource/Admin/Admin">
-            <dependent-object/>
+        <dependent-module archiveName="Ejb3RemoteApi.jar" deploy-path="/lib" handle="module:/resource/Ejb3RemoteApi/Ejb3RemoteApi">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="Ejb2.jar" deploy-path="/" handle="module:/resource/Ejb2/Ejb2">
             <dependent-object/>
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="Ejb3RemoteApi.jar" deploy-path="/lib" handle="module:/resource/Ejb3RemoteApi/Ejb3RemoteApi">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="Ejb1RemoteApi.jar" deploy-path="/lib" handle="module:/resource/Ejb1RemoteApi/Ejb1RemoteApi">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>
