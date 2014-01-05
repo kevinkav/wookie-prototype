@@ -13,7 +13,9 @@ package my.prototype;
 
 import java.util.Hashtable;
 
+import javax.ejb.EJB;
 import javax.ejb.Remote;
+import javax.ejb.RemoteHome;
 import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -21,11 +23,15 @@ import javax.naming.NamingException;
 
 import my.prototype.api.Ejb1Remote;
 import my.prototype.api.Ejb3Remote;
+import my.prototype.remote.home.api.Ejb3RemoteHome;
 
-
-@Remote(Ejb3Remote.class)
+@RemoteHome(Ejb3RemoteHome.class)
+@EJB(name = my.prototype.remote.home.api.Ejb3Remote.EJB3_REMOTE_JNDI, beanInterface = my.prototype.remote.home.api.Ejb3Remote.class)
+//@Remote(Ejb3Remote.class)
 @Stateless
-public class Ejb3 implements Ejb3Remote{
+public class Ejb3 {
+//    public class Ejb3 implements Ejb3Remote{
+
 
     private Ejb1Remote ejb1;
     
@@ -35,7 +41,7 @@ public class Ejb3 implements Ejb3Remote{
     /* (non-Javadoc)
      * @see my.prototype.api.Ejb3Remote#kickEjb3()
      */
-    @Override
+    //@Override
     public void kickEjb3(String kicker) {
         log("EJB3 was kicked by " + kicker);
         ejb1 = resolveBean(EJB1_EJB_JNDI);
@@ -47,7 +53,7 @@ public class Ejb3 implements Ejb3Remote{
      * @see my.prototype.api.Ejb3Remote#getModifiedAttribute()
      */
     // In mediation-core this doesn't have TX attribute mandatory
-    @Override
+    //@Override
     //@TransactionAttribute(TransactionAttributeType.MANDATORY) 
     public void setModifiedAttribute(long id) {
         log("EJB3 calling EJB1 remotely and set Country Of Origin: EJB3");

@@ -6,7 +6,6 @@
 		<project>Ejb1RemoteApi</project>
 		<project>Ejb3</project>
 		<project>Ejb3RemoteApi</project>
-		<project>Admin2</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

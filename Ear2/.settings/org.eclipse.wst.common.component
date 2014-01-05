@@ -12,9 +12,5 @@
         <dependent-module archiveName="Ejb3RemoteApi.jar" deploy-path="/lib" handle="module:/resource/Ejb3RemoteApi/Ejb3RemoteApi">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="Admin2.war" deploy-path="/" handle="module:/resource/Admin2/Admin2">
-            <dependent-object/>
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
     </wb-module>
 </project-modules>

@@ -1,13 +1,16 @@
 package my.prototype;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
+import javax.ejb.CreateException;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -69,7 +72,7 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void runTestWithTx(){
+    private void runTestWithTx() throws RemoteException, NamingException, CreateException{
         
         initialiseStarWarsFilm();
        
