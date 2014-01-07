@@ -11,8 +11,10 @@
  *----------------------------------------------------------------------------*/
 package my.prototype;
 
+import java.rmi.RemoteException;
 import java.util.Hashtable;
 
+import javax.ejb.CreateException;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.RemoteHome;
@@ -20,6 +22,7 @@ import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.rmi.PortableRemoteObject;
 
 import my.prototype.api.Ejb1Remote;
 import my.prototype.api.Ejb3Remote;
@@ -55,9 +58,11 @@ public class Ejb3 {
     // In mediation-core this doesn't have TX attribute mandatory
     //@Override
     //@TransactionAttribute(TransactionAttributeType.MANDATORY) 
-    public void setModifiedAttribute(long id) {
-        log("EJB3 calling EJB1 remotely and set Country Of Origin: EJB3");
-        ejb1 = resolveBean(EJB1_EJB_JNDI);
+    public void setModifiedAttribute(long id) throws RemoteException, NamingException, CreateException {
+        log("EJB3 calling EJB1 remotely and setting Country Of Origin to 'EJB3'");
+        //ejb1 = resolveBean(EJB1_EJB_JNDI);
+        
+        my.prototype.remote.home.api.Ejb1Remote ejb1 = getEjb1RemoteHome();
         //ejb1.kickEjb1("EJB3");
         ejb1.setAttributeCountryOfOrigin(id, "EJB3");
     }
@@ -76,21 +81,35 @@ public class Ejb3 {
         }
     }
     
-    private <T> T ejbLookup(String jndi){
-        T bean = null; 
-        final Hashtable<String, String> props = new Hashtable<String, String>();
-        props.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-        props.put("jboss.naming.client.ejb.context", "true");
-
-        try {
-            InitialContext ic = new InitialContext(props);
-            bean = (T)ic.lookup(jndi);
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-        return bean;
-    }
+    private my.prototype.remote.home.api.Ejb1Remote getEjb1RemoteHome() throws NamingException, RemoteException, CreateException {
+        log("#### getEjb1RemoteHome....");
+        InitialContext ctx = new InitialContext();
+        String jndi = getEjb1RemoteHomeJndi();
+        final Object iiopObject = ctx.lookup(jndi);
+        
+        my.prototype.remote.home.api.Ejb1RemoteHome ejb1RemoteHome = (my.prototype.remote.home.api.Ejb1RemoteHome) PortableRemoteObject
+                .narrow(iiopObject, my.prototype.remote.home.api.Ejb1RemoteHome.class);
+        
+        return ejb1RemoteHome.create();
+    }    
     
+ 
+    private String getEjb1RemoteHomeJndi() {
+        log("Building the JNDI uri for EJB1 Remote Home lookup");
+        log("##### jboss.bind.address.unsecure " + System.getProperty("jboss.bind.address.unsecure"));
+        log("##### jacorb.port " + System.getProperty("jacorb.port"));
+        log("##### jboss.socket.binding.port-offset " + System.getProperty("jboss.socket.binding.port-offset"));
+
+        final String ip = System.getProperty("jboss.bind.address.unsecure", "127.0.0.1");
+        final String port = System.getProperty("jacorb.port", "3528");
+        final String offset = System.getProperty("jboss.socket.binding.port-offset","0");
+        final Integer portNumber = Integer.parseInt(port); 
+        String address = "corbaname:iiop:" + ip + ":" + portNumber.toString() + "#" + my.prototype.remote.home.api.Ejb1Remote.EJB1_REMOTE_JNDI;
+        log(address);
+        return address;
+    }
+
+
     private void log (String str){
         System.out.println(str);
     }

@@ -7,6 +7,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
+import javax.ejb.RemoteHome;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -18,6 +19,8 @@ import javax.persistence.Query;
 import my.prototype.api.Ejb1Local;
 import my.prototype.api.Ejb1Remote;
 import my.prototype.entity.Film;
+import my.prototype.remote.home.api.Ejb1RemoteHome;
+import my.prototype.remote.home.api.Ejb3RemoteHome;
 
 
 /**
@@ -25,8 +28,11 @@ import my.prototype.entity.Film;
  */
 @Stateless
 @Local(Ejb1Local.class)
-@Remote(Ejb1Remote.class)
-public class Ejb1 implements Ejb1Local, Ejb1Remote {
+//@Remote(Ejb1Remote.class)
+@RemoteHome(Ejb1RemoteHome.class)
+@EJB(name = my.prototype.remote.home.api.Ejb1Remote.EJB1_REMOTE_JNDI, beanInterface = my.prototype.remote.home.api.Ejb1Remote.class)
+public class Ejb1 implements Ejb1Local {
+//public class Ejb1 implements Ejb1Local, Ejb1Remote {
 
     @PersistenceContext(unitName = "FilmDatabase")
     private EntityManager em;
@@ -95,7 +101,7 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
     /* (non-Javadoc)
      * @see my.prototype.api.Ejb1Remote#kickEjb1()
      */
-    @Override
+    //@Override
     public void kickEjb1(String kicker) {
         log("Ejb1 kicked by " + kicker);
     }
@@ -104,7 +110,7 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
      * @see my.prototype.api.Ejb1Remote#getAttributeCountryOfOrigin()
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    @Override
+    //@Override
     public String getAttributeCountryOfOrigin(long id) {
         log("Bean1: em.unwrap(org.hibernate.ejb.EntityManagerImpl.class).toString() : " + em.toString());
         Film f = em.find(my.prototype.entity.Film.class, id);
@@ -115,7 +121,7 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
     /* (non-Javadoc)
      * @see my.prototype.api.Ejb1Remote#setAttributeCountryOfOrigin(long)
      */
-    @Override
+    //@Override
     //@TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void setAttributeCountryOfOrigin(long id, String origin) {
         log("EJB1 called from EJB3 via setAttributeCountryOfOrigin method");
@@ -137,10 +143,23 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
         starWars.setYearOfRelease(1977);
         starWars.setCountryOfOrigin("USA");
         em.persist(starWars);
+        findFilms();
     }
     
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void findFilms(){
+        final Query query = em.createQuery("Select p FROM my.prototype.entity.Film p");
+        final List<Film> films = query.getResultList();
+        log("##########################");
+        for (final Film film : films) {
+            log("Found film: " + film.getName());
+        }
+        if(films.isEmpty()){
+            log("Found no films.");
+        }
+        log("##########################");
+    }
     
-    @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void tearDown() throws Exception {
         final Query query = em.createQuery("Select p FROM my.prototype.entity.Film p");
@@ -149,10 +168,11 @@ public class Ejb1 implements Ejb1Local, Ejb1Remote {
             log("Deleting film: " + film.getName());
             em.remove(film);
         }
+        findFilms();
     }
     
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    //@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     private void initialiseStarWarsFilm() {       
         Query query = em.createQuery("Select p FROM my.prototype.entity.Film p WHERE p.name LIKE :name");
         query.setParameter("name", "StarWars");
