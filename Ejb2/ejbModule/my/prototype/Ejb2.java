@@ -32,7 +32,7 @@ public class Ejb2 {
     //@EJB(lookup = Ejb3Remote.EJB3_REMOTE_JNDI)
     private Ejb3Remote ejb3;
     
-    private my.prototype.remote.home.api.Ejb3Remote ejb3Remote;
+    private my.prototype.remote.home.api.Ejb3RemoteObject ejb3Remote;
         
     private String EJB3_JNDI = "java:global/Ear2/Ejb3/Ejb3!my.prototype.api.Ejb3Remote";
     // lookup using ejb namespace
@@ -51,7 +51,7 @@ public class Ejb2 {
     }
     
 
-    private my.prototype.remote.home.api.Ejb3Remote getEjb3Object() throws NamingException, RemoteException, CreateException {
+    private my.prototype.remote.home.api.Ejb3RemoteObject getEjb3Object() throws NamingException, RemoteException, CreateException {
         log("#### getEjb3Object....");
         InitialContext ctx = new InitialContext();
         String jndi = getEjb3RemoteHomeJndi();
@@ -73,7 +73,7 @@ public class Ejb2 {
         final String port = System.getProperty("jacorb.port", "3528");
         final String offset = System.getProperty("jboss.socket.binding.port-offset","0");
         final Integer portNumber = 100 + Integer.parseInt(port); 
-        String address = "corbaname:iiop:" + ip + ":" + portNumber.toString() + "#" + my.prototype.remote.home.api.Ejb3Remote.EJB3_REMOTE_JNDI;
+        String address = "corbaname:iiop:" + ip + ":" + portNumber.toString() + "#" + my.prototype.remote.home.api.Ejb3RemoteObject.EJB3_BINDING_JNDI;
         log(address);
         return address;
     }

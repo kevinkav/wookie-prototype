@@ -20,6 +20,6 @@ public interface Ejb1Local {
     
     void tearDown() throws Exception ;
     
-    void runTest() throws Exception;
+    String runTest1() throws Exception;
     
 }

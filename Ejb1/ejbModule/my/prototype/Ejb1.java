@@ -21,6 +21,7 @@ import javax.rmi.PortableRemoteObject;
 import my.prototype.api.Ejb1Local;
 import my.prototype.entity.Film;
 import my.prototype.remote.home.api.Ejb1RemoteHome;
+import my.prototype.remote.home.api.Ejb3RemoteObject;
 
 
 /**
@@ -30,20 +31,21 @@ import my.prototype.remote.home.api.Ejb1RemoteHome;
 @Local(Ejb1Local.class)
 //@Remote(Ejb1Remote.class)
 @RemoteHome(Ejb1RemoteHome.class)
-@EJB(name = my.prototype.remote.home.api.Ejb1Remote.EJB1_REMOTE_JNDI, beanInterface = my.prototype.remote.home.api.Ejb1Remote.class)
+@EJB(name = my.prototype.remote.home.api.Ejb1RemoteObject.EJB1_BINDING_JNDI, beanInterface = my.prototype.remote.home.api.Ejb1RemoteObject.class)
 public class Ejb1 implements Ejb1Local {
 //public class Ejb1 implements Ejb1Local, Ejb1Remote {
 
     @PersistenceContext(unitName = "FilmDatabase")
     private EntityManager em;
     
-    final String ejb3Address = "corbaname:iiop:localhost:3628#jts/Ejb3";
+    // Vital for solution!
+    final String ejb3Address = "corbaname:iiop:localhost:3628#" + Ejb3RemoteObject.EJB3_BINDING_JNDI;
 
     Film film;
     
     long filmId = 1;
     
-    private my.prototype.remote.home.api.Ejb3Remote ejb3Remote;
+    private my.prototype.remote.home.api.Ejb3RemoteObject ejb3Remote;
     
     private static final Logger LOGGER = Logger.getLogger(Ejb1.class.getCanonicalName());
 
@@ -52,10 +54,11 @@ public class Ejb1 implements Ejb1Local {
      * @see my.protoype.api.Ejb1Local#runTest()
      */
     @Override
-    public void runTest() throws Exception {
+    public String runTest1() throws Exception {
         
         String localValue;
         String remoteValue;
+        String result = "";
         
         initTestFilm();
        
@@ -76,9 +79,12 @@ public class Ejb1 implements Ejb1Local {
         
         if (localValue.equals(remoteValue)){
             LOGGER.info("<<<< Test Passed >>>>>");
+            result = "Passed";
         }else{
             LOGGER.info("<<<< Test Failed >>>>>");
+            result = "Failed";
         }
+        return result;
     }
 
     
@@ -91,7 +97,7 @@ public class Ejb1 implements Ejb1Local {
     }
 
 
-    private my.prototype.remote.home.api.Ejb3Remote getEjb3Object() throws NamingException, RemoteException, CreateException {
+    private my.prototype.remote.home.api.Ejb3RemoteObject getEjb3Object() throws NamingException, RemoteException, CreateException {
         LOGGER.info("Ejb1: getEjb3RemoteHome....");
         InitialContext ctx = new InitialContext();
         LOGGER.info("Ejb1: Address for looking up Ejb3 =  " + ejb3Address);

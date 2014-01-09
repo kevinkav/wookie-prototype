@@ -18,5 +18,5 @@ import javax.ejb.EJBHome;
 
 public interface Ejb3RemoteHome extends EJBHome{
 
-    Ejb3Remote create() throws RemoteException, CreateException;
+    Ejb3RemoteObject create() throws RemoteException, CreateException;
 }

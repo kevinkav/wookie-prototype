@@ -17,12 +17,10 @@ import javax.ejb.EJBObject;
 import javax.ejb.Remote;
 
 @Remote
-public interface Ejb1Remote extends EJBObject {
+public interface Ejb1RemoteObject extends EJBObject {
 
-    public static String EJB1_REMOTE_JNDI = "java:/wookie/ejb1";
+    public static String EJB1_BINDING_JNDI = "jts/Ejb1";
        
     String getAttributeCountryOfOrigin(long id) throws RemoteException;
     
-    void setAttributeCountryOfOrigin(long id, String string) throws RemoteException;
-
 }

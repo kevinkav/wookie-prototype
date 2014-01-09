@@ -34,6 +34,8 @@ public class WebAdmin extends HttpServlet{
     Ejb1Local ejb1;
     
     protected UserTransaction utx;
+    
+    PrintWriter writer;
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,19 +44,22 @@ public class WebAdmin extends HttpServlet{
         try {
             String country = request.getParameter("country");
 
-            PrintWriter writer = response.getWriter();
-            writerHeader(writer);
+            writer = response.getWriter();
+            writerHeader();
 
-            writer.println("<h3>Test setup - creating film...</h3>");
+            writer.println("<h3>Test setup...creating film.</h3>");
             writer.println("<br>");
-
             ejb1.setUp();
 
-            writer.println("<h3>Running test...</h3><br>");
-            ejb1.runTest();
-
+            
+            writer.println("<h3>Running Test1...</h3>");
+            String result1 = ejb1.runTest1();
+            printResult(1, result1);
+            
+            writeFooter();
+            
             ejb1.tearDown();
-            writeFooter(writer);
+            
             
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -62,14 +67,18 @@ public class WebAdmin extends HttpServlet{
         }
 
     }
+    
+    private void printResult(int testNumber, String result){
+        writer.println("<h3>Test " + testNumber + ": " + result + " </h3><br>");
+    }
 
-    private void writeFooter(PrintWriter writer) {
+    private void writeFooter() {
         writer.println("</body>");
         writer.println("</html>");
         writer.close();
     }
 
-    private void writerHeader(PrintWriter writer) {
+    private void writerHeader() {
         writer.println("<html>");
         writer.println("<head></head>");
         writer.println("<body>");
