@@ -21,7 +21,11 @@
     <assembly-descriptor>
         <iiop:iiop>
              <ejb-name>Ejb1</ejb-name>
-             <iiop:binding-name>java:/wookie/ejb1</iiop:binding-name>
+             <iiop:binding-name>jts/Ejb1</iiop:binding-name>
+        </iiop:iiop>
+        <iiop:iiop>
+             <ejb-name>Ejb3</ejb-name>
+             <iiop:binding-name>jts/Ejb3</iiop:binding-name>
         </iiop:iiop>
     </assembly-descriptor>
 </jboss:ejb-jar>

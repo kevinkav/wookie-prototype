@@ -47,7 +47,7 @@ public class Ejb2 {
         
         ejb3Remote = getEjb3Object();
         log("###### Got EJB3RemoteObject");
-        ejb3Remote.setModifiedAttribute(id);
+        ejb3Remote.runTest(id);
     }
     
 

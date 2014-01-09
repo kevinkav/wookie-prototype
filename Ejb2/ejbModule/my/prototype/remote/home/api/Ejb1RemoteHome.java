@@ -13,11 +13,10 @@ package my.prototype.remote.home.api;
 
 import java.rmi.RemoteException;
 
-import javax.ejb.EJBObject;
+import javax.ejb.CreateException;
+import javax.ejb.EJBHome;
 
-public interface Ejb3Remote extends EJBObject{
+public interface Ejb1RemoteHome extends EJBHome{
 
-    public static String EJB3_REMOTE_JNDI = "java:/wookie/ejb3";
-           
-    String runTest(long id) throws RemoteException;
+    Ejb1Remote create() throws RemoteException, CreateException;
 }

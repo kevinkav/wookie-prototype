@@ -19,5 +19,5 @@ public interface Ejb3Remote extends EJBObject{
 
     public static String EJB3_REMOTE_JNDI = "java:/wookie/ejb3";
            
-    String runTest(long id) throws RemoteException;
+    void runTest(long id) throws RemoteException;
 }

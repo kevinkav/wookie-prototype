@@ -50,7 +50,7 @@ public class WebAdmin extends HttpServlet{
 
             ejb1.setUp();
 
-            writer.println("<h3>Modifying Country Of Origin</h3><br>");
+            writer.println("<h3>Running test...</h3><br>");
             ejb1.runTest();
 
             ejb1.tearDown();

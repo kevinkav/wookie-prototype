@@ -13,7 +13,4 @@
   <module>
     <ejb>Ejb1.jar</ejb>
   </module>
-  <module>
-    <ejb>Ejb2.jar</ejb>
-  </module>
 </application>

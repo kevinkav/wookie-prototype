@@ -19,6 +19,8 @@ import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.RemoteHome;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -41,30 +43,18 @@ public class Ejb3 {
     private String EJB1_JNDI = "java:global/Ear1/Ejb1/Ejb1!my.prototype.api.Ejb1Remote";
     private String EJB1_EJB_JNDI = "ejb:Ear1/Ejb1//Ejb1!my.prototype.api.Ejb1Remote";
     
-    /* (non-Javadoc)
-     * @see my.prototype.api.Ejb3Remote#kickEjb3()
-     */
-    //@Override
-    public void kickEjb3(String kicker) {
-        log("EJB3 was kicked by " + kicker);
-        ejb1 = resolveBean(EJB1_EJB_JNDI);
-        ejb1.kickEjb1("EJB3");
-    }
     
 
-    /* (non-Javadoc)
-     * @see my.prototype.api.Ejb3Remote#getModifiedAttribute()
-     */
-    // In mediation-core this doesn't have TX attribute mandatory
+   
     //@Override
-    //@TransactionAttribute(TransactionAttributeType.MANDATORY) 
-    public void setModifiedAttribute(long id) throws RemoteException, NamingException, CreateException {
-        log("EJB3 calling EJB1 remotely and setting Country Of Origin to 'EJB3'");
+    @TransactionAttribute(TransactionAttributeType.MANDATORY) 
+    public String runTest(long id) throws RemoteException, NamingException, CreateException {
+        //log("####### (EJB3) setModifiedAttribute() for id " + id + " #########");
         //ejb1 = resolveBean(EJB1_EJB_JNDI);
         
         my.prototype.remote.home.api.Ejb1Remote ejb1 = getEjb1RemoteHome();
-        //ejb1.kickEjb1("EJB3");
-        ejb1.setAttributeCountryOfOrigin(id, "EJB3");
+        log("####### (Ejb3) getting 'CountryOfOrigin' attribute from Ejb1' #########");
+        return ejb1.getAttributeCountryOfOrigin(id);
     }
 
     
@@ -82,7 +72,7 @@ public class Ejb3 {
     }
     
     private my.prototype.remote.home.api.Ejb1Remote getEjb1RemoteHome() throws NamingException, RemoteException, CreateException {
-        log("#### getEjb1RemoteHome....");
+        log("#### (EJB3) getEjb1RemoteHome....");
         InitialContext ctx = new InitialContext();
         String jndi = getEjb1RemoteHomeJndi();
         final Object iiopObject = ctx.lookup(jndi);
@@ -104,7 +94,9 @@ public class Ejb3 {
         final String port = System.getProperty("jacorb.port", "3528");
         final String offset = System.getProperty("jboss.socket.binding.port-offset","0");
         final Integer portNumber = Integer.parseInt(port); 
-        String address = "corbaname:iiop:" + ip + ":" + portNumber.toString() + "#" + my.prototype.remote.home.api.Ejb1Remote.EJB1_REMOTE_JNDI;
+        //String address = "corbaname:iiop:" + ip + ":" + portNumber.toString() + "#" + Ejb1Remote.EJB1_REMOTE_JNDI;
+        //String address = "corbaname:iiop:" + ip + ":" + portNumber.toString() + "#jts/Ejb1";
+        String address = "corbaname:iiop:localhost:3528#jts/Ejb1";
         log(address);
         return address;
     }

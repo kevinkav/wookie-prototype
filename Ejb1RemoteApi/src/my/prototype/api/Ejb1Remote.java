@@ -17,9 +17,7 @@ import javax.ejb.Remote;
 public interface Ejb1Remote {
 
     public static String EJB1_REMOTE_JNDI = "java:remote/ejb1";
-    
-    void kickEjb1(String kicker);
-    
+        
     String getAttributeCountryOfOrigin(long id);
     
     void setAttributeCountryOfOrigin(long id, String string);
