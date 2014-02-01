@@ -99,9 +99,7 @@ public class Ejb1 implements Ejb1Local {
         
         LOGGER.info("### EJB1: localValue = " + localValue);
         LOGGER.info("### EJB1: remoteValue = " + remoteValue);
-        
-        persistFilm(anotherFilm);
-        
+                
         if (localValue.equals("?") && remoteValue.equals("?")){
             LOGGER.info("##### Test Failed ######");
             result = "Failed";
@@ -151,15 +149,16 @@ public class Ejb1 implements Ejb1Local {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void setUp() throws Exception {
         Film f = createFilm(STAR_WARS, STAR_WARS_ID, DIRECTOR, 122, 1977, USA);
-        persistFilm(f);
+        LOGGER.info("### EJB1: Created film instance: " + f.toString());
+        em.persist(f);
     }
 
     public void persistFilm(Film f){
         em.persist(f);
-        LOGGER.info("### EJB1: Persisted film: " + film.toString());
+        LOGGER.info("### EJB1: Persisted film: " + f.toString());
     }
    
-    
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     private Film createFilm(String filmName, long id,  String director, int time, int year, String country) {
         Film film = new Film();
         film.setId(id);
@@ -168,12 +167,14 @@ public class Ejb1 implements Ejb1Local {
         film.setRunningTimeMins(time);
         film.setYearOfRelease(year);
         film.setCountryOfOrigin(country);
-        LOGGER.info("### EJB1: Created film instance: " + film.toString());
         return film;
     }
     
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public void createAnotherFilm(String filmName, long id,  String director, int time, int year, String country){
         Film anotherFilm = createFilm(filmName, id, director, time, year, country);
+        LOGGER.info("### EJB1: Created another film instance: " + anotherFilm.toString());
+        persistFilm(anotherFilm);
     }
     
     //@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)

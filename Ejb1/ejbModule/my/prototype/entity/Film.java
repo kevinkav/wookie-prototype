@@ -95,6 +95,7 @@ public class Film implements Serializable {
         sb.append("Name: " + name + "\n");
         sb.append("Director: " + director + "\n");
         sb.append("RunningTime: " + runningTimeMins + "\n");
+        sb.append("Year: " + yearOfRelease + "\n");
         sb.append("Country: " + countryOfOrigin + "\n");
         sb.append("---------------------------------\n");
         return sb.toString();
