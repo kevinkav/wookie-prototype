@@ -17,28 +17,30 @@ import java.util.logging.Logger;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJB;
-import javax.ejb.Remote;
 import javax.ejb.RemoteHome;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 
 import my.prototype.api.Ejb1Remote;
-import my.prototype.api.Ejb3Remote;
 import my.prototype.remote.home.api.Ejb1RemoteObject;
 import my.prototype.remote.home.api.Ejb3RemoteHome;
 
 @RemoteHome(Ejb3RemoteHome.class)
 @EJB(name = my.prototype.remote.home.api.Ejb3RemoteObject.EJB3_BINDING_JNDI, beanInterface = my.prototype.remote.home.api.Ejb3RemoteObject.class)
-//@Remote(Ejb3Remote.class)
 @Stateless
 public class Ejb3 {
-//    public class Ejb3 implements Ejb3Remote{
-
 
     Ejb1Remote ejb1;
     
@@ -51,15 +53,17 @@ public class Ejb3 {
     private static final Logger LOGGER = Logger.getLogger(Ejb3.class.getCanonicalName());
 
    
-    //@Override
-    @TransactionAttribute(TransactionAttributeType.MANDATORY) 
-    public String runTest(long id) throws RemoteException, NamingException, CreateException {
-        //log("####### (EJB3) setModifiedAttribute() for id " + id + " #########");
-        //ejb1 = resolveBean(EJB1_EJB_JNDI);
-        
+    //@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)   // tx will not be propagated from EJB1
+    //@TransactionAttribute(TransactionAttributeType.SUPPORTS)       // successfull only if EJB1 starts TX
+    //@TransactionAttribute(TransactionAttributeType.MANDATORY)        // successfull only if EJB1 starts TX
+    //@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public String runTest(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         my.prototype.remote.home.api.Ejb1RemoteObject ejb1 = getEjb1RemoteObject();
         LOGGER.info("Ejb3: getting 'CountryOfOrigin' attribute from Ejb1'");
-        return ejb1.getAttributeCountryOfOrigin(id);
+        String attr = ejb1.getAttributeCountryOfOrigin(id);
+        ejb1.createAnotherFilm("EJB3Film", 2l, "Kevin", 100, 2014, "Ireland");
+        return attr;
     }
 
     

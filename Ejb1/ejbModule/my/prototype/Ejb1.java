@@ -29,11 +29,31 @@ import my.prototype.remote.home.api.Ejb3RemoteObject;
  */
 @Stateless
 @Local(Ejb1Local.class)
-//@Remote(Ejb1Remote.class)
 @RemoteHome(Ejb1RemoteHome.class)
 @EJB(name = my.prototype.remote.home.api.Ejb1RemoteObject.EJB1_BINDING_JNDI, beanInterface = my.prototype.remote.home.api.Ejb1RemoteObject.class)
 public class Ejb1 implements Ejb1Local {
-//public class Ejb1 implements Ejb1Local, Ejb1Remote {
+
+    /**
+     * 
+     */
+    private static final String USA = "USA";
+
+    /**
+     * 
+     */
+    private static final String DIRECTOR = "George Lucas";
+
+    /**
+     * 
+     */
+    private static final String NAME = "name";
+
+    /**
+     * 
+     */
+    private static final String STAR_WARS = "StarWars";
+    
+    private static final long STAR_WARS_ID = 1l;
 
     @PersistenceContext(unitName = "FilmDatabase")
     private EntityManager em;
@@ -42,6 +62,8 @@ public class Ejb1 implements Ejb1Local {
     final String ejb3Address = "corbaname:iiop:localhost:3628#" + Ejb3RemoteObject.EJB3_BINDING_JNDI;
 
     Film film;
+    
+    Film anotherFilm;
     
     long filmId = 1;
     
@@ -54,6 +76,9 @@ public class Ejb1 implements Ejb1Local {
      * @see my.protoype.api.Ejb1Local#runTest()
      */
     @Override
+    //@TransactionAttribute(TransactionAttributeType.NEVER)
+    //@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String runTest1() throws Exception {
         
         String localValue;
@@ -61,39 +86,39 @@ public class Ejb1 implements Ejb1Local {
         String result = "";
         
         initTestFilm();
-       
-        LOGGER.info("Ejb1: initialvalue =  " + film.getCountryOfOrigin());
+        LOGGER.info("### EJB1 Initial Data: " + film.toString());
         
         changeAttribute();
-        
         localValue = getAttributeCountryOfOrigin(filmId);
         
-        LOGGER.info("Ejb1: em.toString() : " + em.toString());
+        LOGGER.info("### EJB1 Changed Data: " + film.toString());
         
-                
         ejb3Remote = getEjb3Object();
         remoteValue = ejb3Remote.runTest(filmId);
         
-        LOGGER.info("Ejb1: localValue = " + localValue);
-        LOGGER.info("Ejb1: remoteValue = " + remoteValue);
         
-        if (localValue.equals(remoteValue)){
-            LOGGER.info("<<<< Test Passed >>>>>");
+        LOGGER.info("### EJB1: localValue = " + localValue);
+        LOGGER.info("### EJB1: remoteValue = " + remoteValue);
+        
+        persistFilm(anotherFilm);
+        
+        if (localValue.equals("?") && remoteValue.equals("?")){
+            LOGGER.info("##### Test Failed ######");
+            result = "Failed";
+        }else if (localValue.equals(remoteValue)){
+            LOGGER.info("##### Test Passed ######");
             result = "Passed";
         }else{
-            LOGGER.info("<<<< Test Failed >>>>>");
+            LOGGER.info("##### Test Failed ######");
             result = "Failed";
         }
         return result;
     }
 
     
-    /**
-     * 
-     */
     private void changeAttribute() {
         film.setCountryOfOrigin("country_ejb1");
-        LOGGER.info("Ejb1: Set CountryOfOrigin attribute to: country_ejb1");
+        LOGGER.info("### EJB1: Setting CountryOfOrigin new value: country_ejb1");
     }
 
 
@@ -111,26 +136,11 @@ public class Ejb1 implements Ejb1Local {
     /* (non-Javadoc)
      * @see my.prototype.api.Ejb1Remote#getAttributeCountryOfOrigin()
      */
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    //@TransactionAttribute(TransactionAttributeType.MANDATORY)
     public String getAttributeCountryOfOrigin(long id) {
         LOGGER.info("Ejb1: em.toString() : " + em.toString());
         Film film = em.find(my.prototype.entity.Film.class, id);
         return film.getCountryOfOrigin();
-    }
-    
-    
-    /* (non-Javadoc)
-     * @see my.prototype.api.Ejb1Remote#setAttributeCountryOfOrigin(long)
-     */
-    //@Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void setAttributeCountryOfOrigin(long id, String origin) {
-        LOGGER.info("Ejb1: Setting attribute 'CountryOfOrigin' to " + origin + " #########");
-        LOGGER.info("Ejb1: em.toString() : " + em.toString());
-
-        Film f = em.find(my.prototype.entity.Film.class, id);
-        f.setCountryOfOrigin(origin);
-        LOGGER.info("Ejb1: Set 'CountryOfOrigin' to " + origin + " #########");
     }
     
     
@@ -140,23 +150,39 @@ public class Ejb1 implements Ejb1Local {
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void setUp() throws Exception {
-        Film starWars = new Film();
-        starWars.setName("StarWars");
-        starWars.setDirector("George Lucas");
-        starWars.setRunningTimeMins(122);
-        starWars.setYearOfRelease(1977);
-        starWars.setCountryOfOrigin("?");
-        em.persist(starWars);
-        findFilms();
+        Film f = createFilm(STAR_WARS, STAR_WARS_ID, DIRECTOR, 122, 1977, USA);
+        persistFilm(f);
+    }
+
+    public void persistFilm(Film f){
+        em.persist(f);
+        LOGGER.info("### EJB1: Persisted film: " + film.toString());
+    }
+   
+    
+    private Film createFilm(String filmName, long id,  String director, int time, int year, String country) {
+        Film film = new Film();
+        film.setId(id);
+        film.setName(filmName);
+        film.setDirector(director);
+        film.setRunningTimeMins(time);
+        film.setYearOfRelease(year);
+        film.setCountryOfOrigin(country);
+        LOGGER.info("### EJB1: Created film instance: " + film.toString());
+        return film;
     }
     
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void findFilms(){
+    public void createAnotherFilm(String filmName, long id,  String director, int time, int year, String country){
+        Film anotherFilm = createFilm(filmName, id, director, time, year, country);
+    }
+    
+    //@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void findFilms() {
         final Query query = em.createQuery("Select p FROM my.prototype.entity.Film p");
         final List<Film> films = query.getResultList();
         LOGGER.info("##########################");
         for (final Film film : films) {
-            LOGGER.info("Found film: " + film.getName());
+            LOGGER.info(film.toString());
         }
         if(films.isEmpty()){
             LOGGER.info("Found no films.");
@@ -169,7 +195,7 @@ public class Ejb1 implements Ejb1Local {
         final Query query = em.createQuery("Select p FROM my.prototype.entity.Film p");
         final List<Film> films = query.getResultList();
         for (final Film film : films) {
-            LOGGER.info("Deleting film: " + film.getName());
+            LOGGER.info("### EJB1: Deleting film: " + film.getName());
             em.remove(film);
         }
         findFilms();
@@ -178,7 +204,7 @@ public class Ejb1 implements Ejb1Local {
 
     private void initTestFilm() {       
         Query query = em.createQuery("Select p FROM my.prototype.entity.Film p WHERE p.name LIKE :name");
-        query.setParameter("name", "StarWars");
+        query.setParameter(NAME, STAR_WARS);
         final List<Film> films = query.getResultList();
         film = films.get(0);
         filmId = film.getId();

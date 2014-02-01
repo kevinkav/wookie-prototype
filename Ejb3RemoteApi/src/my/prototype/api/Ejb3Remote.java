@@ -11,17 +11,15 @@
  *----------------------------------------------------------------------------*/
 package my.prototype.api;
 
+import java.rmi.RemoteException;
+
 import javax.ejb.Remote;
 
 @Remote
 public interface Ejb3Remote {
 
-    public static String EJB3_REMOTE_JNDI = "java:remote/ejb3";
+    public static String EJB3_REMOTE_JNDI = "java:remote/B";
     
-    /**
-     * Remote entry method to Ejb3
-     */
-    void kickEjb3(String kicker);
+    String runTest(long id) throws RemoteException;
         
-    void setModifiedAttribute(long id);
 }

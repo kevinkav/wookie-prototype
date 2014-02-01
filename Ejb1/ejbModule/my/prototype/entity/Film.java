@@ -50,6 +50,10 @@ public class Film implements Serializable {
     public long getId() {
         return id;
     }
+    
+    public void setId(long id){
+        this.id = id;
+    }
 
     public int getYearOfRelease() {
         return yearOfRelease;
@@ -83,4 +87,17 @@ public class Film implements Serializable {
         this.runningTimeMins = runningTimeMins;
     }
 
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n---------------------------------\n");
+        sb.append("FilmId: " + id + "\n");
+        sb.append("Name: " + name + "\n");
+        sb.append("Director: " + director + "\n");
+        sb.append("RunningTime: " + runningTimeMins + "\n");
+        sb.append("Country: " + countryOfOrigin + "\n");
+        sb.append("---------------------------------\n");
+        return sb.toString();
+        
+    }
 }

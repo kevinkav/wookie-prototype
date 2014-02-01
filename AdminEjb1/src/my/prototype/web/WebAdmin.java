@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
 
+import my.prototype.api.ALocal;
 import my.prototype.api.Ejb1Local;
 
 
@@ -33,8 +34,9 @@ public class WebAdmin extends HttpServlet{
     @EJB
     Ejb1Local ejb1;
     
-    protected UserTransaction utx;
-    
+/*    @EJB
+    ALocal ejbA;*/
+        
     PrintWriter writer;
 
     /**
@@ -42,28 +44,44 @@ public class WebAdmin extends HttpServlet{
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String country = request.getParameter("country");
-
+            
             writer = response.getWriter();
             writerHeader();
 
-            writer.println("<h3>Test setup...creating film.</h3>");
+            // Test 1
+            writer.println("<h3>Test 1 setup...creating film.</h3>");
             writer.println("<br>");
             ejb1.setUp();
 
-            
-            writer.println("<h3>Running Test1...</h3>");
+            writer.println("<h3>Test 1 running...</h3>");
             String result1 = ejb1.runTest1();
             printResult(1, result1);
-            
+  
             writeFooter();
             
-            ejb1.tearDown();
+            
+            // Test 2
+            /*writer.println("<h3>Test 2 setup...creating film.</h3>");
+            writer.println("<br>");
+            ejbA.setUp();
+
+            writer.println("<h3>Test 2 running...</h3>");
+            String result2 = ejbA.runTest();
+            printResult(2, result2);
+  
+            writeFooter();
+            ejbA.tearDown();*/
             
             
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }finally{
+            try {
+                ejb1.tearDown();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }

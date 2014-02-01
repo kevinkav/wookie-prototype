@@ -11,6 +11,8 @@
  *----------------------------------------------------------------------------*/
 package my.prototype.api;
 
+import java.rmi.RemoteException;
+
 import javax.ejb.Remote;
 
 @Remote
@@ -18,8 +20,6 @@ public interface Ejb1Remote {
 
     public static String EJB1_REMOTE_JNDI = "java:remote/ejb1";
         
-    String getAttributeCountryOfOrigin(long id);
-    
-    void setAttributeCountryOfOrigin(long id, String string);
+    String getAttributeCountryOfOrigin(long id) throws RemoteException;
 
 }

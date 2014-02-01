@@ -80,7 +80,7 @@ public class Ejb2 {
 
     public void kickEjb3(){
         ejb3 = resolveBean(EJB3_EJB_LOOKUP);
-        ejb3.kickEjb3("EJB2");
+        //ejb3.kickEjb3("EJB2");
     }
     
     private void log (String str){

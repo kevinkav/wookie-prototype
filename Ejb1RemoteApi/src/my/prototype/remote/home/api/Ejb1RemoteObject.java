@@ -23,4 +23,7 @@ public interface Ejb1RemoteObject extends EJBObject {
        
     String getAttributeCountryOfOrigin(long id) throws RemoteException;
     
+    void createAnotherFilm(String filmName, long id, String director, int time, int year, String country) throws RemoteException;
+    
+    //void persistFilm(long filmId) throws RemoteException;
 }
