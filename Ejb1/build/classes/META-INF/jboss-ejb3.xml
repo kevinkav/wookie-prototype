@@ -9,7 +9,7 @@
   ~ program(s) have been supplied.
   -->
 <!--suppress XmlPathReference -->
-<jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee"
+ <jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee"
                xmlns="http://java.sun.com/xml/ns/javaee"
                xmlns:iiop="urn:iiop"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,7 +18,7 @@
                   urn:iiop jboss-ejb-iiop_1_0.xsd"
                version="3.1"
                impl-version="2.0">
-    <assembly-descriptor>
+     <assembly-descriptor>
         <iiop:iiop>
              <ejb-name>Ejb1</ejb-name>
              <iiop:binding-name>jts/Ejb1</iiop:binding-name>
@@ -28,4 +28,4 @@
              <iiop:binding-name>jts/Ejb3</iiop:binding-name>
         </iiop:iiop>
     </assembly-descriptor>
-</jboss:ejb-jar>
+</jboss:ejb-jar> 

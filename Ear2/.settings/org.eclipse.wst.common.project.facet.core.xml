@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
-  <runtime name="JBoss AP 6.0.1 Runtime Server-1"/>
+  <runtime name="JBoss AP 6.0.1 Runtime Server-2"/>
   <fixed facet="jst.ear"/>
   <installed facet="jst.ear" version="6.0"/>
 </faceted-project>
