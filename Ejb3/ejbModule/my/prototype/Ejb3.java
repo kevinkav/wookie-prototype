@@ -62,7 +62,7 @@ public class Ejb3 {
         my.prototype.remote.home.api.Ejb1RemoteObject ejb1 = getEjb1RemoteObject();
         LOGGER.info("Ejb3: getting 'CountryOfOrigin' attribute from Ejb1'");
         String attr = ejb1.getAttributeCountryOfOrigin(id);
-        ejb1.createAnotherFilm("EJB3Film", 2l, "Kevin", 100, 2014, "Ireland");
+        ejb1.createCast("Harrison Ford");
         return attr;
     }
 

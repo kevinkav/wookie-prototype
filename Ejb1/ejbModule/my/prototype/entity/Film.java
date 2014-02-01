@@ -36,8 +36,17 @@ public class Film implements Serializable {
     
     private String name;
     
+    private Cast cast;
     
  
+    public void setCast(Cast cast){
+        this.cast = cast;
+    }
+    
+    public Cast getCast(){
+        return this.cast;
+    }
+    
     public String getName() {
         return name;
     }
@@ -97,6 +106,14 @@ public class Film implements Serializable {
         sb.append("RunningTime: " + runningTimeMins + "\n");
         sb.append("Year: " + yearOfRelease + "\n");
         sb.append("Country: " + countryOfOrigin + "\n");
+        if (cast != null){
+            sb.append("CastID: " + cast.getId() + "\n"); 
+            sb.append("LeadActor: " + cast.getLeadActor() + "\n");
+        }
+        else{
+            sb.append("CastID: \n"); 
+            sb.append("LeadActor: <>" + "\n");
+        }
         sb.append("---------------------------------\n");
         return sb.toString();
         
