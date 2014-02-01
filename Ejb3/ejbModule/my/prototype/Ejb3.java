@@ -61,8 +61,8 @@ public class Ejb3 {
     public String runTest(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         my.prototype.remote.home.api.Ejb1RemoteObject ejb1 = getEjb1RemoteObject();
         LOGGER.info("Ejb3: getting 'CountryOfOrigin' attribute from Ejb1'");
-        String attr = ejb1.getAttributeCountryOfOrigin(id);
-        ejb1.createCast("Harrison Ford");
+        String attr = ejb1.getAttributeCountryOfOrigin_RemoteCall(id);
+        ejb1.createCast_RemoteCall("Harrison Ford");
         return attr;
     }
 

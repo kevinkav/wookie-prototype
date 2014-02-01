@@ -16,14 +16,12 @@ import java.rmi.RemoteException;
 import javax.ejb.EJBObject;
 import javax.ejb.Remote;
 
-@Remote
+//@Remote
 public interface Ejb1RemoteObject extends EJBObject {
 
     public static String EJB1_BINDING_JNDI = "jts/Ejb1";
        
-    String getAttributeCountryOfOrigin(long id) throws RemoteException;
+    String getAttributeCountryOfOrigin_RemoteCall(long id) throws RemoteException;
     
-    void createCast(String leadActor) throws RemoteException;
-    
-    //void persistFilm(long filmId) throws RemoteException;
+    void createCast_RemoteCall(String leadActor) throws RemoteException;
 }

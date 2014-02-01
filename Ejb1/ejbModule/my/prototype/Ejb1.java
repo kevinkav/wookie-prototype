@@ -63,88 +63,12 @@ public class Ejb1 implements Ejb1Local {
     private static final Logger LOGGER = Logger.getLogger(Ejb1.class.getCanonicalName());
 
     
-    /* (non-Javadoc)
-     * @see my.protoype.api.Ejb1Local#runTest()
-     */
-    @Override
-    //@TransactionAttribute(TransactionAttributeType.NEVER)
-    //@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public String runTest1() throws Exception {
-        
-        String localValue;
-        String remoteValue;
-        String result = "";
-        
-        //initTestFilm();
-        film = findFilm(STAR_WARS);
-        LOGGER.info("### EJB1: Initial Film Data: " + film.toString());
-        
-        // change attribute
-        film.setCountryOfOrigin("country_ejb1");
-        localValue = getAttributeCountryOfOrigin(STAR_WARS_ID);
-        
-        LOGGER.info("### EJB1: Changed Data: " + film.toString());
-        
-        ejb3Remote = getEjb3Object();
-        remoteValue = ejb3Remote.runTest(filmId);
-        
-        
-        LOGGER.info("### EJB1: localValue = " + localValue);
-        LOGGER.info("### EJB1: remoteValue = " + remoteValue);
-                       
-        film = findFilm(STAR_WARS);
-        LOGGER.info("### EJB1: Film: " + film.toString());
-        LOGGER.info("### EJB1: Cast: " + film.getCast().toString());
-        
-        if (localValue.equals("?") && remoteValue.equals("?")){
-            LOGGER.info("##### Test Failed ######");
-            result = "Failed";
-        }else if (localValue.equals(remoteValue)){
-            LOGGER.info("##### Test Passed ######");
-            result = "Passed";
-        }else{
-            LOGGER.info("##### Test Failed ######");
-            result = "Failed";
-        }
-        return result;
-    }
-
-    
-    public String getAttributeCountryOfOrigin(long id) {
-        Film film = em.find(my.prototype.entity.Film.class, id);
-        return film.getCountryOfOrigin();
-    }
-    
-
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void setUp() throws Exception {
         Film film = createFilm(STAR_WARS, STAR_WARS_ID, DIRECTOR, 122, 1977, USA);
         em.persist(film);
         LOGGER.info("### EJB1: Created and persisted film: " + film.toString());
-    }
-    
-    public void createCast(String leadActor){
-        Cast cast = new Cast();
-        cast.setId(2);
-        cast.setLeadActor(leadActor);
-        Film f = findFilm(STAR_WARS);
-        f.setCast(cast);
-        LOGGER.info("### EJB1: Created Cast instance and set in Film: " + cast.toString());
-    }
-    
-    public void findFilms() {
-        final Query query = em.createQuery("Select p FROM my.prototype.entity.Film p");
-        final List<Film> films = query.getResultList();
-        LOGGER.info("#########Find Films#################");
-        for (final Film film : films) {
-            LOGGER.info(film.toString());
-        }
-        if(films.isEmpty()){
-            LOGGER.info("No films found.");
-        }
-        LOGGER.info("##########################");
     }
     
     
@@ -158,12 +82,64 @@ public class Ejb1 implements Ejb1Local {
         }
     }
     
+    
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public boolean runTest() throws Exception {
+        
+        String localCountryOfOriginValue;
+        String remoteCountryOfOriginValue;
+        
+        // print initial film data
+        film = findFilm(STAR_WARS_ID);
+        LOGGER.info("### EJB1: Initial Film: " + film.toString());
+        
+        // change attribute
+        film.setCountryOfOrigin("country_ejb1");
+        film = findFilm(STAR_WARS_ID);
+        localCountryOfOriginValue = film.getCountryOfOrigin();
+        LOGGER.info("### EJB1: Updated CountryOfOrigin attibute locally in Film: " + film.toString());
+        
+        // Make remote call
+        ejb3Remote = getEjb3Object();
+        remoteCountryOfOriginValue = ejb3Remote.runTest(STAR_WARS_ID);
+        
+        // print both results
+        LOGGER.info("### EJB1: local CountryOfOrigin value: " + localCountryOfOriginValue);
+        LOGGER.info("### EJB1: remote CountryOfOrigin value: " + remoteCountryOfOriginValue);
+        
+        // print updated film data after remote call               
+        film = findFilm(STAR_WARS_ID);
+        LOGGER.info("### EJB1: after remote call Film: " + film.toString());
+        LOGGER.info("### EJB1: after remote call Cast: " + film.getCast().toString());
+        
+        boolean testPassed = false;
+        
+        if (film.getCast() != null){
+            if (!(localCountryOfOriginValue.equals(USA) && remoteCountryOfOriginValue.equals(USA))){
+                if (localCountryOfOriginValue.equals(remoteCountryOfOriginValue)){
+                    testPassed = true;
+                }
+            }
+        }
+        return testPassed;
+    }
 
-    private void initTestFilm() {       
-        film = findFilm(STAR_WARS);
-        filmId = film.getId();
-        film = em.find(my.prototype.entity.Film.class, filmId);
-    }  
+    
+    public String getAttributeCountryOfOrigin_RemoteCall(final long id) {
+        Film film = em.find(my.prototype.entity.Film.class, id);
+        return film.getCountryOfOrigin();
+    }
+    
+    
+    public void createCast_RemoteCall(final String leadActor){
+        Cast cast = new Cast();
+        cast.setId(CAST_ID);
+        cast.setLeadActor(leadActor);
+        Film f = findFilm(STAR_WARS_ID);
+        f.setCast(cast);
+        LOGGER.info("### EJB1: Created Cast instance and set in Film: " + cast.toString());
+    }
 
     
     private Film createFilm(String filmName, long id,  String director, int time, int year, String country) {
@@ -178,11 +154,8 @@ public class Ejb1 implements Ejb1Local {
     }
     
     
-    private Film findFilm(String filmName){
-        Query query = em.createQuery("Select p FROM my.prototype.entity.Film p WHERE p.name LIKE :name");
-        query.setParameter(NAME, filmName);
-        final List<Film> films = query.getResultList();
-        return films.get(0);
+    private Film findFilm(long id){
+        return em.find(my.prototype.entity.Film.class, id);
     }
     
 
