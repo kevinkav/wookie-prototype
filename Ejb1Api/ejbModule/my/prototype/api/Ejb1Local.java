@@ -16,10 +16,11 @@ import javax.ejb.Local;
 @Local
 public interface Ejb1Local {
         
-    void setUp() throws Exception;
+    void setUp();
     
-    void tearDown() throws Exception ;
+    void tearDown();
     
-    boolean runTest() throws Exception;
+    void runTest() throws Exception;
     
+    String getResult();
 }
