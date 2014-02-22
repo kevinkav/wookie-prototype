@@ -24,8 +24,8 @@
              <iiop:binding-name>jts/Ejb1</iiop:binding-name>
         </iiop:iiop>
         <iiop:iiop>
-             <ejb-name>Ejb3</ejb-name>
-             <iiop:binding-name>jts/Ejb3</iiop:binding-name>
+             <ejb-name>Ejb2</ejb-name>
+             <iiop:binding-name>jts/Ejb2</iiop:binding-name>
         </iiop:iiop>
     </assembly-descriptor>
 </jboss:ejb-jar> 

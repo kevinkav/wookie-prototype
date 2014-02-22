@@ -9,14 +9,17 @@
  * program(s) have been supplied.
  *******************************************************************************
  *----------------------------------------------------------------------------*/
-package my.prototype.remote.home.api;
+package my.prototype.api;
 
 import java.rmi.RemoteException;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBHome;
+import javax.ejb.Remote;
 
-public interface Ejb3RemoteHome extends EJBHome{
+@Remote
+public interface Ejb2Remote {
 
-    Ejb3RemoteObject create() throws RemoteException, CreateException;
+    public static String EJB2_REMOTE_JNDI = "java:remote/B";
+    
+    String runTest(long id) throws RemoteException;
+        
 }

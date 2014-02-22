@@ -24,7 +24,7 @@ public class TestCaseManager {
     Ejb1Local ejb1;
 
     private String result;
-    private String info;
+    private String info = "Info...";
     private String setupResult;
     private String teardownResult;
 

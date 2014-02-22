@@ -15,9 +15,9 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBObject;
 
-public interface Ejb3RemoteObject extends EJBObject{
+public interface Ejb2RemoteObject extends EJBObject{
 
-    public static String EJB3_BINDING_JNDI = "jts/Ejb3";
+    public static String EJB2_BINDING_JNDI = "jts/Ejb2";
            
     String runTest(long id) throws RemoteException;
 }

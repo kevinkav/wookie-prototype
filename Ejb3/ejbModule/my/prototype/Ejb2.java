@@ -33,12 +33,12 @@ import javax.transaction.SystemException;
 
 import my.prototype.api.Ejb1Remote;
 import my.prototype.remote.home.api.Ejb1RemoteObject;
-import my.prototype.remote.home.api.Ejb3RemoteHome;
+import my.prototype.remote.home.api.Ejb2RemoteHome;
 
-@RemoteHome(Ejb3RemoteHome.class)
-@EJB(name = my.prototype.remote.home.api.Ejb3RemoteObject.EJB3_BINDING_JNDI, beanInterface = my.prototype.remote.home.api.Ejb3RemoteObject.class)
+@RemoteHome(Ejb2RemoteHome.class)
+@EJB(name = my.prototype.remote.home.api.Ejb2RemoteObject.EJB2_BINDING_JNDI, beanInterface = my.prototype.remote.home.api.Ejb2RemoteObject.class)
 @Stateless
-public class Ejb3 {
+public class Ejb2 {
 
     Ejb1Remote ejb1;
     
@@ -48,7 +48,7 @@ public class Ejb3 {
     
     final String ejb1Address = "corbaname:iiop:localhost:3528#" + Ejb1RemoteObject.EJB1_BINDING_JNDI; 
 
-    private static final Logger LOGGER = Logger.getLogger(Ejb3.class.getCanonicalName());
+    private static final Logger LOGGER = Logger.getLogger(Ejb2.class.getCanonicalName());
 
    
     //@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)   // tx will not be propagated from EJB1
