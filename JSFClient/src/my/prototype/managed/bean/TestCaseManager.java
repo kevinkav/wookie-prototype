@@ -23,85 +23,66 @@ public class TestCaseManager {
     @EJB
     Ejb1Local ejb1;
 
-    private boolean flush = false;
-    private String tcId = "local";
     private String result;
+    private String info;
+    private String setupResult;
+    private String teardownResult;
 
-    /**
-     * @return the result
-     */
+
+    public String getTeardownResult() {
+        return teardownResult;
+    }
+
+    public void setTeardownResult(String teardownResult) {
+        this.teardownResult = teardownResult;
+    }
+
+    public String getSetupResult() {
+        return setupResult;
+    }
+
+    public void setSetupResult(String setupResult) {
+        this.setupResult = setupResult;
+    }
+
     public String getResult() {
         return result;
     }
 
-    /**
-     * @param result the result to set
-     */
     public void setResult(String result) {
         this.result = result;
     }
-
-    /**
-     * @return the flush
-     */
-    public boolean isFlush() {
-        return flush;
+    
+    public String getInfo() {
+        return info;
     }
 
-    /**
-     * @param flush
-     *            the flush to set
-     */
-    public void setFlush(final boolean flush) {
-        this.flush = flush;
-    }
-
-    public void result(){
-        ejb1.getResult();
+    public void setInfo(String info) {
+        this.info = info;
     }
     
-    public void execute() {
-        System.out.println("Called execute");
-        System.out.println("flush:" + this.flush);
-        System.out.println("tcId:" + this.tcId);
-
-        //if (this.tcId.equalsIgnoreCase("local")) {
-            //ejb1.runLocalTest(this.flush);
-        //} else {
-            try {
-                ejb1.runTest();
-                result = ejb1.getResult();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        //}
-    }
-
     public void setup() {
-        System.out.println("Called setup");
-        //result = "";
-        ejb1.setUp();
+        setupResult = ejb1.setUp();
+        info = "Setup done";
     }
 
     public void tearDown() {
-        System.out.println("Called tear down");
-        //result = "";
-        ejb1.tearDown();
+        teardownResult = ejb1.tearDown();
+        info = teardownResult;
+        info = "Teardown done";
     }
 
-    /**
-     * @return the tcId
-     */
-    public String getTcId() {
-        return tcId;
+
+    public void execute() {
+        System.out.println("Called execute");
+        try {
+            result = ejb1.runTest();
+            info = "Test executed";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * @param tcId
-     *            the tcId to set
-     */
-    public void setTcId(final String tcId) {
-        this.tcId = tcId;
-    }
+
 
 }
