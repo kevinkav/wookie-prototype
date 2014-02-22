@@ -74,7 +74,6 @@ public class TestCaseManager {
 
 
     public void execute() {
-        System.out.println("Called execute");
         try {
             result = ejb1.runTest();
             info = "Test executed";
