@@ -20,6 +20,8 @@ public interface Ejb1Remote {
 
     public static String EJB1_REMOTE_JNDI = "java:remote/ejb1";
         
-    String getAttributeCountryOfOrigin(long id) throws RemoteException;
+    String getAttributeCountryOfOrigin_RemoteCall(long id) throws RemoteException;
+    
+    void createCast_RemoteCall(String leadActor) throws RemoteException;
 
 }

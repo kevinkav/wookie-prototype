@@ -13,70 +13,146 @@ package my.prototype.managed.bean;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.inject.Inject;
 
-import my.prototype.api.Ejb1Local;
+import my.prototype.api.TestCase;
+import my.prototype.qualifiers.JTS;
+import my.prototype.qualifiers.NON_JTS;
 
 
 @ManagedBean(name = "tc")
 public class TestCaseManager {
 
-    @EJB
-    Ejb1Local ejb1;
+    //@EJB
+    @Inject
+    @JTS
+    TestCase ejbJts;
+    
+    //@EJB
+    @Inject
+    @NON_JTS
+    TestCase ejbNonJts;
 
-    private String result;
-    private String info = "Info...";
-    private String setupResult;
-    private String teardownResult;
+    private String result1;
+    private String info1 = "Info...";
+    private String setupResult1;
+    private String teardownResult1;
+    
+    private String result2;
+    private String info2 = "Info...";
+    private String setupResult2;
+    private String teardownResult2;
 
-
-    public String getTeardownResult() {
-        return teardownResult;
+    /* ********************************************
+     * TC1 - Using JTS 
+     ******************************************** */
+    public String getTeardownResultTC1() {
+        return teardownResult1;
     }
 
-    public void setTeardownResult(String teardownResult) {
-        this.teardownResult = teardownResult;
+    public void setTeardownResultTC1(String teardownResult) {
+        this.teardownResult1 = teardownResult;
     }
 
-    public String getSetupResult() {
-        return setupResult;
+    public String getSetupResultTC1() {
+        return setupResult1;
     }
 
-    public void setSetupResult(String setupResult) {
-        this.setupResult = setupResult;
+    public void setSetupResultTC1(String setupResult) {
+        this.setupResult1 = setupResult;
     }
 
-    public String getResult() {
-        return result;
+    public String getResultTC1() {
+        return result1;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setResultTC1(String result) {
+        this.result1 = result;
     }
     
-    public String getInfo() {
-        return info;
+    public String getInfoTC1() {
+        return info1;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setInfoTC1(String info) {
+        this.info1 = info;
     }
     
-    public void setup() {
-        setupResult = ejb1.setUp();
-        info = "Setup done";
+    public void setupTC1() {
+        setupResult1 = ejbJts.setUp();
+        info1 = "Setup done";
     }
 
-    public void tearDown() {
-        teardownResult = ejb1.tearDown();
-        info = teardownResult;
-        info = "Teardown done";
+    public void tearDownTC1() {
+        teardownResult1 = ejbJts.tearDown();
+        info1 = teardownResult1;
+        info1 = "Teardown done";
     }
 
 
-    public void execute() {
+    public void executeTC1() {
         try {
-            result = ejb1.runTest();
-            info = "Test executed";
+            ejbJts.runTest();
+            result1 = ejbJts.getResult();
+            info1 = "Test executed";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    
+    /* ********************************************
+     * TC2 - Using NON JTS 
+     ******************************************** */
+    public String getTeardownResultTC2() {
+        return teardownResult2;
+    }
+
+    public void setTeardownResultTC2(String teardownResult) {
+        this.teardownResult2 = teardownResult;
+    }
+
+    public String getSetupResultTC2() {
+        return setupResult2;
+    }
+
+    public void setSetupResultTC2(String setupResult) {
+        this.setupResult2 = setupResult;
+    }
+
+    public String getResultTC2() {
+        return result2;
+    }
+
+    public void setResultTC2(String result) {
+        this.result2 = result;
+    }
+    
+    public String getInfoTC2() {
+        return info2;
+    }
+
+    public void setInfoTC2(String info) {
+        this.info2 = info;
+    }
+    
+    public void setupTC2() {
+        setupResult2 = ejbNonJts.setUp();
+        info2 = "Setup done";
+    }
+
+    public void tearDownTC2() {
+        teardownResult2 = ejbNonJts.tearDown();
+        info2 = teardownResult1;
+        info2 = "Teardown done";
+    }
+
+
+    public void executeTC2() {
+        try {
+            ejbNonJts.runTest();
+            result2 = ejbNonJts.getResult();
+            info2 = "Test executed";
         } catch (Exception e) {
             e.printStackTrace();
         }

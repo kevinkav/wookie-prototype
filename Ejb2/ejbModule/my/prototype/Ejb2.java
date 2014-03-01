@@ -40,13 +40,15 @@ import my.prototype.remote.home.api.Ejb2RemoteHome;
 @Stateless
 public class Ejb2 {
 
-    Ejb1Remote ejb1;
+    private Ejb1Remote ejb1;
     
-    String EJB1_JNDI = "java:global/Ear1/Ejb1/Ejb1!my.prototype.api.Ejb1Remote";
+    private String EJB1_JNDI = "java:global/Ear1/Ejb1/Ejb1!my.prototype.api.Ejb1Remote";
     
-    String EJB1_EJB_JNDI = "ejb:Ear1/Ejb1//Ejb1!my.prototype.api.Ejb1Remote";
+    private String EJB1_EJB_JNDI = "ejb:Ear1/Ejb1//Ejb1!my.prototype.api.Ejb1Remote";
     
-    final String ejb1Address = "corbaname:iiop:localhost:3528#" + Ejb1RemoteObject.EJB1_BINDING_JNDI; 
+    private String ejb1Address = "corbaname:iiop:localhost:3528#" + Ejb1RemoteObject.EJB1_BINDING_JNDI; 
+    
+    private final String LEAD_ACTOR = "Harrison Ford";
 
     private static final Logger LOGGER = Logger.getLogger(Ejb2.class.getCanonicalName());
 
@@ -58,9 +60,9 @@ public class Ejb2 {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String runTest(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         my.prototype.remote.home.api.Ejb1RemoteObject ejb1 = getEjb1RemoteObject();
-        LOGGER.info("Ejb3: getting 'CountryOfOrigin' attribute from Ejb1'");
+        LOGGER.info("Ejb2: getting 'CountryOfOrigin' attribute from Ejb1'");
         String attr = ejb1.getAttributeCountryOfOrigin_RemoteCall(id);
-        ejb1.createCast_RemoteCall("Harrison Ford");
+        ejb1.createCast_RemoteCall(LEAD_ACTOR);
         return attr;
     }
 
@@ -79,7 +81,7 @@ public class Ejb2 {
     }
     
     private my.prototype.remote.home.api.Ejb1RemoteObject getEjb1RemoteObject() throws NamingException, RemoteException, CreateException {
-        LOGGER.info("Ejb3: getting Ejb1RemoteHome....");
+        LOGGER.info("Ejb2: getting Ejb1RemoteHome....");
         InitialContext ctx = new InitialContext();
         final Object iiopObject = ctx.lookup(ejb1Address);
         my.prototype.remote.home.api.Ejb1RemoteHome ejb1RemoteHome = (my.prototype.remote.home.api.Ejb1RemoteHome) PortableRemoteObject

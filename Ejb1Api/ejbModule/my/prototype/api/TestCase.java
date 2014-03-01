@@ -9,17 +9,15 @@
  * program(s) have been supplied.
  *******************************************************************************
  *----------------------------------------------------------------------------*/
-package my.prototype.remote.home.api;
+package my.prototype.api;
 
-import java.rmi.RemoteException;
+public interface TestCase {
 
-import javax.ejb.EJBObject;
-
-public interface Ejb1RemoteObject extends EJBObject {
-
-    public static String EJB1_BINDING_JNDI = "jts/Ejb1";
-       
-    String getAttributeCountryOfOrigin_RemoteCall(long id) throws RemoteException;
+    String setUp();
     
-    void createCast_RemoteCall(String leadActor) throws RemoteException;
+    String tearDown();
+    
+    String getResult();
+    
+    void runTest();
 }

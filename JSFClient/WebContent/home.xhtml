@@ -49,46 +49,65 @@
 <h:body>
 	<h2>Transaction Scoped Persistence Context</h2>
 	<h:form>
+	
+		<!-- TEST CASE 1  -->
+		
 		<h:panelGrid columns="1" styleClass="default" style="width: 450px" cellpadding="0" cellspacing="5">
-			
 			<f:facet name="header">
             		<h:outputText value="Test Case 1"/>
             		<h:outputText value="Using JTS and EJB3 is Impl v2"/>
         	</f:facet>
-			
 			<h:panelGroup style="display:block; text-align:left">
-				<h:commandButton actionListener="#{tc.setup}" styleClass="buttons" value="Setup TC" />
+				<h:commandButton actionListener="#{tc.setupTC1}" styleClass="buttons" value="Setup TC" />
 				<h:messages />
-				<h:outputText value="#{tc.setupResult}" style="color:blue; margin-left:20px"/>
-			</h:panelGroup>
-			       	         	 	
+				<h:outputText value="#{tc.setupResultTC1}" style="color:blue; margin-left:20px"/>
+			</h:panelGroup>     	         	 	
 			<h:panelGroup style="display:block; text-align:left">		                                    					
-				<h:commandButton actionListener="#{tc.execute}"	styleClass="buttons" value="Execute TC" />
+				<h:commandButton actionListener="#{tc.executeTC1}"	styleClass="buttons" value="Execute TC" />
 				<h:messages />
-				<h:outputText value="#{tc.result}" style="color:blue; margin-left:20px"/>
+				<h:outputText value="#{tc.resultTC1}" style="color:blue; margin-left:20px"/>
 			</h:panelGroup>
-			
 			<h:panelGroup style="display:block; text-align:left">			
-				<h:commandButton actionListener="#{tc.tearDown}" styleClass="buttons" value="TearDown TC" />
+				<h:commandButton actionListener="#{tc.tearDownTC1}" styleClass="buttons" value="TearDown TC" />
 				<h:messages />
-				<h:outputText value="#{tc.teardownResult}" style="color:blue; margin-left:20px"/>
+				<h:outputText value="#{tc.teardownResultTC1}" style="color:blue; margin-left:20px"/>
 			</h:panelGroup>
-			
 			<f:facet name="footer">
 				<h:panelGroup style="display:block; text-align:left; font-family:arial;">
-					<h:outputText value="[#{tc.info}]"/>
+					<h:outputText value="[#{tc.infoTC1}]"/>
 				</h:panelGroup>
 			</f:facet>
-			
-		<!-- 	Number 1 : <h:inputText value="#{calc.number1}" id="number1" />
-     		Number 2 : <h:inputText value="#{calc.number2}" id="number2"/>
-
-     		<h:outputText value="Result = #{calc.result}" />
-
-     		<h:commandButton value="Execute" actionListener="#{calc.executeAdd}" />
-		 -->	
-			
 		</h:panelGrid>
+		
+		<!-- TEST CASE 2  -->
+		
+		<h:panelGrid columns="1" styleClass="default" style="width: 450px" cellpadding="0" cellspacing="5">
+			<f:facet name="header">
+            		<h:outputText value="Test Case 2"/>
+            		<h:outputText value="Using JTS and EJB3 is Impl v3"/>
+        	</f:facet>
+			<h:panelGroup style="display:block; text-align:left">
+				<h:commandButton actionListener="#{tc.setupTC2}" styleClass="buttons" value="Setup TC" />
+				<h:messages />
+				<h:outputText value="#{tc.setupResultTC2}" style="color:blue; margin-left:20px"/>
+			</h:panelGroup>   	         	 	
+			<h:panelGroup style="display:block; text-align:left">		                                    					
+				<h:commandButton actionListener="#{tc.executeTC2}"	styleClass="buttons" value="Execute TC" />
+				<h:messages />
+				<h:outputText value="#{tc.resultTC2}" style="color:blue; margin-left:20px"/>
+			</h:panelGroup>
+			<h:panelGroup style="display:block; text-align:left">			
+				<h:commandButton actionListener="#{tc.tearDownTC2}" styleClass="buttons" value="TearDown TC" />
+				<h:messages />
+				<h:outputText value="#{tc.teardownResultTC2}" style="color:blue; margin-left:20px"/>
+			</h:panelGroup>
+			<f:facet name="footer">
+				<h:panelGroup style="display:block; text-align:left; font-family:arial;">
+					<h:outputText value="[#{tc.infoTC2}]"/>
+				</h:panelGroup>
+			</f:facet>
+		</h:panelGrid>
+		
 	</h:form>
 </h:body>
 </html>
