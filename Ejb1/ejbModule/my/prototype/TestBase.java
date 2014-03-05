@@ -82,20 +82,19 @@ public abstract class TestBase implements TestCase{
     public String getResult() {
         // print updated film data after remote call               
         Film film = findFilm(STAR_WARS_ID);
-        LOGGER.info("### EJB1: after remote call Film: " + film.toString());
-        LOGGER.info("### EJB1: after remote call Cast: " + film.getCast().toString());
-
         String testResult = "Failed";
 
-        if (film.getCast() != null){
-            /*if (!(localCountryOfOriginValue.equals(USA) && remoteCountryOfOriginValue.equals(USA))){
+        if (film != null){
+            if (film.getCast() != null){
+                /*if (!(localCountryOfOriginValue.equals(USA) && remoteCountryOfOriginValue.equals(USA))){
                 if (localCountryOfOriginValue.equals(remoteCountryOfOriginValue)){
                     testResult = "Passed";
                 }
             }*/
-            Cast cast = film.getCast();
-            if ((cast.getLeadActor().equals(LEAD_ACTOR)) && (cast.getId() == CAST_ID)){
-                testResult = "Passed";
+                Cast cast = film.getCast();
+                if ((cast.getLeadActor().equals(LEAD_ACTOR)) && (cast.getId() == CAST_ID)){
+                    testResult = "Passed";
+                }
             }
         }
         LOGGER.info("### TestResult: " + testResult);

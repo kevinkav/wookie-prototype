@@ -13,24 +13,17 @@ package my.prototype.managed.bean;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.inject.Inject;
 
 import my.prototype.api.TestCase;
-import my.prototype.qualifiers.JTS;
-import my.prototype.qualifiers.NON_JTS;
 
 
 @ManagedBean(name = "tc")
 public class TestCaseManager {
 
-    //@EJB
-    @Inject
-    @JTS
+    @EJB(beanName="Ejb1")
     TestCase ejbJts;
     
-    //@EJB
-    @Inject
-    @NON_JTS
+    @EJB(beanName="Ejb1NonJTS")
     TestCase ejbNonJts;
 
     private String result1;

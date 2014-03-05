@@ -17,7 +17,6 @@ import javax.rmi.PortableRemoteObject;
 import my.prototype.api.TestCase;
 import my.prototype.entity.Cast;
 import my.prototype.entity.Film;
-import my.prototype.qualifiers.JTS;
 import my.prototype.remote.home.api.Ejb1RemoteHome;
 import my.prototype.remote.home.api.Ejb2RemoteHome;
 import my.prototype.remote.home.api.Ejb2RemoteObject;
@@ -26,7 +25,6 @@ import my.prototype.remote.home.api.Ejb2RemoteObject;
 /**
  * Session Bean implementation class Ejb1
  */
-@JTS
 @Stateless
 @Local(TestCase.class)
 @RemoteHome(Ejb1RemoteHome.class)
@@ -77,6 +75,9 @@ public class Ejb1 extends TestBase {
     }
 
 
+    /**
+     * Called from other Application Server to create Cast object
+     */
     public void createCast_RemoteCall(final String leadActor){
         LOGGER.info("### EJB1: createCast_RemoteCall with Lead actor: " + leadActor);
         Cast cast = new Cast();
