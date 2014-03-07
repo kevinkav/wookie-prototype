@@ -14,13 +14,14 @@ package my.prototype.managed.bean;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 
-import my.prototype.api.TestCase;
+import my.prototype.test.api.TestCase;
+
 
 
 @ManagedBean(name = "tc")
 public class TestCaseManager {
 
-    @EJB(beanName="Ejb1")
+    @EJB(beanName="Ejb1JTS")
     TestCase ejbJts;
     
     @EJB(beanName="Ejb1NonJTS")
@@ -89,7 +90,8 @@ public class TestCaseManager {
             result1 = ejbJts.getResult();
             info1 = "Test executed";
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            result1 = "Failed";
         }
     }
 
@@ -147,7 +149,8 @@ public class TestCaseManager {
             result2 = ejbNonJts.getResult();
             info2 = "Test executed";
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            result2 = "Failed";
         }
     }
 
