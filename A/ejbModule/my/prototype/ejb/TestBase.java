@@ -31,12 +31,11 @@ public abstract class TestBase implements TestCase{
     public static final String USA = "USA";
     public static final String DIRECTOR = "George Lucas";
     public static final String STAR_WARS = "StarWars";
+    public static final String COUNTRY_OF_ORIGIN_CHANGED = "changed";
+    public static final String COUNTRY_OF_ORIGIN_USA = "USA";
     public static final long STAR_WARS_ID = 1l;
     public static final long CAST_ID = 2l;    
     private static final Logger LOGGER = Logger.getLogger(TestBase.class.getCanonicalName());
-
-    @Inject
-    public BeanLocator beanLocator;
     
     @PersistenceContext(unitName = "FilmDatabase")
     public EntityManager em;
@@ -44,7 +43,7 @@ public abstract class TestBase implements TestCase{
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String setUp() {
-        Film film = createFilm(STAR_WARS, STAR_WARS_ID, DIRECTOR, 122, 1977, USA);
+        Film film = createFilm(STAR_WARS, STAR_WARS_ID, DIRECTOR, 122, 1977, COUNTRY_OF_ORIGIN_USA);
         em.persist(film);
         LOGGER.info("### EJB1: Created and persisted film: " + film.toString());   
         return "Created film: " + film.getName() + " FilmId: " + STAR_WARS_ID;

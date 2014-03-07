@@ -21,11 +21,11 @@ import my.prototype.test.api.TestCase;
 @ManagedBean(name = "tc")
 public class TestCaseManager {
 
-    @EJB(beanName="Ejb1JTS")
-    TestCase ejbJts;
+    @EJB(beanName="Ejb1_v2")
+    TestCase ejb_v2;
     
-    @EJB(beanName="Ejb1NonJTS")
-    TestCase ejbNonJts;
+    @EJB(beanName="Ejb1_v3")
+    TestCase ejb_v3;
 
     private String result1;
     private String info1 = "Info...";
@@ -73,12 +73,12 @@ public class TestCaseManager {
     }
     
     public void setupTC1() {
-        setupResult1 = ejbJts.setUp();
+        setupResult1 = ejb_v2.setUp();
         info1 = "Setup done";
     }
 
     public void tearDownTC1() {
-        teardownResult1 = ejbJts.tearDown();
+        teardownResult1 = ejb_v2.tearDown();
         info1 = teardownResult1;
         info1 = "Teardown done";
     }
@@ -86,8 +86,8 @@ public class TestCaseManager {
 
     public void executeTC1() {
         try {
-            ejbJts.runTest();
-            result1 = ejbJts.getResult();
+            ejb_v2.runTest();
+            result1 = ejb_v2.getResult();
             info1 = "Test executed";
         } catch (Exception e) {
             //e.printStackTrace();
@@ -132,12 +132,12 @@ public class TestCaseManager {
     }
     
     public void setupTC2() {
-        setupResult2 = ejbNonJts.setUp();
+        setupResult2 = ejb_v3.setUp();
         info2 = "Setup done";
     }
 
     public void tearDownTC2() {
-        teardownResult2 = ejbNonJts.tearDown();
+        teardownResult2 = ejb_v3.tearDown();
         info2 = teardownResult1;
         info2 = "Teardown done";
     }
@@ -145,8 +145,8 @@ public class TestCaseManager {
 
     public void executeTC2() {
         try {
-            ejbNonJts.runTest();
-            result2 = ejbNonJts.getResult();
+            ejb_v3.runTest();
+            result2 = ejb_v3.getResult();
             info2 = "Test executed";
         } catch (Exception e) {
             //e.printStackTrace();
