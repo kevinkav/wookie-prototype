@@ -1,30 +1,18 @@
 package my.prototype.ejb;
 
-import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
-/*------------------------------------------------------------------------------
- *******************************************************************************
- * COPYRIGHT Ericsson 2012
- *
- * The copyright to the computer program(s) herein is the property of
- * Ericsson Inc. The programs may be used and/or copied only with written
- * permission from Ericsson Inc. or in accordance with the terms and
- * conditions stipulated in the agreement/contract under which the
- * program(s) have been supplied.
- *******************************************************************************
- *----------------------------------------------------------------------------*/
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import my.prototype.test.api.TestCase;
 import my.prototype.entity.Cast;
 import my.prototype.entity.Film;
+import my.prototype.test.api.TestCase;
+
 
 public abstract class Ejb1Base implements TestCase{
 
@@ -150,6 +138,35 @@ public abstract class Ejb1Base implements TestCase{
         return film;
     }
     
+    /**
+     * Called by Ejb2 from node2 application server to get the current
+     * value of the CountryOfOrigin attribute
+     * 
+     * @param id
+     * @return the current CountryOfOrigin attribute value
+     */
+    public String getCountryOfOrigin(final long id) {
+        LOG.info("getCountryOfOrigin with id: " + id);
+        Film film = em.find(my.prototype.entity.Film.class, id);
+        String attr = film.getCountryOfOrigin();
+        LOG.info("Found attribute CountryOfOrigin value: " + attr);
+        return attr;
+    }
     
+    /**
+     * Called by Ejb2 from node2 application server to create a Cast object
+     * in the Film object
+     */
+    public void addCastToFilm(){
+        LOG.info("addCastToFilm");
+        Cast cast = new Cast();
+        cast.setId(CAST_ID);
+        cast.setLeadActor(LEAD_ACTOR);
+        Film f = findFilm(STAR_WARS_ID);
+        f.setCast(cast);
+        em.persist(cast);
+        em.persist(f);
+        LOG.info("Created Cast in Film: " + cast.toString());
+    }
 
 }

@@ -5,12 +5,13 @@ import java.rmi.RemoteException;
 import javax.ejb.Remote;
 
 @Remote
-public interface Ejb1Remote {
+public interface Ejb1StatefulRemote {
 
     /**
      * JNDI used for lookup 
      */
-    String EJB1_JNDI_LOOKUP = "ejb:Ear1/A/Ejb1_V3!my.remote.v3.api.Ejb1Remote";
+    String EJB1_STATEFUL_JNDI_LOOKUP = 
+            "ejb:Ear1/A/Ejb1_V3_Stateful!my.remote.v3.api.Ejb1StatefulRemote";
 
     
     /**

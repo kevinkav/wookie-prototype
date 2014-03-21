@@ -15,8 +15,6 @@ import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
 import my.prototype.test.api.TestCase;
-import my.prototype.entity.Cast;
-import my.prototype.entity.Film;
 import my.remote.v2.home.api.Ejb1RemoteHome;
 import my.remote.v2.home.api.Ejb1RemoteObject;
 import my.remote.v2.home.api.Ejb2RemoteHome;
@@ -52,30 +50,6 @@ public class Ejb1_V2 extends Ejb1Base {
             throw e;
         }
         LOG.info("Commiting transaction.");
-    }
-
-
-
-    public String getCountryOfOrigin(final long id) {
-        LOG.info("getCountryOfOrigin with id: " + id);
-        Film film = em.find(my.prototype.entity.Film.class, id);
-        return film.getCountryOfOrigin();
-    }
-
-
-    /**
-     * Called from other Application Server to create Cast object
-     */
-    public void addCastToFilm(){
-        LOG.info("addCastToFilm");
-        Cast cast = new Cast();
-        cast.setId(CAST_ID);
-        cast.setLeadActor(LEAD_ACTOR);
-        Film f = findFilm(STAR_WARS_ID);
-        f.setCast(cast);
-        em.persist(cast);
-        em.persist(f);
-        LOG.info("Created Cast in Film: " + cast.toString());
     }
 
 
