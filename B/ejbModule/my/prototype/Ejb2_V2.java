@@ -37,14 +37,14 @@ import my.remote.v2.home.api.Ejb2RemoteObject;
 @RemoteHome(Ejb2RemoteHome.class)
 @EJB(name = Ejb2RemoteObject.EJB2_BINDING_JNDI, beanInterface = Ejb2RemoteObject.class)
 @Stateless
-public class Ejb2_v2 {
+public class Ejb2_V2 {
     
     
     private static final String EJB1_JTS_ADDRESS = 
             "corbaname:iiop:localhost:3528#" + Ejb1RemoteObject.EJB1_BINDING_JNDI; 
     
     private static final Logger LOG = 
-            Logger.getLogger(Ejb2_v2.class.getCanonicalName());
+            Logger.getLogger(Ejb2_V2.class.getCanonicalName());
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String getCountryOfOriginAndCreateCast(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {

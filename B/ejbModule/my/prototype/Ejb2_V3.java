@@ -13,6 +13,7 @@ package my.prototype;
 
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -26,26 +27,27 @@ import my.remote.v3.bean.locator.BeanLocator;
 
 @Remote(Ejb2Remote.class)
 @Stateless
-public class Ejb2_v3 implements Ejb2Remote{
+@EJB(name=Ejb2Remote.EJB2_JNDI_LOOKUP, beanInterface=Ejb2Remote.class)
+public class Ejb2_V3 implements Ejb2Remote{
 
     @Inject
     BeanLocator beanLocator;
     Ejb1Remote ejb1;    
-    private static final Logger LOGGER = Logger.getLogger(Ejb2_v3.class.getCanonicalName());
-    private static final String BEAN1_LOOKUP_NAME = "ejb:Ear1/A/Ejb1_v3!my.remote.v3.api.Ejb1Remote";
+    private static final Logger LOG = Logger.getLogger(Ejb2_V3.class.getCanonicalName());
+    //private static final String BEAN1_LOOKUP_NAME = "ejb:Ear1/A/Ejb1_V3!my.remote.v3.api.Ejb1Remote";
     
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String getCountryOfOriginAndCreateCast(long id) throws Exception {
-        LOGGER.info("Called with id: " + id);
+        LOG.info("Called with id: " + id);
         String countryOfOriginEjb1 = "";
         try {
-            ejb1 = (Ejb1Remote) beanLocator.locateBean(BEAN1_LOOKUP_NAME);
+            ejb1 = (Ejb1Remote) beanLocator.locateBean(Ejb1Remote.EJB1_JNDI_LOOKUP);
             countryOfOriginEjb1 = ejb1.getCountryOfOrigin(id);
-            LOGGER.info("received CoutryOfOrigin value from ejb1: " + countryOfOriginEjb1);
+            LOG.info("received CoutryOfOrigin value from ejb1: " + countryOfOriginEjb1);
             ejb1.addCastToFilm();
         } catch (Exception e) {
-            LOGGER.severe("Exception occurred rolling back transaction...");
+            LOG.severe("Exception occurred rolling back transaction...");
             throw e;
         }
         return countryOfOriginEjb1;

@@ -14,6 +14,7 @@ package my.prototype.ejb;
 import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -32,10 +33,11 @@ import my.remote.v3.bean.locator.BeanLocator;
 @Stateless
 @Local(TestCase.class)
 @Remote(Ejb1Remote.class)
-public class Ejb1_v3 extends Ejb1Base implements Ejb1Remote {
+@EJB(name=Ejb1Remote.EJB1_JNDI_LOOKUP, beanInterface=Ejb1Remote.class)
+public class Ejb1_V3 extends Ejb1Base implements Ejb1Remote {
 
-    private static final Logger LOG = Logger.getLogger(Ejb1_v3.class.getCanonicalName());
-    private static final String BEAN3_LOOKUP_NAME = "ejb:Ear2/B/Ejb2_v3!my.remote.v3.api.Ejb2Remote";
+    private static final Logger LOG = Logger.getLogger(Ejb1_V3.class.getCanonicalName());
+    //private static final String EJB2_LOOKUP_NAME = "ejb:Ear2/B/Ejb2_v3!my.remote.v3.api.Ejb2Remote";
 
     @Inject
     BeanLocator beanLocator;
@@ -47,8 +49,8 @@ public class Ejb1_v3 extends Ejb1Base implements Ejb1Remote {
         try {
             String local_CountryOfOriginValue = changeCountryOfOrigin();
             // Call Ejb2
-            Ejb2Remote ejb3Remote = (Ejb2Remote) beanLocator.locateBean(BEAN3_LOOKUP_NAME);
-            String remote_CountryOfOriginValue = ejb3Remote.getCountryOfOriginAndCreateCast(STAR_WARS_ID);
+            Ejb2Remote ejb2Remote = (Ejb2Remote) beanLocator.locateBean(Ejb2Remote.EJB2_JNDI_LOOKUP);
+            String remote_CountryOfOriginValue = ejb2Remote.getCountryOfOriginAndCreateCast(STAR_WARS_ID);
             // print both results
             printLocalAndRemoteValues(local_CountryOfOriginValue, remote_CountryOfOriginValue);
         } catch (Exception e) {

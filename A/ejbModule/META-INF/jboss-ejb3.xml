@@ -20,11 +20,11 @@
                impl-version="2.0">
         <assembly-descriptor>
         <iiop:iiop>
-             <ejb-name>Ejb1_v2</ejb-name>
+             <ejb-name>Ejb1_V2</ejb-name>
              <iiop:binding-name>jts/Ejb1</iiop:binding-name>
         </iiop:iiop>
         <iiop:iiop>
-             <ejb-name>Ejb2_v2</ejb-name>
+             <ejb-name>Ejb2_V2</ejb-name>
              <iiop:binding-name>jts/Ejb2</iiop:binding-name>
         </iiop:iiop>
     </assembly-descriptor>

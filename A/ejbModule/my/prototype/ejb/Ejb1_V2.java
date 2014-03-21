@@ -30,10 +30,10 @@ import my.remote.v2.home.api.Ejb2RemoteObject;
 @Local(TestCase.class)
 @RemoteHome(Ejb1RemoteHome.class)
 @EJB(name = Ejb1RemoteObject.EJB1_BINDING_JNDI, beanInterface = Ejb1RemoteObject.class)
-public class Ejb1_v2 extends Ejb1Base {
+public class Ejb1_V2 extends Ejb1Base {
 
     final String ejb2Address = "corbaname:iiop:localhost:3628#" + Ejb2RemoteObject.EJB2_BINDING_JNDI;
-    private static final Logger LOG = Logger.getLogger(Ejb1_v2.class.getCanonicalName());    
+    private static final Logger LOG = Logger.getLogger(Ejb1_V2.class.getCanonicalName());    
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)

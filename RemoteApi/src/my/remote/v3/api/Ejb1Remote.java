@@ -10,7 +10,9 @@ public interface Ejb1Remote {
     /**
      * JNDI used to lookup Ejb1NonJTS
      */
-    String EJB1_REMOTE_JNDI = "java:remote/ejb1";
+    //String EJB1_REMOTE_JNDI = "java:remote/ejb1";
+    String EJB1_JNDI_LOOKUP = "ejb:Ear1/A/Ejb1_V3!my.remote.v3.api.Ejb1Remote";
+
     
     /**
      * Gets the CountryOfOrigin attribute from the Film object.

@@ -21,15 +21,13 @@ import my.prototype.test.api.TestCase;
 @ManagedBean(name = "tc")
 public class TestCaseManager {
 
-    @EJB(beanName="Ejb1_v2")
+    @EJB(beanName="Ejb1_V2")
     TestCase ejb1_v2;
     
-    @EJB(beanName="Ejb1_v3")
+    @EJB(beanName="Ejb1_V3")
     TestCase ejb1_v3;
 
-    private static final String SETUP_MSG = "[Setup Test]";
     private static final String EXECUTED_MSG = "[Executed Test]";
-    private static final String TEARDOWN_MSG = "[Teardown Test]";
     private static final String DONE = "Done";
     
     private String testResult1;
