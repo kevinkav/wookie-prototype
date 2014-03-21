@@ -11,7 +11,6 @@
  *----------------------------------------------------------------------------*/
 package my.prototype;
 
-import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
 import javax.ejb.Remote;
@@ -31,23 +30,25 @@ public class Ejb2_v3 implements Ejb2Remote{
 
     @Inject
     BeanLocator beanLocator;
-    
     Ejb1Remote ejb1;    
-    
-   
     private static final Logger LOGGER = Logger.getLogger(Ejb2_v3.class.getCanonicalName());
-    
     private static final String BEAN1_LOOKUP_NAME = "ejb:Ear1/A/Ejb1_v3!my.remote.v3.api.Ejb1Remote";
     
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public String runTest(long id) throws RemoteException {
-        LOGGER.info("runTest called with id: " + id);
-        ejb1 = (Ejb1Remote) beanLocator.locateBean(BEAN1_LOOKUP_NAME);
-        String attr = ejb1.getCountryOfOrigin(id);
-        LOGGER.info("received CoutryOfOrigin value from ejb1: " + attr);
-        ejb1.addCastToFilm();
-        return attr;
+    public String getCountryOfOriginAndCreateCast(long id) throws Exception {
+        LOGGER.info("Called with id: " + id);
+        String countryOfOriginEjb1 = "";
+        try {
+            ejb1 = (Ejb1Remote) beanLocator.locateBean(BEAN1_LOOKUP_NAME);
+            countryOfOriginEjb1 = ejb1.getCountryOfOrigin(id);
+            LOGGER.info("received CoutryOfOrigin value from ejb1: " + countryOfOriginEjb1);
+            ejb1.addCastToFilm();
+        } catch (Exception e) {
+            LOGGER.severe("Exception occurred rolling back transaction...");
+            throw e;
+        }
+        return countryOfOriginEjb1;
     }
 
 }

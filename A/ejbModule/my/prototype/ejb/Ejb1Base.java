@@ -1,5 +1,6 @@
 package my.prototype.ejb;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -25,17 +26,18 @@ import my.prototype.test.api.TestCase;
 import my.prototype.entity.Cast;
 import my.prototype.entity.Film;
 
-public abstract class TestBase implements TestCase{
+public abstract class Ejb1Base implements TestCase{
 
     public static final String LEAD_ACTOR = "Harrison Ford";
     public static final String USA = "USA";
     public static final String DIRECTOR = "George Lucas";
     public static final String STAR_WARS = "StarWars";
-    public static final String COUNTRY_OF_ORIGIN_CHANGED = "changed";
+    public static final String COUNTRY_OF_ORIGIN_USA_CHANGED = "USA_CHANGED";
     public static final String COUNTRY_OF_ORIGIN_USA = "USA";
     public static final long STAR_WARS_ID = 1l;
-    public static final long CAST_ID = 2l;    
-    private static final Logger LOGGER = Logger.getLogger(TestBase.class.getCanonicalName());
+    public static final long CAST_ID = 2l;  
+    private Film film;
+    private static final Logger LOG = Logger.getLogger(Ejb1Base.class.getCanonicalName());
     
     @PersistenceContext(unitName = "FilmDatabase")
     public EntityManager em;
@@ -45,7 +47,7 @@ public abstract class TestBase implements TestCase{
     public String setUp() {
         Film film = createFilm(STAR_WARS, STAR_WARS_ID, DIRECTOR, 122, 1977, COUNTRY_OF_ORIGIN_USA);
         em.persist(film);
-        LOGGER.info("### EJB1: Created and persisted film: " + film.toString());   
+        LOG.info("### EJB1: Created and persisted film: " + film.toString());   
         return "Created film: " + film.getName() + " FilmId: " + STAR_WARS_ID;
     }
     
@@ -57,7 +59,7 @@ public abstract class TestBase implements TestCase{
         Query query = em.createQuery("Select c FROM my.prototype.entity.Cast c");
         final List<Cast> casts = query.getResultList();
         for (final Cast cast : casts) {
-            LOGGER.info("### EJB1: Deleting cast: " + cast.getId() + " " + cast.getLeadActor());
+            LOG.info("### EJB1: Deleting cast: " + cast.getId() + " " + cast.getLeadActor());
             sb.append(cast.getId());
             em.remove(cast);
         }
@@ -65,7 +67,7 @@ public abstract class TestBase implements TestCase{
         query = em.createQuery("Select p FROM my.prototype.entity.Film p");
         final List<Film> films = query.getResultList();
         for (final Film film : films) {
-            LOGGER.info("### EJB1: Deleting film: " + film.getName());
+            LOG.info("### EJB1: Deleting film: " + film.getName());
             sb.append(film.getId());
             em.remove(film);
         }
@@ -74,7 +76,7 @@ public abstract class TestBase implements TestCase{
     
 
     @Override
-    public abstract void runTest();
+    public abstract void runTest() throws Exception;
     
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     @Override
@@ -96,7 +98,7 @@ public abstract class TestBase implements TestCase{
                 }
             }
         }
-        LOGGER.info("### TestResult: " + testResult);
+        LOG.info("### TestResult: " + testResult);
         return testResult;
     }
     
@@ -105,10 +107,35 @@ public abstract class TestBase implements TestCase{
     }
     
     public void printFilmContents(long filmId){
-        LOGGER.info("### EJB1: printFilmContents... ");
+        LOG.info("### EJB1: printFilmContents... ");
         Film f = findFilm(filmId);
         if (f != null){
             f.toString();
+        }
+    }
+    
+    /**
+     * Changes the CountryOfOrigin attribute and returns
+     * the new value of the attribute.
+     * 
+     * @return the new attribute value of CountryOfOrigin
+     */
+    protected String changeCountryOfOrigin(){
+        film = findFilm(STAR_WARS_ID);
+        LOG.info("Initial Film attributes: " + film.toString());
+        film.setCountryOfOrigin(COUNTRY_OF_ORIGIN_USA_CHANGED);
+        film = findFilm(STAR_WARS_ID);
+        String localCountryOfOriginValue = film.getCountryOfOrigin();
+        LOG.info("Changed CountryOfOrigin attribute: " + film.toString());
+        return localCountryOfOriginValue;
+    }
+    
+    protected void printLocalAndRemoteValues(String localVal, String remoteVal){
+        LOG.info("Local CountryOfOrigin value: " + localVal);
+        LOG.info("Remote CountryOfOrigin value: " + remoteVal);
+        if (!localVal.equals(remoteVal)){
+            LOG.info("CountryOfOrigin local and remote values are different !!");
+            LOG.info("Ejb2 did not see the changed value inside the same transaction/entitymanager started in Ejb1!!");
         }
     }
     
@@ -122,5 +149,7 @@ public abstract class TestBase implements TestCase{
         film.setCountryOfOrigin(country);
         return film;
     }
+    
+    
 
 }

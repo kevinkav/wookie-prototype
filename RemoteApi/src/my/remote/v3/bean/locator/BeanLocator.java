@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 public class BeanLocator {
 
@@ -17,27 +18,19 @@ public class BeanLocator {
      * 
      * @param address
      * @return
+     * @throws NamingException 
      */
-    public Object locateBean(String address) {
+    public Object locateBean(String address) throws NamingException {
         initContext();
-        Object bean = null;
-        try {
-            bean = context.lookup(address);
-            LOG.info("Located bean successfully.");
-        } catch (final Exception e) {
-            LOG.severe("Bean lookup failed");
-        }
+        Object bean = context.lookup(address);
+        LOG.info("Located bean successfully.");
         return bean;
     }
 
 
-    private void initContext() {
+    private void initContext() throws NamingException {
         initProperties();
-        try {
-            context = new InitialContext(props);
-        } catch (final Exception e) {
-            LOG.severe("Context initialisation failed");
-        }
+        context = new InitialContext(props);
     }
     
     private void initProperties() {

@@ -23,11 +23,13 @@ public interface Ejb2RemoteObject extends EJBObject{
     public static String EJB2_BINDING_JNDI = "jts/Ejb2";
     
     /**
-     * Executes the test.
+     * This method first tries to fetch the CountryOfOrigin attribute that was changed
+     * by Ejb1 at the start of test and secondly this method tries to create and add 
+     * a new Cast object to the Film object.
      * 
      * @param id
      * @return
      * @throws RemoteException
      */
-    String runTest(long id) throws RemoteException;
+    String getCountryOfOriginAndCreateCast(long id) throws RemoteException;
 }

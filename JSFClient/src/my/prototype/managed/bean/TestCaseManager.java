@@ -22,20 +22,25 @@ import my.prototype.test.api.TestCase;
 public class TestCaseManager {
 
     @EJB(beanName="Ejb1_v2")
-    TestCase ejb_v2;
+    TestCase ejb1_v2;
     
     @EJB(beanName="Ejb1_v3")
-    TestCase ejb_v3;
+    TestCase ejb1_v3;
 
-    private String result1;
-    private String info1 = "Info...";
+    private static final String SETUP_MSG = "[Setup Test]";
+    private static final String EXECUTED_MSG = "[Executed Test]";
+    private static final String TEARDOWN_MSG = "[Teardown Test]";
+    private static final String DONE = "Done";
+    
+    private String testResult1;
     private String setupResult1;
     private String teardownResult1;
+    private String info1 = "";
     
-    private String result2;
-    private String info2 = "Info...";
+    private String testResult2;
     private String setupResult2;
     private String teardownResult2;
+    private String info2 = "";
 
     /* ********************************************
      * TC1 - Using JTS 
@@ -57,11 +62,11 @@ public class TestCaseManager {
     }
 
     public String getResultTC1() {
-        return result1;
+        return testResult1;
     }
 
     public void setResultTC1(String result) {
-        this.result1 = result;
+        this.testResult1 = result;
     }
     
     public String getInfoTC1() {
@@ -73,25 +78,25 @@ public class TestCaseManager {
     }
     
     public void setupTC1() {
-        setupResult1 = ejb_v2.setUp();
-        info1 = "Setup done";
+        info1 = ejb1_v2.setUp();
+        setupResult1 = DONE;
     }
 
     public void tearDownTC1() {
-        teardownResult1 = ejb_v2.tearDown();
-        info1 = teardownResult1;
-        info1 = "Teardown done";
+        info1 = ejb1_v2.tearDown();
+        teardownResult1 = DONE;
     }
 
 
     public void executeTC1() {
         try {
-            ejb_v2.runTest();
-            result1 = ejb_v2.getResult();
-            info1 = "Test executed";
+            ejb1_v2.runTest();
+            testResult1 = ejb1_v2.getResult();
+            info1 = EXECUTED_MSG;
         } catch (Exception e) {
-            //e.printStackTrace();
-            result1 = "Failed";
+            String ERROR_MSG = "[" + e.getMessage() + "]";
+            testResult1 = ERROR_MSG;
+            info1 = ERROR_MSG;
         }
     }
 
@@ -116,11 +121,11 @@ public class TestCaseManager {
     }
 
     public String getResultTC2() {
-        return result2;
+        return testResult2;
     }
 
     public void setResultTC2(String result) {
-        this.result2 = result;
+        this.testResult2 = result;
     }
     
     public String getInfoTC2() {
@@ -131,26 +136,26 @@ public class TestCaseManager {
         this.info2 = info;
     }
     
-    public void setupTC2() {
-        setupResult2 = ejb_v3.setUp();
-        info2 = "Setup done";
+    public void setupTC2() { 
+        info2 = ejb1_v3.setUp();
+        setupResult2 = DONE;
     }
 
     public void tearDownTC2() {
-        teardownResult2 = ejb_v3.tearDown();
-        info2 = teardownResult1;
-        info2 = "Teardown done";
+        info2 = ejb1_v3.tearDown();
+        teardownResult2 = DONE;
     }
 
 
     public void executeTC2() {
         try {
-            ejb_v3.runTest();
-            result2 = ejb_v3.getResult();
-            info2 = "Test executed";
+            ejb1_v3.runTest();
+            testResult2 = ejb1_v3.getResult();
+            info2 = EXECUTED_MSG;
         } catch (Exception e) {
-            //e.printStackTrace();
-            result2 = "Failed";
+            String ERROR_MSG = "[" + e.getMessage() + "]";
+            testResult2 = ERROR_MSG;
+            info2 = ERROR_MSG;
         }
     }
 

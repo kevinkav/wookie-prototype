@@ -30,41 +30,28 @@ import my.remote.v2.home.api.Ejb2RemoteObject;
 @Local(TestCase.class)
 @RemoteHome(Ejb1RemoteHome.class)
 @EJB(name = Ejb1RemoteObject.EJB1_BINDING_JNDI, beanInterface = Ejb1RemoteObject.class)
-public class Ejb1_v2 extends TestBase {
+public class Ejb1_v2 extends Ejb1Base {
 
-
-    private String localCountryOfOriginValue;
-    private String remoteCountryOfOriginValue;
     final String ejb2Address = "corbaname:iiop:localhost:3628#" + Ejb2RemoteObject.EJB2_BINDING_JNDI;
-    private Film film;
     private static final Logger LOG = Logger.getLogger(Ejb1_v2.class.getCanonicalName());    
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void runTest() {
+    public void runTest() throws Exception {
         try{
-            // print initial film data
-            film = findFilm(STAR_WARS_ID);
-            LOG.info("Initial Film: " + film.toString());
-
-            // change attribute
-            film.setCountryOfOrigin(COUNTRY_OF_ORIGIN_CHANGED);
-            film = findFilm(STAR_WARS_ID);
-            localCountryOfOriginValue = film.getCountryOfOrigin();
-            LOG.info("Updated CountryOfOrigin attibute locally in Film: " + film.toString());
-
+            String local_CountryOfOriginValue = changeCountryOfOrigin();
+          
             // Make remote call
             Ejb2RemoteObject ejb2Remote = (Ejb2RemoteObject) getEjbRemoteObject(ejb2Address);
-            remoteCountryOfOriginValue = ejb2Remote.runTest(STAR_WARS_ID);
+            String remote_CountryOfOriginValue = ejb2Remote.getCountryOfOriginAndCreateCast(STAR_WARS_ID);
 
             // print both results
-            LOG.info("local CountryOfOrigin value: " + localCountryOfOriginValue);
-            LOG.info("remote CountryOfOrigin value: " + remoteCountryOfOriginValue);
-            LOG.info("Commiting transaction...");
+            printLocalAndRemoteValues(local_CountryOfOriginValue, remote_CountryOfOriginValue); 
         }catch (Exception e){
-            LOG.severe("+++++++++++++++++ Exception !!!! ++++++++++++++++");
-            e.printStackTrace();
+            LOG.severe("Exception occurred rolling back transaction...");
+            throw e;
         }
+        LOG.info("Commiting transaction.");
     }
 
 

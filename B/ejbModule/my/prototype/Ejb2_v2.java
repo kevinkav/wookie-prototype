@@ -47,7 +47,7 @@ public class Ejb2_v2 {
             Logger.getLogger(Ejb2_v2.class.getCanonicalName());
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public String runTest(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+    public String getCountryOfOriginAndCreateCast(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         LOG.info("runTest called with id: " + id);
         Ejb1RemoteObject ejb1 = getEjb1RemoteObject();
         String attr = ejb1.getCountryOfOrigin(id);

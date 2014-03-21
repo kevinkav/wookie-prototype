@@ -11,6 +11,7 @@
  *----------------------------------------------------------------------------*/
 package my.prototype.test.api;
 
+
 public interface TestCase {
 
     /**
@@ -36,5 +37,5 @@ public interface TestCase {
     /**
      * Runs the test. 
      */
-    void runTest();
+    void runTest() throws Exception;
 }

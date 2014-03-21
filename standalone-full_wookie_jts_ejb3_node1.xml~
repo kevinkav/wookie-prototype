@@ -72,12 +72,12 @@
             <console-handler name="CONSOLE">
                 <level name="INFO"/>
                 <formatter>
-                    <pattern-formatter pattern="%d{HH:mm:ss,SSS} %-5p [%c][%M:%L] %s%E%n"/>
+                    <pattern-formatter pattern="%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
                 </formatter>
             </console-handler>
             <periodic-rotating-file-handler name="FILE">
                 <formatter>
-                    <pattern-formatter pattern="%d{HH:mm:ss,SSS} %-5p [%c][%M:%L] %s%E%n"/>
+                    <pattern-formatter pattern="%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
                 </formatter>
                 <file relative-to="jboss.server.log.dir" path="server.log"/>
                 <suffix value=".yyyy-MM-dd"/>
@@ -91,6 +91,9 @@
             </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
+            </logger>
+            <logger category="com.ericsson.oss.services.topologysync" use-parent-handlers="true">
+                <level name="DEBUG"/>
             </logger>
             <logger category="jacorb">
                 <level name="WARN"/>
@@ -302,7 +305,26 @@
                         </entries>
                     </pooled-connection-factory>
                 </jms-connection-factories>
-</hornetq-server>
+
+                <jms-destinations>
+                    <jms-topic name="SFWKsdkConfigPropertyModification">
+                        <entry name="topic/sdk-config-property-modification"/>
+                        <entry name="java:jboss/exported/jms/topic/sdk-config-property-modification"/>
+                    </jms-topic>
+                    <jms-topic name="SFWKsdkUpgradeCoreTopic">
+                        <entry name="topic/sdk-upgrade-topic"/>
+                        <entry name="java:jboss/exported/jms/topic/sdk-upgrade-topic"/>
+                    </jms-topic>
+                    <jms-topic name="SFWKsdkServiceAvailabilityTopic">
+                        <entry name="topic/sdk-service-availability-topic"/>
+                        <entry name="java:jboss/exported/jms/topic/sdk-service-availability-topic"/>
+                    </jms-topic>
+                    <jms-topic name="HealthCheckTopic">
+                        <entry name="topic/sdk-healthcheck-topic"/>
+                        <entry name="java:jboss/exported/jms/topic/sdk-healthcheck-topic"/>
+                    </jms-topic>
+                </jms-destinations>
+            </hornetq-server>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:naming:1.2">
             <remote-naming/>
@@ -326,7 +348,7 @@
         <subsystem xmlns="urn:jboss:domain:remoting:1.1">
             <connector name="remoting-connector" socket-binding="remoting" security-realm="ApplicationRealm"/>
             <outbound-connections>
-                <remote-outbound-connection name="remote-ejb-connection2" outbound-socket-binding-ref="remote-ejb2" username="ejbuser" security-realm="ejb-security-realm">
+                <remote-outbound-connection name="remote-ejb-connection" outbound-socket-binding-ref="remote-ejb" username="ejbuser" security-realm="ejb-security-realm">
                     <properties>
                         <property name="SASL_POLICY_NOANONYMOUS" value="false"/>
                         <property name="SSL_ENABLED" value="false"/>
@@ -361,7 +383,7 @@
             </security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:threads:1.1"/>
-  <!--      <subsystem xmlns="urn:jboss:domain:transactions:1.2">
+ 	<!--subsystem xmlns="urn:jboss:domain:transactions:1.2">
             <core-environment node-identifier="${jboss.tx.node.id}">
                 <process-id>
                     <uuid/>
@@ -371,7 +393,7 @@
             <coordinator-environment default-timeout="300"/>
             <jts/>
         </subsystem>  -->
-	<subsystem xmlns="urn:jboss:domain:transactions:1.2">
+        <subsystem xmlns="urn:jboss:domain:transactions:1.2">
             <core-environment>
                 <process-id>
                     <uuid/>
@@ -412,7 +434,7 @@
         </interface>
     </interfaces>
 
-    <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:100}">
+    <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:0}">
         <socket-binding name="management-native" interface="management" port="${jboss.management.native.port:9999}"/>
         <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990}"/>
         <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9443}"/>
@@ -427,13 +449,13 @@
         <socket-binding name="osgi-http" interface="management" port="8090"/>
         <socket-binding name="txn-recovery-environment" port="4712"/>
         <socket-binding name="txn-status-manager" port="4713"/>
-        <socket-binding name="remoting" port="4447"/>
-	<outbound-socket-binding name="mail-smtp">
+	<socket-binding name="remoting" port="4447"/>
+        <outbound-socket-binding name="mail-smtp">
             <remote-destination host="localhost" port="25"/>
         </outbound-socket-binding>
-
-        <outbound-socket-binding name="remote-ejb2">
-            <remote-destination host="localhost" port="4447"/>
+        
+	<outbound-socket-binding name="remote-ejb">
+            <remote-destination host="localhost" port="4547"/>
         </outbound-socket-binding>
 
     </socket-binding-group>
