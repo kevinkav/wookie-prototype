@@ -23,7 +23,6 @@ import my.remote.v3.bean.locator.BeanLocator;
 public class Ejb1_V3 extends Ejb1Base implements Ejb1Remote {
 
     private static final Logger LOG = Logger.getLogger(Ejb1_V3.class.getCanonicalName());
-    //private static final String EJB2_LOOKUP_NAME = "ejb:Ear2/B/Ejb2_v3!my.remote.v3.api.Ejb2Remote";
 
     @Inject
     BeanLocator beanLocator;
