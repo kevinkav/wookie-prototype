@@ -26,9 +26,13 @@ public class TestCaseManager {
     
     @EJB(beanName="Ejb1_V3")
     TestCase ejb1_v3;
+    
+    @EJB(beanName="Ejb1_V3_Stateful")
+    TestCase ejb1_v3_stateful;
 
     private static final String EXECUTED_MSG = "[Executed Test]";
     private static final String DONE = "Done";
+    private static final String FAILED = "Failed";
     
     private String testResult1;
     private String setupResult1;
@@ -39,9 +43,15 @@ public class TestCaseManager {
     private String setupResult2;
     private String teardownResult2;
     private String info2 = "";
-
+    
+    private String testResult3;
+    private String setupResult3;
+    private String teardownResult3;
+    private String info3 = "";
+    
+    
     /* ********************************************
-     * TC1 - Using JTS 
+     * TC1 EJB3.1 Stateless
      ******************************************** */
     public String getTeardownResultTC1() {
         return teardownResult1;
@@ -75,32 +85,30 @@ public class TestCaseManager {
         this.info1 = info;
     }
     
-    public void setupTC1() {
-        info1 = ejb1_v2.setUp();
+    public void setupTC1() { 
+        info1 = ejb1_v3.setUp();
         setupResult1 = DONE;
     }
 
     public void tearDownTC1() {
-        info1 = ejb1_v2.tearDown();
+        info1 = ejb1_v3.tearDown();
         teardownResult1 = DONE;
     }
 
 
     public void executeTC1() {
         try {
-            ejb1_v2.runTest();
-            testResult1 = ejb1_v2.getResult();
+            ejb1_v3.runTest();
+            testResult1 = ejb1_v3.getResult();
             info1 = EXECUTED_MSG;
         } catch (Exception e) {
-            String ERROR_MSG = "[" + e.getMessage() + "]";
-            testResult1 = ERROR_MSG;
-            info1 = ERROR_MSG;
+            info1 =  "[" + e.getMessage() + "]";
+            testResult1 = FAILED;
         }
     }
-
     
     /* ********************************************
-     * TC2 - Using NON JTS 
+     * TC2 EJB 3.1 Statefull
      ******************************************** */
     public String getTeardownResultTC2() {
         return teardownResult2;
@@ -135,28 +143,84 @@ public class TestCaseManager {
     }
     
     public void setupTC2() { 
-        info2 = ejb1_v3.setUp();
+        info2 = ejb1_v3_stateful.setUp();
         setupResult2 = DONE;
     }
 
     public void tearDownTC2() {
-        info2 = ejb1_v3.tearDown();
+        info2 = ejb1_v3_stateful.tearDown();
         teardownResult2 = DONE;
     }
 
 
     public void executeTC2() {
         try {
-            ejb1_v3.runTest();
-            testResult2 = ejb1_v3.getResult();
+            ejb1_v3_stateful.runTest();
+            testResult2 = ejb1_v3_stateful.getResult();
             info2 = EXECUTED_MSG;
         } catch (Exception e) {
-            String ERROR_MSG = "[" + e.getMessage() + "]";
-            testResult2 = ERROR_MSG;
-            info2 = ERROR_MSG;
+            info2 = "[" + e.getMessage() + "]";
+            testResult2 = FAILED;
         }
     }
 
+    /* ********************************************
+     * TC3 EJB2.1 
+     ******************************************** */
+    
+    public String getTeardownResultTC3() {
+        return teardownResult3;
+    }
+
+    public void setTeardownResultTC3(String teardownResult) {
+        this.teardownResult3 = teardownResult;
+    }
+
+    public String getSetupResultTC3() {
+        return setupResult3;
+    }
+
+    public void setSetupResultTC3(String setupResult) {
+        this.setupResult3 = setupResult;
+    }
+
+    public String getResultTC3() {
+        return testResult3;
+    }
+
+    public void setResultTC3(String result) {
+        this.testResult3 = result;
+    }
+    
+    public String getInfoTC3() {
+        return info3;
+    }
+
+    public void setInfoTC3(String info) {
+        this.info3 = info;
+    }
+    
+    public void setupTC3() {
+        info3 = ejb1_v2.setUp();
+        setupResult3 = DONE;
+    }
+
+    public void tearDownTC3() {
+        info3 = ejb1_v2.tearDown();
+        teardownResult3 = DONE;
+    }
+
+
+    public void executeTC3() {
+        try {
+            ejb1_v2.runTest();
+            testResult3 = ejb1_v2.getResult();
+            info3 = EXECUTED_MSG;
+        } catch (Exception e) {
+            info3 = "[" + e.getMessage() + "]";
+            testResult3 = FAILED;
+        }
+    }
 
 
 }

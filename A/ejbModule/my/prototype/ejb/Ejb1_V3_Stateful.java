@@ -3,9 +3,11 @@ package my.prototype.ejb;
 
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
+import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -22,13 +24,14 @@ import my.remote.v3.bean.locator.BeanLocator;
 @EJB(name=Ejb1StatefulRemote.EJB1_STATEFUL_JNDI_LOOKUP, beanInterface=Ejb1StatefulRemote.class)
 public class Ejb1_V3_Stateful extends Ejb1Base implements Ejb1StatefulRemote {
 
-    private static final Logger LOG = 
-            Logger.getLogger(Ejb1_V3_Stateful.class.getCanonicalName());
-
+    private static final String CLASSNAME = Ejb1_V3_Stateful.class.getSimpleName();
+    private static final Logger LOG = Logger.getLogger(CLASSNAME);
+    private static final String PREFIX = "[" + CLASSNAME + "] ";
+    
+    
     @Inject
     BeanLocator beanLocator;
     
-    //TODO
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @Override
     public void runTest() throws Exception {
@@ -40,13 +43,29 @@ public class Ejb1_V3_Stateful extends Ejb1Base implements Ejb1StatefulRemote {
             // print both results
             printLocalAndRemoteValues(local_CountryOfOriginValue, remote_CountryOfOriginValue);
         } catch (Exception e) {
-            LOG.severe("Exception occurred rolling back transaction...");
+            LOG.severe(PREFIX + "Exception occurred rolling back transaction...");
             throw e;
         }
-        LOG.info("Commiting transaction...");
+        LOG.info(PREFIX + "Commiting transaction...");
     }
 
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public String tearDown() {
+        String str = super.tearDown();
+        destroyBean();
+        return str;
+    }
+    
+    @Remove
+    private void destroyBean(){
+        LOG.info(PREFIX + "Finished with stateful bean " + this.getClass().getSimpleName());
+    }
 
+    @PostConstruct
+    private void startup(){
+        LOG.info(PREFIX + "Created " + this.getClass().getSimpleName());
+    }
 
  
 }

@@ -1,5 +1,6 @@
 package my.remote.v3.bean.locator;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
@@ -7,8 +8,14 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-public class BeanLocator {
+/**
+ * Beanlocator thats used to locate EJBs remotely.
+ * Note it implements serializable because the stateful ejb cannot
+ * be passivated unless this class is serializable.
+ */
+public class BeanLocator implements Serializable {
 
+    private static final long serialVersionUID = -520152991172756468L;
     private Hashtable<Object, Object> props;
     private Context context;
     private static final Logger LOG = Logger.getLogger(BeanLocator.class.getCanonicalName());

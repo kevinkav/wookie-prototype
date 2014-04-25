@@ -3,6 +3,7 @@ package my.prototype.ejb;
 import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.CreateException;
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -30,8 +31,10 @@ import my.remote.v2.home.api.Ejb2RemoteObject;
 @EJB(name = Ejb1RemoteObject.EJB1_BINDING_JNDI, beanInterface = Ejb1RemoteObject.class)
 public class Ejb1_V2 extends Ejb1Base {
 
-    final String ejb2Address = "corbaname:iiop:localhost:3628#" + Ejb2RemoteObject.EJB2_BINDING_JNDI;
-    private static final Logger LOG = Logger.getLogger(Ejb1_V2.class.getCanonicalName());    
+    private static final String EJB2_ADDRESS = "corbaname:iiop:localhost:3628#" + Ejb2RemoteObject.EJB2_BINDING_JNDI;
+    private static final String CLASSNAME = Ejb1_V2.class.getSimpleName();
+    private static final Logger LOG = Logger.getLogger(CLASSNAME);
+    private static final String PREFIX = "[" + CLASSNAME + "] ";
 
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -40,21 +43,21 @@ public class Ejb1_V2 extends Ejb1Base {
             String local_CountryOfOriginValue = changeCountryOfOrigin();
           
             // Make remote call
-            Ejb2RemoteObject ejb2Remote = (Ejb2RemoteObject) getEjbRemoteObject(ejb2Address);
+            Ejb2RemoteObject ejb2Remote = (Ejb2RemoteObject) getEjbRemoteObject(EJB2_ADDRESS);
             String remote_CountryOfOriginValue = ejb2Remote.getCountryOfOriginAndCreateCast(STAR_WARS_ID);
 
             // print both results
             printLocalAndRemoteValues(local_CountryOfOriginValue, remote_CountryOfOriginValue); 
         }catch (Exception e){
-            LOG.severe("Exception occurred rolling back transaction...");
+            LOG.severe(PREFIX + "Exception occurred rolling back transaction...");
             throw e;
         }
-        LOG.info("Commiting transaction.");
+        LOG.info(PREFIX + "Commiting transaction.");
     }
 
 
     private Object getEjbRemoteObject(String ejbAddress) throws NamingException, RemoteException, CreateException {
-        LOG.info("Looking up address:  " + ejbAddress);
+        LOG.info(PREFIX + "Looking up address:  " + ejbAddress);
         InitialContext ctx = new InitialContext();
         final Object iiopObject = ctx.lookup(ejbAddress);
         Object remoteObj = null;
@@ -66,6 +69,10 @@ public class Ejb1_V2 extends Ejb1Base {
         return remoteObj;
     }
 
+    @PostConstruct
+    private void startup(){
+        LOG.info(PREFIX + "Created " + this.getClass().getSimpleName());
+    }
 
 }
 

@@ -50,18 +50,20 @@
 	<h2>Transaction Scoped Persistence Context</h2>
 	<h:form>
 	
-		<!-- TEST CASE 1  -->
+		
+		
+		<!-- TEST CASE 1 Stateless EJB3.1 Bean Test -->
 		
 		<h:panelGrid columns="1" styleClass="default" style="width: 450px" cellpadding="0" cellspacing="5">
 			<f:facet name="header">
-            		<h:outputText value="Test Case 1"/>
-            		<h:outputText value="JTS with EJB2.1 remote call"/>
+            		<h:outputText value="Test Case 1: "/>
+            		<h:outputText value="Stateless EJB3.1 Bean Test"/>
         	</f:facet>
 			<h:panelGroup style="display:block; text-align:left">
 				<h:commandButton actionListener="#{tc.setupTC1}" styleClass="buttons" value="Setup TC" />
 				<h:messages />
 				<h:outputText value="#{tc.setupResultTC1}" style="color:blue; margin-left:20px"/>
-			</h:panelGroup>     	         	 	
+			</h:panelGroup>   	         	 	
 			<h:panelGroup style="display:block; text-align:left">		                                    					
 				<h:commandButton actionListener="#{tc.executeTC1}"	styleClass="buttons" value="Execute TC" />
 				<h:messages />
@@ -79,18 +81,19 @@
 			</f:facet>
 		</h:panelGrid>
 		
-		<!-- TEST CASE 2  -->
+		
+		<!-- TEST CASE 2 Statefull EJB3.1 Bean Test -->
 		
 		<h:panelGrid columns="1" styleClass="default" style="width: 450px" cellpadding="0" cellspacing="5">
 			<f:facet name="header">
-            		<h:outputText value="Test Case 2"/>
-            		<h:outputText value="JTS with EJB3.1 remote call"/>
+            		<h:outputText value="Test Case 2: "/>
+            		<h:outputText value="Statefull EJB3.1 Bean Test"/>
         	</f:facet>
 			<h:panelGroup style="display:block; text-align:left">
 				<h:commandButton actionListener="#{tc.setupTC2}" styleClass="buttons" value="Setup TC" />
 				<h:messages />
 				<h:outputText value="#{tc.setupResultTC2}" style="color:blue; margin-left:20px"/>
-			</h:panelGroup>   	         	 	
+			</h:panelGroup>     	         	 	
 			<h:panelGroup style="display:block; text-align:left">		                                    					
 				<h:commandButton actionListener="#{tc.executeTC2}"	styleClass="buttons" value="Execute TC" />
 				<h:messages />
@@ -107,6 +110,36 @@
 				</h:panelGroup>
 			</f:facet>
 		</h:panelGrid>
+		
+		<!-- TEST CASE 3 Stateless EJB2.1 Bean Test -->
+		
+		<h:panelGrid columns="1" styleClass="default" style="width: 450px" cellpadding="0" cellspacing="5">
+			<f:facet name="header">
+            		<h:outputText value="Test Case 3: "/>
+            		<h:outputText value="Stateless EJB2.1 Bean Test"/>
+        	</f:facet>
+			<h:panelGroup style="display:block; text-align:left">
+				<h:commandButton actionListener="#{tc.setupTC3}" styleClass="buttons" value="Setup TC" />
+				<h:messages />
+				<h:outputText value="#{tc.setupResultTC3}" style="color:blue; margin-left:20px"/>
+			</h:panelGroup>     	         	 	
+			<h:panelGroup style="display:block; text-align:left">		                                    					
+				<h:commandButton actionListener="#{tc.executeTC3}"	styleClass="buttons" value="Execute TC" />
+				<h:messages />
+				<h:outputText value="#{tc.resultTC3}" style="color:blue; margin-left:20px"/>
+			</h:panelGroup>
+			<h:panelGroup style="display:block; text-align:left">			
+				<h:commandButton actionListener="#{tc.tearDownTC3}" styleClass="buttons" value="TearDown TC" />
+				<h:messages />
+				<h:outputText value="#{tc.teardownResultTC3}" style="color:blue; margin-left:20px"/>
+			</h:panelGroup>
+			<f:facet name="footer">
+				<h:panelGroup style="display:block; text-align:left; font-family:arial;">
+					<h:outputText value="#{tc.infoTC3}"/>
+				</h:panelGroup>
+			</f:facet>
+		</h:panelGrid>
+		
 		
 	</h:form>
 </h:body>

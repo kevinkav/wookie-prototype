@@ -2,6 +2,7 @@ package my.prototype.ejb;
 
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
@@ -22,7 +23,9 @@ import my.remote.v3.bean.locator.BeanLocator;
 @EJB(name=Ejb1Remote.EJB1_JNDI_LOOKUP, beanInterface=Ejb1Remote.class)
 public class Ejb1_V3 extends Ejb1Base implements Ejb1Remote {
 
-    private static final Logger LOG = Logger.getLogger(Ejb1_V3.class.getCanonicalName());
+    private static final String CLASSNAME = Ejb1_V3.class.getSimpleName();
+    private static final Logger LOG = Logger.getLogger(CLASSNAME);
+    private static final String PREFIX = "[" + CLASSNAME + "] ";
 
     @Inject
     BeanLocator beanLocator;
@@ -39,11 +42,14 @@ public class Ejb1_V3 extends Ejb1Base implements Ejb1Remote {
             // print both results
             printLocalAndRemoteValues(local_CountryOfOriginValue, remote_CountryOfOriginValue);
         } catch (Exception e) {
-            LOG.severe("Exception occurred rolling back transaction...");
+            LOG.severe(PREFIX + "Exception occurred rolling back transaction...");
             throw e;
         }
-        LOG.info("Commiting transaction...");
+        LOG.info(PREFIX + "Commiting transaction...");
     }
     
-    
+    @PostConstruct
+    private void startup(){
+        LOG.info(PREFIX + "Created " + this.getClass().getSimpleName());
+    }
 }
