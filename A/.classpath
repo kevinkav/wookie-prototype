@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="lib" path="/home/eeikkah/.m2/repository/org/jboss/spec/jboss-javaee-all-6.0/3.0.2.Final/jboss-javaee-all-6.0-3.0.2.Final.jar"/>
 	<classpathentry kind="src" path="ejbModule"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/TestApi"/>
@@ -14,5 +15,8 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.jboss.ide.eclipse.as.classpath.core.ejb3.classpathContainer/JBoss AS 7.1"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/home/eeikkah/.m2/repository/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
