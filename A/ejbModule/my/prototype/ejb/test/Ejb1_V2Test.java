@@ -27,21 +27,16 @@ public class Ejb1_V2Test {
     private static final String EJB2_ADDRESS = 
     		"corbaname:iiop:localhost:3628#" + Ejb2RemoteObject.EJB2_BINDING_JNDI;
 
-    
 	@Mock
-	EntityManager mockEm;
-	
+	private EntityManager mockEm;
 	@Mock
-	Ejb2RemoteObject mockEjb2RemoteObject;
-	
+	private Ejb2RemoteObject mockEjb2RemoteObject;
 	@Mock
-	CorbaUtil mockCorbaUtil;
-		
-	//@Mock
-	Film film;
-	
+	private CorbaUtil mockCorbaUtil;
 	@InjectMocks
-	Ejb1_V2 ejb_v2 = new Ejb1_V2();
+	private Ejb1_V2 ejb_v2 = new Ejb1_V2();
+	
+	private Film expectedFilm;
 	
 
 	/**
@@ -49,9 +44,9 @@ public class Ejb1_V2Test {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		Whitebox.setInternalState(ejb_v2, "em", mockEm);
-		Whitebox.setInternalState(ejb_v2, "corbaUtil", mockCorbaUtil);
-		film = createFilm();
+		//Whitebox.setInternalState(ejb_v2, "em", mockEm);
+		//Whitebox.setInternalState(ejb_v2, "corbaUtil", mockCorbaUtil);
+		//compareFilm = createFilm();
 	}
 
 
@@ -60,23 +55,22 @@ public class Ejb1_V2Test {
 	 */
 	@After
 	public void tearDown() throws Exception {
-		//when(mockEm.persist(any(Film.class)))
 	}
 
-
-	@Test
-	public void test_EjbV2_setUp() throws Exception {
-		String actualResult = ejb_v2.setUp();
-		verify(mockEm).persist(any(Film.class));
-		String expectedResult = "Created film: " + film.getName() + " FilmId: " + film.getId();
-		Assert.assertEquals(expectedResult, actualResult);
-	}
 	
 	@Test
 	public void test_EjbV2_RunTest() throws Exception {
+		
+		String actualResult = ejb_v2.setUp();
+		expectedFilm = createFilm();
+		//verify(mockEm).persist(any(Film.class));
+		verify(mockEm).persist(expectedFilm);
+		String expectedResult = "Created film: " + expectedFilm.getName() + " FilmId: " + expectedFilm.getId();
+		Assert.assertEquals(expectedResult, actualResult);
+		
 		when(mockCorbaUtil.getEjb2RemoteObject(EJB2_ADDRESS)).thenReturn(mockEjb2RemoteObject);
-		when(mockEjb2RemoteObject.getCountryOfOriginAndCreateCast(1l)).thenReturn("USA");
-		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(film);
+		when(mockEjb2RemoteObject.getCountryOfOriginAndCreateCast(1l)).thenReturn("USA_changed");
+		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(expectedFilm);
 		ejb_v2.runTest();
 		
 		
