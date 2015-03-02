@@ -1,7 +1,8 @@
 package my.prototype.ejb;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static my.prototype.common.Constants.IRELAND;
+import static my.prototype.common.Constants.FILM_ID;
+import static my.remote.common.Constants.SERVER_A;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -16,6 +17,9 @@ import my.prototype.test.api.TestCase;
 import my.remote.v2.home.api.Ejb1RemoteHome;
 import my.remote.v2.home.api.Ejb1RemoteObject;
 import my.remote.v2.home.api.Ejb2RemoteObject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -33,22 +37,24 @@ public class Ejb1_V2 extends Ejb1Base {
     
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void runTest() throws Exception {
+    public String runTest() throws Exception {
+    	LOG.info("[{}] running test", SERVER_A);
+    	String testResult = "failed";
         try{
-            String local_CountryOfOriginValue = changeCountryOfOrigin();
-          
-            // Make remote call
+            String localValue = setCountryOfOrigin(IRELAND);
             createCorbaUtil();
-            Ejb2RemoteObject ejb2Remote = corbaUtil.getEjb2RemoteObject(EJB2_ADDRESS);
-            String remote_CountryOfOriginValue = ejb2Remote.getCountryOfOriginAndCreateCast(STAR_WARS_ID);
-
-            // print both results
-            printLocalAndRemoteValues(local_CountryOfOriginValue, remote_CountryOfOriginValue); 
+            Ejb2RemoteObject ejb2 = corbaUtil.getEjb2RemoteObject(EJB2_ADDRESS);
+            String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
+            ejb2.createCast(FILM_ID); 
+            if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){
+            	testResult = "Passed";
+            }
         }catch (Exception e){
-            LOG.error("Exception occurred rolling back transaction...");
+            LOG.error("Exception occurred rolling back transaction - exception msg [{}]", e.getMessage());
             throw e;
         }
-        LOG.info("Commiting transaction.");
+        LOG.info("[{}] commiting transaction", SERVER_A);
+        return testResult;
     }
 
 
@@ -64,7 +70,7 @@ public class Ejb1_V2 extends Ejb1Base {
 
     @PostConstruct
     private void startup(){
-        LOG.info("Created " + this.getClass().getSimpleName());
+    	LOG.info("[{}] created", SERVER_A);
     }
 
 }

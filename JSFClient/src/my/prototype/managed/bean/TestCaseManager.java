@@ -98,8 +98,7 @@ public class TestCaseManager {
 
     public void executeTC1() {
         try {
-            ejb1_v3.runTest();
-            testResult1 = ejb1_v3.getResult();
+        	testResult1 = ejb1_v3.runTest();
             info1 = EXECUTED_MSG;
         } catch (Exception e) {
             info1 =  "[" + e.getMessage() + "]";
@@ -155,8 +154,7 @@ public class TestCaseManager {
 
     public void executeTC2() {
         try {
-            ejb1_v3_stateful.runTest();
-            testResult2 = ejb1_v3_stateful.getResult();
+        	testResult2 = ejb1_v3_stateful.runTest();
             info2 = EXECUTED_MSG;
         } catch (Exception e) {
             info2 = "[" + e.getMessage() + "]";
@@ -213,14 +211,11 @@ public class TestCaseManager {
 
     public void executeTC3() {
         try {
-            ejb1_v2.runTest();
-            testResult3 = ejb1_v2.getResult();
+        	testResult3 = ejb1_v2.runTest();
             info3 = EXECUTED_MSG;
         } catch (Exception e) {
             info3 = "[" + e.getMessage() + "]";
             testResult3 = FAILED;
         }
     }
-
-
 }

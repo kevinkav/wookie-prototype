@@ -16,15 +16,15 @@ public interface TestCase {
      * @return
      */
     String tearDown();
-    
-    /**
-     * Gets the result of running the test.
-     * @return
-     */
-    String getResult();
+      
     
     /**
      * Runs the test. 
+     * 
+     * @return
+     * @throws Exception
      */
-    void runTest() throws Exception;
+    String runTest() throws Exception;
+    
+    
 }

@@ -14,8 +14,6 @@ package my.prototype.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -99,8 +97,7 @@ public class Film implements Serializable {
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("\n---------------------------------\n");
-        sb.append("FilmId: " + id + "\n");
+        sb.append("\nFilmId: " + id + "\n");
         sb.append("Name: " + name + "\n");
         sb.append("Director: " + director + "\n");
         sb.append("RunningTime: " + runningTimeMins + "\n");
@@ -114,8 +111,64 @@ public class Film implements Serializable {
             sb.append("CastID: \n"); 
             sb.append("LeadActor: <>" + "\n");
         }
-        sb.append("---------------------------------\n");
         return sb.toString();
         
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cast == null) ? 0 : cast.hashCode());
+		result = prime * result
+				+ ((countryOfOrigin == null) ? 0 : countryOfOrigin.hashCode());
+		result = prime * result
+				+ ((director == null) ? 0 : director.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + runningTimeMins;
+		result = prime * result + yearOfRelease;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Film other = (Film) obj;
+		if (cast == null) {
+			if (other.cast != null)
+				return false;
+		} else if (!cast.equals(other.cast))
+			return false;
+		if (countryOfOrigin == null) {
+			if (other.countryOfOrigin != null)
+				return false;
+		} else if (!countryOfOrigin.equals(other.countryOfOrigin))
+			return false;
+		if (director == null) {
+			if (other.director != null)
+				return false;
+		} else if (!director.equals(other.director))
+			return false;
+		if (id != other.id)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (runningTimeMins != other.runningTimeMins)
+			return false;
+		if (yearOfRelease != other.yearOfRelease)
+			return false;
+		return true;
+	}
+    
+    
+    
 }

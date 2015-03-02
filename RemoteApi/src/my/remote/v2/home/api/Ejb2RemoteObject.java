@@ -20,5 +20,14 @@ public interface Ejb2RemoteObject extends EJBObject{
      * @return
      * @throws RemoteException
      */
-    String getCountryOfOriginAndCreateCast(long id) throws RemoteException;
+    //String getCountryOfOriginAndCreateCast(long id) throws RemoteException;
+    String getCountryOfOrigin(long id) throws RemoteException;
+    
+    /**
+     * Creates a Cast object associated with a film.
+     * 
+     * @param id
+     * @throws RemoteException
+     */
+    void createCast(long id) throws RemoteException;
 }

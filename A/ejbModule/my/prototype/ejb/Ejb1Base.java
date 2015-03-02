@@ -1,7 +1,17 @@
 package my.prototype.ejb;
 
+import static my.prototype.common.Constants.CAST_ID;
+import static my.prototype.common.Constants.HARRISON_FORD;
+import static my.prototype.common.Constants.IRELAND;
+import static my.prototype.common.Constants.USA;
+import static my.prototype.common.Constants.GEORGE_LUCAS;
+import static my.prototype.common.Constants.FILM_ID;
+import static my.prototype.common.Constants.STAR_WARS;
+import static my.prototype.common.Constants.RUNNING_TIME;
+import static my.prototype.common.Constants.YEAR;
+import static my.remote.common.Constants.SERVER_A;
+
 import java.util.List;
-import java.util.logging.Logger;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -13,19 +23,13 @@ import my.prototype.entity.Cast;
 import my.prototype.entity.Film;
 import my.prototype.test.api.TestCase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public abstract class Ejb1Base implements TestCase{
 
-    private static final Logger LOG = Logger.getLogger(Ejb1Base.class.getCanonicalName());
-
-    private static final String LEAD_ACTOR = "Harrison Ford";
-    private static final String DIRECTOR = "George Lucas";
-    private static final String STAR_WARS = "StarWars";
-    private static final String COUNTRY_OF_ORIGIN_USA_CHANGED = "USA_CHANGED";
-    private static final String COUNTRY_OF_ORIGIN_USA = "USA";
-    public static final long STAR_WARS_ID = 1l;
-    private static final long CAST_ID = 2l;  
-    private Film film;
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb1Base.class);  
     
     @PersistenceContext(unitName = "FilmDatabase")
     private EntityManager em;
@@ -33,10 +37,14 @@ public abstract class Ejb1Base implements TestCase{
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String setUp() {
-        Film film = createFilm(STAR_WARS, STAR_WARS_ID, DIRECTOR, 122, 1977, COUNTRY_OF_ORIGIN_USA);
+        Film film = createFilm(STAR_WARS, 
+        						FILM_ID, 
+        						GEORGE_LUCAS, 
+        						RUNNING_TIME, 
+        						YEAR, 
+        						USA);
         em.persist(film);
-        LOG.info("[EJB1] Created and persisted film: " + film.toString());   
-        return "Created film: " + film.getName() + " FilmId: " + STAR_WARS_ID;
+        return SERVER_A + " created " + film.toString();
     }
     
     @Override
@@ -47,7 +55,6 @@ public abstract class Ejb1Base implements TestCase{
         Query query = em.createQuery("Select c FROM my.prototype.entity.Cast c");
         final List<Cast> casts = query.getResultList();
         for (final Cast cast : casts) {
-            LOG.info("[EJB1] Deleting cast: " + cast.getId() + " " + cast.getLeadActor());
             sb.append(cast.getId());
             em.remove(cast);
         }
@@ -55,100 +62,29 @@ public abstract class Ejb1Base implements TestCase{
         query = em.createQuery("Select p FROM my.prototype.entity.Film p");
         final List<Film> films = query.getResultList();
         for (final Film film : films) {
-            LOG.info("[EJB1] Deleting film: " + film.getName());
             sb.append(film.getId());
             em.remove(film);
         }
+        LOG.info("[{}] [{}]", SERVER_A, sb.toString());
         return sb.toString();
     }
     
 
     @Override
-    public abstract void runTest() throws Exception;
-    
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    @Override
-    public String getResult() {
-        // print updated film data after remote call               
-        Film film = findFilm(STAR_WARS_ID);
-        String testResult = "Failed";
-
-        if (film != null){
-            if (film.getCast() != null){
-                /*if (!(localCountryOfOriginValue.equals(USA) && remoteCountryOfOriginValue.equals(USA))){
-                if (localCountryOfOriginValue.equals(remoteCountryOfOriginValue)){
-                    testResult = "Passed";
-                }
-            }*/
-                Cast cast = film.getCast();
-                if ((cast.getLeadActor().equals(LEAD_ACTOR)) && (cast.getId() == CAST_ID)){
-                    testResult = "Passed";
-                }
-            }
-        }
-        LOG.info("[EJB1] TestResult: " + testResult);
-        return testResult;
-    }
-    
-    public Film findFilm(long id){
-        return em.find(my.prototype.entity.Film.class, id);
-    }
-    
-    public void printFilmContents(long filmId){
-        Film f = findFilm(filmId);
-        if (f != null){
-            f.toString();
-        }
-    }
+    public abstract String runTest() throws Exception;
     
     /**
-     * Changes the CountryOfOrigin attribute and returns
-     * the new value of the attribute.
-     * 
-     * @return the new attribute value of CountryOfOrigin
-     */
-    protected String changeCountryOfOrigin(){
-        film = findFilm(STAR_WARS_ID);
-        LOG.info("[EJB1] Initial Film attributes: " + film.toString());
-        film.setCountryOfOrigin(COUNTRY_OF_ORIGIN_USA_CHANGED);
-        film = findFilm(STAR_WARS_ID);
-        String localCountryOfOriginValue = film.getCountryOfOrigin();
-        LOG.info("[EJB1] Changed CountryOfOrigin attribute: " + film.toString());
-        return localCountryOfOriginValue;
-    }
-    
-    protected void printLocalAndRemoteValues(String localVal, String remoteVal){
-        LOG.info("[EJB1] Local CountryOfOrigin value: " + localVal);
-        LOG.info("[EJB1] Remote CountryOfOrigin value: " + remoteVal);
-        if (!localVal.equals(remoteVal)){
-            LOG.info("[EJB1] CountryOfOrigin local and remote values are different !!");
-            LOG.info("[EJB1] Ejb2 did not see the changed value inside the same transaction/entitymanager started in Ejb1!!");
-        }
-    }
-    
-    private Film createFilm(String filmName, long id,  String director, int time, int year, String country) {
-        Film film = new Film();
-        film.setId(id);
-        film.setName(filmName);
-        film.setDirector(director);
-        film.setRunningTimeMins(time);
-        film.setYearOfRelease(year);
-        film.setCountryOfOrigin(country);
-        return film;
-    }
-    
-    /**
-     * Called by Ejb2 from node2 application server to get the current
-     * value of the CountryOfOrigin attribute
+     * Method thats called from server-B to get the current
+     * value of the CountryOfOrigin attribute in the active transaction
      * 
      * @param id
      * @return the current CountryOfOrigin attribute value
      */
     public String getCountryOfOrigin(final long id) {
-        LOG.info("[EJB1] getCountryOfOrigin with id: " + id);
+        LOG.info("[{}] getCountryOfOrigin with id [{}] ", SERVER_A, id);
         Film film = em.find(my.prototype.entity.Film.class, id);
         String attr = film.getCountryOfOrigin();
-        LOG.info("[EJB1] Found attribute CountryOfOrigin value: " + attr);
+        LOG.info("[{}] found CountryOfOrigin value [{}] ", SERVER_A, attr);
         return attr;
     }
     
@@ -157,16 +93,81 @@ public abstract class Ejb1Base implements TestCase{
      * in the Film object
      */
     public void addCastToFilm(){
-        LOG.info("[EJB1] addCastToFilm");
+        LOG.info("[{}] adding Cast object to Film", SERVER_A);
         Cast cast = new Cast();
         cast.setId(CAST_ID);
-        cast.setLeadActor(LEAD_ACTOR);
-        Film f = findFilm(STAR_WARS_ID);
-        f.setCast(cast);
-        em.persist(cast);
-        em.persist(f);
-        LOG.info("[EJB1] Created Cast in Film: " + cast.toString());
+        cast.setLeadActor(HARRISON_FORD);
+        Film film = find(FILM_ID, my.prototype.entity.Film.class);
+        film.setCast(cast);
+        //em.persist(cast);
+        //em.persist(f);
+        persist(cast);
+        persist(film);
+        LOG.info("[{}] created Cast object[{}] ", SERVER_A, cast.toString());
     }
+        
     
+    /**
+     * Sets the CountryOfOrigin attribute and returns
+     * the new value of the attribute.
+     * 
+     * @return the new attribute value of CountryOfOrigin
+     */
+    protected String setCountryOfOrigin(String newCountry){
+        Film film = find(FILM_ID, my.prototype.entity.Film.class);
+        LOG.info("[{}] before setting CountryOfOrigin attribute value is [{}] ", SERVER_A, film.getCountryOfOrigin());
+        film.setCountryOfOrigin(newCountry);
+        film = find(FILM_ID, my.prototype.entity.Film.class);
+        String updatedCountryOfOrigin = film.getCountryOfOrigin();
+        LOG.info("[{}] set new CountryOfOrigin value to [{}] ",  SERVER_A, updatedCountryOfOrigin);
+        return updatedCountryOfOrigin;
+    }
+     
+    protected boolean verifyCast() {
+    	LOG.info("[{}] verifying Cast", SERVER_A);
+		boolean result = false;
+		Film film = find(FILM_ID, my.prototype.entity.Film.class);
+		if (film != null){
+            if (film.getCast() != null){
+                Cast cast = film.getCast();
+                if ((cast.getLeadActor().equals(HARRISON_FORD)) && (cast.getId() == CAST_ID)){
+                	result = true;    	
+                }
+            }
+        }
+		LOG.info("[{}] verify cast result passed? [{}]", SERVER_A, result);
+		return result;
+	}
+
+	protected boolean verifyCountryOfOrigin(String localVal, String remoteVal) {
+		LOG.info("[{}] verifying CountryOfOriginAttribute, localValue [{}]"
+				+ " remoteValue [{}]", SERVER_A, localVal, remoteVal);
+		boolean result = (localVal.equals(remoteVal) && 
+				remoteVal.equals(IRELAND));
+		LOG.info("[{}] verify CountryOfOrigin passed? [{}]", SERVER_A, result);
+		return result;
+	}
+	
+	private Film find(long id, Class clazz){
+		LOG.info("[{}] find object with id [{}]", SERVER_A, id);
+        return em.find(clazz, id);
+    }
+	
+	private void persist(Object obj){
+		em.persist(obj);
+	}
+    
+    private Film createFilm(String filmName, long id,  String director, int time, int year, String country) {
+    	LOG.info("[{}] creating new film...", SERVER_A);
+        Film film = new Film();
+        film.setId(id);
+        film.setName(filmName);
+        film.setDirector(director);
+        film.setRunningTimeMins(time);
+        film.setYearOfRelease(year);
+        film.setCountryOfOrigin(country);
+        LOG.info("[{}] created film [{}}", film.toString());
+        return film;
+    }
 
 }

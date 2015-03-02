@@ -52,4 +52,35 @@ public class Cast implements Serializable{
         sb.append("---------------------------------\n");
         return sb.toString();
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result
+				+ ((leadActor == null) ? 0 : leadActor.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cast other = (Cast) obj;
+		if (id != other.id)
+			return false;
+		if (leadActor == null) {
+			if (other.leadActor != null)
+				return false;
+		} else if (!leadActor.equals(other.leadActor))
+			return false;
+		return true;
+	}
+    
+    
 }
