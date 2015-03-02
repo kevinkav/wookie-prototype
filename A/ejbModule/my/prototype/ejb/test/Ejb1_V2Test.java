@@ -41,20 +41,24 @@ public class Ejb1_V2Test {
 
 	@Mock
 	private Film mockFilm;
+	
 	@Mock
 	private Cast mockCast;
+	
 	@Mock
 	private Query mockQuery;
+	
 	@Mock
 	private EntityManager mockEm;
+	
 	@Mock
 	private Ejb2RemoteObject mockEjb2;
+	
 	@Mock
 	private CorbaUtil mockCorbaUtil;
+	
 	@InjectMocks
 	private Ejb1_V2 ejb_v2 = new Ejb1_V2();
-
-	private Film expectedFilm;
 
 
 	/**
@@ -62,9 +66,7 @@ public class Ejb1_V2Test {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		//Whitebox.setInternalState(ejb_v2, "em", mockEm);
-		//Whitebox.setInternalState(ejb_v2, "corbaUtil", mockCorbaUtil);
-		//compareFilm = createFilm();
+
 	}
 
 
@@ -178,18 +180,6 @@ public class Ejb1_V2Test {
 
 		verify(mockEm, times(2)).remove(any(Long.class));
 		Assert.assertTrue("Expected deleted message!", message.contains("Deleted"));
-	}
-	
-	
-	private Film createFilm() {
-		Film film = new Film();
-		film.setName("StarWars");
-		film.setId(1L);
-		film.setCountryOfOrigin("USA");
-		film.setDirector("George Lucas");
-		film.setRunningTimeMins(122);
-		film.setYearOfRelease(1977);
-		return film;
 	}
 
 

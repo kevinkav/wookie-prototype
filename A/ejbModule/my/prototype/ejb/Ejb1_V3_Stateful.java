@@ -41,12 +41,14 @@ public class Ejb1_V3_Stateful extends Ejb1Base implements Ejb1StatefulRemote {
         try {
             String localValue = setCountryOfOrigin(IRELAND);
             Ejb2Remote ejb2 = (Ejb2Remote) beanLocator.locateBean(Ejb2Remote.EJB2_JNDI_LOOKUP);
-            String remoteValue = ejb2.getCountryOfOriginAndCreateCast(FILM_ID);
+            //String remoteValue = ejb2.getCountryOfOriginAndCreateCast(FILM_ID);
+            String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
+            ejb2.createCast(FILM_ID);
             if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){
             	testResult = "Passed";
             }
         } catch (Exception e) {
-            LOG.error("[{}] Exception occurred rolling back transaction, exception message - ", SERVER_A, e.getMessage());
+        	LOG.error("Exception occurred rolling back transaction - exception msg [{}]", e.getMessage());
             throw e;
         }
         LOG.info("[{}] Commiting transaction", SERVER_A);

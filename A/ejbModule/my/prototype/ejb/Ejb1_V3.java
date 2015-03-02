@@ -37,20 +37,22 @@ public class Ejb1_V3 extends Ejb1Base implements Ejb1Remote {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @Override
     public String runTest() throws Exception {
-    	LOG.info("[{}] [{}] running test", SERVER_A);
+    	LOG.info("[{}] running test", SERVER_A);
     	String testResult = "Failed";
         try {
             String localValue = setCountryOfOrigin(IRELAND);
             Ejb2Remote ejb2 = (Ejb2Remote) beanLocator.locateBean(Ejb2Remote.EJB2_JNDI_LOOKUP);
             String remoteValue = ejb2.getCountryOfOriginAndCreateCast(FILM_ID);
+            //String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
+            //ejb2.createCast(FILM_ID);
             if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){
             	testResult = "Passed";
             }
         } catch (Exception e) {
-            LOG.error("[{}] Exception occurred rolling back transaction, exception message - ", SERVER_A, e.getMessage());
+        	LOG.error("Exception occurred rolling back transaction - exception msg [{}]", e.getMessage());
             throw e;
         }
-        LOG.info("[{}] commiting transaction", SERVER_A);
+        LOG.info("[{}] Commiting transaction", SERVER_A);
         return testResult;
     }
     

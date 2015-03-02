@@ -49,7 +49,7 @@ public class Ejb2_V2 {
     
     private static final Logger LOG = LoggerFactory.getLogger(Ejb2_V2.class);
 
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String getCountryOfOrigin(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         LOG.info("[{}] getCountryOfOrigin invoked with id [{}]: ", SERVER_B, id);
         Ejb1RemoteObject ejb1 = getEjb1RemoteObject();
@@ -59,9 +59,9 @@ public class Ejb2_V2 {
         return attr;
     }
     
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void createCast(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
-        LOG.info("[{}] createCast invoked with id [{}]", id);
+        LOG.info("[{}] createCast invoked with id [{}]", SERVER_B, id);
         Ejb1RemoteObject ejb1 = getEjb1RemoteObject();
         ejb1.addCastToFilm();
     }
