@@ -1,0 +1,64 @@
+package my.serverA.ejb3.impl;
+
+import static my.remote.common.Constants.SERVER_A;
+import static my.serverA.common.Constants.FILM_ID;
+import static my.serverA.common.Constants.IRELAND;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import my.remote.ejb3.bean.locator.BeanLocator;
+import my.remote.serverA.ejb3.api.StatelessRemoteA;
+import my.remote.serverB.ejb3.api.StatelessRemoteB;
+import my.serverA.common.EjbBaseA;
+import my.test.api.TestCase;
+
+
+@Stateless
+@Local(TestCase.class)
+@Remote(StatelessRemoteA.class)
+@EJB(name=StatelessRemoteA.EJB1_JNDI_LOOKUP, beanInterface=StatelessRemoteA.class)
+public class Ejb3StatelessA extends EjbBaseA implements StatelessRemoteA {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatelessA.class);
+    
+    @Inject
+    BeanLocator beanLocator;
+    
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @Override
+    public String runTest() throws Exception {
+    	LOG.info("[{}] running test", SERVER_A);
+    	String testResult = "Failed";
+        try {
+            String localValue = setCountryOfOrigin(IRELAND);
+            StatelessRemoteB ejb2 = (StatelessRemoteB) beanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP);
+            String remoteValue = ejb2.getCountryOfOriginAndCreateCast(FILM_ID);
+            //String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
+            //ejb2.createCast(FILM_ID);
+            if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){
+            	testResult = "Passed";
+            }
+        } catch (Exception e) {
+        	LOG.error("Exception occurred rolling back transaction - exception msg [{}]", e.getMessage());
+            throw e;
+        }
+        LOG.info("[{}] Commiting transaction", SERVER_A);
+        return testResult;
+    }
+    
+    @PostConstruct
+    private void startup(){
+        LOG.info("[{}] created", SERVER_A);
+    }
+}

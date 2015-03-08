@@ -6,8 +6,8 @@
     <persistence-unit name="FilmDatabase" transaction-type="JTA">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
-        <class>my.prototype.entity.Film</class>
-        <class>my.prototype.entity.Cast</class>
+        <class>my.database.entity.Film</class>
+        <class>my.database.entity.Cast</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
