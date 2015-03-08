@@ -37,7 +37,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class Ejb2StatelessATest {
 
 	private static final String EJB2_ADDRESS = 
-			"corbaname:iiop:localhost:3628#" + RemoteObjectB.EJB2_BINDING_JNDI;
+			"corbaname:iiop:localhost:3628#" + RemoteObjectB.IIOP_BINDING;
 
 	@Mock
 	private Film mockFilm;
@@ -91,6 +91,7 @@ public class Ejb2StatelessATest {
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
 		when(mockCorbaUtil.getEjb2RemoteObject(EJB2_ADDRESS)).thenReturn(mockEjb2);
 		when(mockEjb2.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockEjb2.getCountryOfOriginAndCreateCast(1l)).thenReturn(IRELAND);
 		when(mockFilm.getCast()).thenReturn(mockCast);
 		when(mockCast.getLeadActor()).thenReturn(HARRISON_FORD);
 		when(mockCast.getId()).thenReturn(CAST_ID);
@@ -98,9 +99,9 @@ public class Ejb2StatelessATest {
 		String testResult = ejb_v2.runTest();
 
 		Assert.assertEquals("Expected a pass message!", "Passed", testResult);
-		verify(mockEjb2).getCountryOfOrigin(FILM_ID);
-		verify(mockEjb2, times(1)).createCast(FILM_ID);
-		verify(mockFilm, times(2)).getCountryOfOrigin();
+		//verify(mockEjb2, times(1)).createCast(FILM_ID);
+		//verify(mockFilm, times(2)).getCountryOfOrigin();
+		verify(mockEjb2, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
 		verify(mockCorbaUtil).getEjb2RemoteObject(EJB2_ADDRESS);
 		verify(mockCast).getId();
 		verify(mockCast).getLeadActor();

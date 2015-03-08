@@ -7,9 +7,9 @@ import javax.ejb.EJBObject;
 public interface RemoteObjectA extends EJBObject {
 
     /**
-     * String used to bind Ejb1JTS bean to a IIOP naming service name.
+     * String used to bind Ejb2StatelessA bean to a IIOP naming service name.
      */
-    String EJB1_BINDING_JNDI = "jts/Ejb2StatelessA";
+    String IIOP_BINDING = "jts/Ejb2StatelessA";
      
     /**
      * Gets the CountryOfOrigin attribute from the Film object.

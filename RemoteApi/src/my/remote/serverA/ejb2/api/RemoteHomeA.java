@@ -8,7 +8,7 @@ import javax.ejb.EJBHome;
 public interface RemoteHomeA extends EJBHome{
     
     /**
-     * Method that creates a Ejb1RemoteObject.
+     * Method that creates a RemoteObjectA.
      * 
      * @return
      * @throws RemoteException

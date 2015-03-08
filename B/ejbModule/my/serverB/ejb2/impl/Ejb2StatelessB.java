@@ -40,30 +40,38 @@ import my.remote.serverB.ejb2.api.RemoteHomeB;
 import my.remote.serverB.ejb2.api.RemoteObjectB;
 
 @RemoteHome(RemoteHomeB.class)
-@EJB(name = RemoteObjectB.EJB2_BINDING_JNDI, beanInterface = RemoteObjectB.class)
+@EJB(name = RemoteObjectB.IIOP_BINDING, beanInterface = RemoteObjectB.class)
 @Stateless
 public class Ejb2StatelessB {
     
-    private static final String EJB1_JTS_ADDRESS = 
-            "corbaname:iiop:localhost:3528#" + RemoteObjectA.EJB1_BINDING_JNDI; 
+    private static final String EJB1_JTS_ADDRESS = "corbaname:iiop:localhost:3528#" + RemoteObjectA.IIOP_BINDING; 
     
     private static final Logger LOG = LoggerFactory.getLogger(Ejb2StatelessB.class);
 
+    public String getCountryOfOriginAndCreateCast(long id) throws RemoteException, NamingException, CreateException {
+    	LOG.info("[{}] getCountryOfOriginAndCreateCast invoked with id [{}]: ", SERVER_B, id);
+    	RemoteObjectA ejb2StatelessA = getEjb1RemoteObject();
+    	String countryOfOriginFromA = ejb2StatelessA.getCountryOfOrigin(id);
+        LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
+        ejb2StatelessA.addCastToFilm();
+		return countryOfOriginFromA;
+    }
+    
+    
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String getCountryOfOrigin(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         LOG.info("[{}] getCountryOfOrigin invoked with id [{}]: ", SERVER_B, id);
-        RemoteObjectA ejb1 = getEjb1RemoteObject();
-        String attr = ejb1.getCountryOfOrigin(id);
-        LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, attr, SERVER_A);
-        //ejb1.addCastToFilm();
-        return attr;
+        RemoteObjectA ejb2StatelessA = getEjb1RemoteObject();
+        String countryOfOriginFromA = ejb2StatelessA.getCountryOfOrigin(id);
+        LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
+        return countryOfOriginFromA;
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void createCast(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         LOG.info("[{}] createCast invoked with id [{}]", SERVER_B, id);
-        RemoteObjectA ejb1 = getEjb1RemoteObject();
-        ejb1.addCastToFilm();
+        RemoteObjectA ejb2StatelessA = getEjb1RemoteObject();
+        ejb2StatelessA.addCastToFilm();
     }
 
     
@@ -71,11 +79,11 @@ public class Ejb2StatelessB {
         LOG.info("[{}] looking up Ejb1RemoteOject from [{}]", SERVER_A, SERVER_B);
         InitialContext ctx = new InitialContext();
         final Object iiopObject = ctx.lookup(EJB1_JTS_ADDRESS);
-        RemoteHomeA ejb1RemoteHome = (RemoteHomeA) PortableRemoteObject
+        RemoteHomeA ejb2StatelessRemoteHome = (RemoteHomeA) PortableRemoteObject
                 .narrow(iiopObject, RemoteHomeA.class);
-        RemoteObjectA ejb1RemoteObject = ejb1RemoteHome.create();
-        LOG.info("[{}] successfully found Ejb1RemoteOject from [{}]", SERVER_A, SERVER_B);
-        return ejb1RemoteObject;
+        RemoteObjectA ejb2StatelessA = ejb2StatelessRemoteHome.create();
+        LOG.info("[{}] successfully found ejb2StatelessA from [{}]", SERVER_A, SERVER_B);
+        return ejb2StatelessA;
     }    
   
     

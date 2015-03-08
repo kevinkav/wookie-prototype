@@ -26,7 +26,7 @@ import my.test.api.TestCase;
 @Stateless
 @Local(TestCase.class)
 @Remote(StatelessRemoteA.class)
-@EJB(name=StatelessRemoteA.EJB1_JNDI_LOOKUP, beanInterface=StatelessRemoteA.class)
+@EJB(name=StatelessRemoteA.JNDI_LOOKUP, beanInterface=StatelessRemoteA.class)
 public class Ejb3StatelessA extends EjbBaseA implements StatelessRemoteA {
 
     private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatelessA.class);
@@ -42,8 +42,8 @@ public class Ejb3StatelessA extends EjbBaseA implements StatelessRemoteA {
     	String testResult = "Failed";
         try {
             String localValue = setCountryOfOrigin(IRELAND);
-            StatelessRemoteB ejb2 = (StatelessRemoteB) beanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP);
-            String remoteValue = ejb2.getCountryOfOriginAndCreateCast(FILM_ID);
+            StatelessRemoteB ejb3StatelessRemoteB = (StatelessRemoteB) beanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP);
+            String remoteValue = ejb3StatelessRemoteB.getCountryOfOriginAndCreateCast(FILM_ID);
             //String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
             //ejb2.createCast(FILM_ID);
             if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){

@@ -15,8 +15,6 @@ import static my.serverA.common.Constants.CAST_ID;
 import static my.serverA.common.Constants.HARRISON_FORD;
 import static my.serverA.common.Constants.IRELAND;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
@@ -25,9 +23,7 @@ import javax.persistence.Query;
 import my.database.entity.Cast;
 import my.database.entity.Film;
 import my.remote.ejb3.bean.locator.BeanLocator;
-import my.remote.serverB.ejb2.api.RemoteObjectB;
 import my.remote.serverB.ejb3.api.StatelessRemoteB;
-import my.serverA.ejb2.impl.Ejb2StatelessA;
 import my.serverA.ejb3.impl.Ejb3StatefulA;
 
 import org.junit.After;
@@ -57,7 +53,7 @@ public class Ejb3StatefulATest {
 	BeanLocator mockBeanLocator;
 	
 	@InjectMocks
-	private Ejb3StatefulA ejb_v3 = new Ejb3StatefulA();
+	private Ejb3StatefulA ejb3Stateful = new Ejb3StatefulA();
 
 	@Before
 	public void setUp() throws Exception {
@@ -78,7 +74,7 @@ public class Ejb3StatefulATest {
 		when(mockCast.getLeadActor()).thenReturn(HARRISON_FORD);
 		when(mockCast.getId()).thenReturn(CAST_ID);
 		
-		ejb_v3.runTest();
+		ejb3Stateful.runTest();
 	}
 
 }

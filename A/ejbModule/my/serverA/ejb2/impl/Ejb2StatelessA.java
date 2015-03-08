@@ -30,10 +30,10 @@ import org.slf4j.LoggerFactory;
 @Stateless
 @Local(TestCase.class)
 @RemoteHome(RemoteHomeA.class)
-@EJB(name = RemoteObjectA.EJB1_BINDING_JNDI, beanInterface = RemoteObjectA.class)
+@EJB(name = RemoteObjectA.IIOP_BINDING, beanInterface = RemoteObjectA.class)
 public class Ejb2StatelessA extends EjbBaseA {
 
-    private static final String EJB2_ADDRESS = "corbaname:iiop:localhost:3628#" + RemoteObjectB.EJB2_BINDING_JNDI;
+    private static final String EJB2_ADDRESS = "corbaname:iiop:localhost:3628#" + RemoteObjectB.IIOP_BINDING;
     private static final Logger LOG = LoggerFactory.getLogger(Ejb2StatelessA.class);    
     private CorbaUtil corbaUtil = null;
     
@@ -45,9 +45,10 @@ public class Ejb2StatelessA extends EjbBaseA {
         try{
             String localValue = setCountryOfOrigin(IRELAND);
             createCorbaUtil();
-            RemoteObjectB ejb2 = corbaUtil.getEjb2RemoteObject(EJB2_ADDRESS);
-            String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
-            ejb2.createCast(FILM_ID); 
+            RemoteObjectB ejb2StatelessB = corbaUtil.getEjb2RemoteObject(EJB2_ADDRESS);
+            String remoteValue = ejb2StatelessB.getCountryOfOriginAndCreateCast(FILM_ID);
+            //String remoteValue = ejb2StatelessB.getCountryOfOrigin(FILM_ID);
+            //ejb2StatelessB.createCast(FILM_ID); 
             if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){
             	testResult = "Passed";
             }

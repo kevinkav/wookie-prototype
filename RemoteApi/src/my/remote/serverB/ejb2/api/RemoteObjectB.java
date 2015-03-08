@@ -7,20 +7,26 @@ import javax.ejb.EJBObject;
 public interface RemoteObjectB extends EJBObject{
 
     /**
-     * String used to bind Ejb2JTS bean to a IIOP naming service name.
+     * String used to bind Ejb2StatelessB bean to a IIOP naming service name.
      */
-    public static String EJB2_BINDING_JNDI = "jts/Ejb2StatelessB";
+    public static String IIOP_BINDING = "jts/Ejb2StatelessB";
     
     /**
-     * This method first tries to fetch the CountryOfOrigin attribute that was changed
-     * by Ejb1 at the start of test and secondly this method tries to create and add 
-     * a new Cast object to the Film object.
+     * Gets the CountryOfOrigin attribute and creates Cast object.
      * 
      * @param id
      * @return
      * @throws RemoteException
      */
-    //String getCountryOfOriginAndCreateCast(long id) throws RemoteException;
+    String getCountryOfOriginAndCreateCast(long id) throws RemoteException;
+    
+    /**
+     * Gets the CountryOfOrigin attribute.
+     * 
+     * @param id
+     * @return
+     * @throws RemoteException
+     */
     String getCountryOfOrigin(long id) throws RemoteException;
     
     /**

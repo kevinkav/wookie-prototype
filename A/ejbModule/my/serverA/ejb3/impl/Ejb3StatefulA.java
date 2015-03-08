@@ -14,19 +14,19 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import my.remote.ejb3.bean.locator.BeanLocator;
 import my.remote.serverA.ejb3.api.StatefulRemoteA;
-import my.remote.serverB.ejb3.api.StatelessRemoteB;
+import my.remote.serverB.ejb3.api.StatefulRemoteB;
 import my.serverA.common.EjbBaseA;
 import my.test.api.TestCase;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Local(TestCase.class)
 @Remote(StatefulRemoteA.class)
 @Stateful
-@EJB(name=StatefulRemoteA.EJB1_STATEFUL_JNDI_LOOKUP, beanInterface=StatefulRemoteA.class)
+@EJB(name=StatefulRemoteA.JNDI_LOOKUP, beanInterface=StatefulRemoteA.class)
 public class Ejb3StatefulA extends EjbBaseA implements StatefulRemoteA {
 
     private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatefulA.class);
@@ -41,10 +41,10 @@ public class Ejb3StatefulA extends EjbBaseA implements StatefulRemoteA {
     	String testResult = "Failed";
         try {
             String localValue = setCountryOfOrigin(IRELAND);
-            StatelessRemoteB ejb2 = (StatelessRemoteB) beanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP);
-            //String remoteValue = ejb2.getCountryOfOriginAndCreateCast(FILM_ID);
-            String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
-            ejb2.createCast(FILM_ID);
+            StatefulRemoteB ejb3StatefulRemoteB = (StatefulRemoteB) beanLocator.locateBean(StatefulRemoteB.JNDI_LOOKUP);
+            String remoteValue = ejb3StatefulRemoteB.getCountryOfOriginAndCreateCast(FILM_ID);
+            //String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
+            //ejb2.createCast(FILM_ID);
             if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){
             	testResult = "Passed";
             }
@@ -57,7 +57,7 @@ public class Ejb3StatefulA extends EjbBaseA implements StatefulRemoteA {
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String tearDown() {
         String str = super.tearDown();
         destroyBean();

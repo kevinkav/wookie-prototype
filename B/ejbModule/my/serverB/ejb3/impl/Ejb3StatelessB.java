@@ -28,6 +28,9 @@ import my.remote.ejb3.bean.locator.BeanLocator;
 import my.remote.serverA.ejb3.api.StatelessRemoteA;
 import my.remote.serverB.ejb3.api.StatelessRemoteB;
 
+/**
+ * Stateless bean
+ */
 
 @Remote(StatelessRemoteB.class)
 @Stateless
@@ -36,39 +39,36 @@ public class Ejb3StatelessB implements StatelessRemoteB{
 
 	@Inject
     private BeanLocator beanLocator;
-	
-    private StatelessRemoteA ejb1;  
-    
+	    
     private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatelessB.class);
-    //private static final String BEAN1_LOOKUP_NAME = "ejb:Ear1/A/Ejb1_V3!my.remote.v3.api.Ejb1Remote";
     
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public String getCountryOfOriginAndCreateCast(long id) throws Exception {
         LOG.info("Called with id: " + id);
-        String countryOfOriginEjb1 = "";
+        String countryOfOriginFromA = "";
         try {
-            ejb1 = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.EJB1_JNDI_LOOKUP);
-            countryOfOriginEjb1 = ejb1.getCountryOfOrigin(id);
-            LOG.info("received CoutryOfOrigin value from ejb1: " + countryOfOriginEjb1);
-            ejb1.addCastToFilm();
+        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
+            countryOfOriginFromA = ejb3StatelessRemoteA.getCountryOfOrigin(id);
+            LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
+            ejb3StatelessRemoteA.addCastToFilm();
         } catch (Exception e) {
         	LOG.error("Exception occurred rolling back transaction, error message [{}]", e.getMessage());
             throw e;
         }
-        return countryOfOriginEjb1;
+        return countryOfOriginFromA;
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
 	@Override
 	public String getCountryOfOrigin(long id) throws Exception {
 		LOG.info("[{}] getCountryOfOrigin invoked with id [{}]: ", SERVER_B, id);
 		String countryOfOriginEjb1 = "";
         try {
-            ejb1 = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.EJB1_JNDI_LOOKUP);
-            countryOfOriginEjb1 = ejb1.getCountryOfOrigin(id);
+        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
+            countryOfOriginEjb1 = ejb3StatelessRemoteA.getCountryOfOrigin(id);
             LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginEjb1, SERVER_A);
-            ejb1.addCastToFilm();
+            ejb3StatelessRemoteA.addCastToFilm();
         } catch (Exception e) {
         	LOG.error("Exception occurred rolling back transaction, error message [{}]", e.getMessage());
             throw e;
@@ -76,13 +76,13 @@ public class Ejb3StatelessB implements StatelessRemoteB{
         return countryOfOriginEjb1;
 	}
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
 	@Override
 	public void createCast(long id) throws Exception {
     	LOG.info("[{}] createCast invoked with id [{}]", SERVER_B, id);
         try {
-            ejb1 = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.EJB1_JNDI_LOOKUP);
-            ejb1.addCastToFilm();
+        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
+        	ejb3StatelessRemoteA.addCastToFilm();
         } catch (Exception e) {
             LOG.error("Exception occurred rolling back transaction, error message [{}]", e.getMessage());
             throw e;
