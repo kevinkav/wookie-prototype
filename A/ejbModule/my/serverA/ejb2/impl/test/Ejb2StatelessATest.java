@@ -20,8 +20,8 @@ import javax.persistence.Query;
 
 import my.database.entity.Cast;
 import my.database.entity.Film;
+import my.remote.bean.locator.Ejb2BeanLocator;
 import my.remote.serverB.ejb2.api.RemoteObjectB;
-import my.serverA.common.CorbaUtil;
 import my.serverA.ejb2.impl.Ejb2StatelessA;
 
 import org.junit.After;
@@ -52,10 +52,10 @@ public class Ejb2StatelessATest {
 	private EntityManager mockEm;
 	
 	@Mock
-	private RemoteObjectB mockEjb2;
+	private RemoteObjectB mockmockRemoteObjectB;
 	
 	@Mock
-	private CorbaUtil mockCorbaUtil;
+	private Ejb2BeanLocator mockEjb2BeanLocator;
 	
 	@InjectMocks
 	private Ejb2StatelessA ejb_v2 = new Ejb2StatelessA();
@@ -89,9 +89,9 @@ public class Ejb2StatelessATest {
 	public void test_runTest() throws Exception{
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
-		when(mockCorbaUtil.getEjb2RemoteObject(EJB2_ADDRESS)).thenReturn(mockEjb2);
-		when(mockEjb2.getCountryOfOrigin(1l)).thenReturn(IRELAND);
-		when(mockEjb2.getCountryOfOriginAndCreateCast(1l)).thenReturn(IRELAND);
+		when(mockEjb2BeanLocator.getRemoteObjectB(EJB2_ADDRESS)).thenReturn(mockmockRemoteObjectB);
+		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockmockRemoteObjectB.getCountryOfOriginAndCreateCast(1l)).thenReturn(IRELAND);
 		when(mockFilm.getCast()).thenReturn(mockCast);
 		when(mockCast.getLeadActor()).thenReturn(HARRISON_FORD);
 		when(mockCast.getId()).thenReturn(CAST_ID);
@@ -101,8 +101,8 @@ public class Ejb2StatelessATest {
 		Assert.assertEquals("Expected a pass message!", "Passed", testResult);
 		//verify(mockEjb2, times(1)).createCast(FILM_ID);
 		//verify(mockFilm, times(2)).getCountryOfOrigin();
-		verify(mockEjb2, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
-		verify(mockCorbaUtil).getEjb2RemoteObject(EJB2_ADDRESS);
+		verify(mockmockRemoteObjectB, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
+		verify(mockEjb2BeanLocator).getRemoteObjectB(EJB2_ADDRESS);
 		verify(mockCast).getId();
 		verify(mockCast).getLeadActor();
 
@@ -113,8 +113,8 @@ public class Ejb2StatelessATest {
 
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
-		when(mockCorbaUtil.getEjb2RemoteObject(EJB2_ADDRESS)).thenThrow(new NamingException());
-		when(mockEjb2.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockEjb2BeanLocator.getRemoteObjectB(EJB2_ADDRESS)).thenThrow(new NamingException());
+		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
 
 		ejb_v2.runTest();
 	}
@@ -124,8 +124,8 @@ public class Ejb2StatelessATest {
 
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
-		when(mockCorbaUtil.getEjb2RemoteObject(EJB2_ADDRESS)).thenThrow(new CreateException());
-		when(mockEjb2.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockEjb2BeanLocator.getRemoteObjectB(EJB2_ADDRESS)).thenThrow(new CreateException());
+		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
 
 		ejb_v2.runTest();
 	}
@@ -135,8 +135,8 @@ public class Ejb2StatelessATest {
 
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
-		when(mockCorbaUtil.getEjb2RemoteObject(EJB2_ADDRESS)).thenThrow(new RemoteException());
-		when(mockEjb2.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockEjb2BeanLocator.getRemoteObjectB(EJB2_ADDRESS)).thenThrow(new RemoteException());
+		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
 
 		ejb_v2.runTest();
 	}

@@ -27,8 +27,8 @@ import javax.persistence.Query;
 import my.database.entity.Cast;
 import my.database.entity.Film;
 import my.remote.bean.locator.Ejb3BeanLocator;
-import my.remote.serverB.ejb3.api.StatefulRemoteB;
-import my.serverA.ejb3.impl.Ejb3StatefulA;
+import my.remote.serverB.ejb3.api.StatelessRemoteB;
+import my.serverA.ejb3.impl.Ejb3StatelessA;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -40,7 +40,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Ejb3StatefulATest {
+public class Ejb3StatelessATest {
 
 	@Mock
 	private Film mockFilm;
@@ -55,13 +55,13 @@ public class Ejb3StatefulATest {
 	private EntityManager mockEm;
 	
 	@Mock
-	private StatefulRemoteB mockStatefulRemoteB;
+	private StatelessRemoteB mockStatelessRemoteB;
 	
 	@Mock
 	Ejb3BeanLocator mockBeanLocator;
 	
 	@InjectMocks
-	private Ejb3StatefulA ejb3StatefulA = new Ejb3StatefulA();
+	private Ejb3StatelessA ejb3StatelessA = new Ejb3StatelessA();
 
 	@Before
 	public void setUp() throws Exception {
@@ -76,15 +76,15 @@ public class Ejb3StatefulATest {
 	public void test_runTest() throws Exception {
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
-		when(mockBeanLocator.locateBean(StatefulRemoteB.JNDI_LOOKUP)).thenReturn(mockStatefulRemoteB);
+		when(mockBeanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP)).thenReturn(mockStatelessRemoteB);
 		when(mockFilm.getCast()).thenReturn(mockCast);
 		when(mockCast.getLeadActor()).thenReturn(HARRISON_FORD);
 		when(mockCast.getId()).thenReturn(CAST_ID);
-		when(mockStatefulRemoteB.getCountryOfOriginAndCreateCast(FILM_ID)).thenReturn(IRELAND);	
-		String testResult = ejb3StatefulA.runTest();	// execute test
+		when(mockStatelessRemoteB.getCountryOfOriginAndCreateCast(FILM_ID)).thenReturn(IRELAND);	
+		String testResult = ejb3StatelessA.runTest();	// execute test
 		Assert.assertEquals("Expected a pass message!", "Passed", testResult);
-		verify(mockStatefulRemoteB, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
-		verify(mockBeanLocator).locateBean(StatefulRemoteB.JNDI_LOOKUP);
+		verify(mockStatelessRemoteB, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
+		verify(mockBeanLocator).locateBean(StatelessRemoteB.JNDI_LOOKUP);
 		verify(mockCast).getId();
 		verify(mockCast).getLeadActor();
 	}
@@ -93,9 +93,9 @@ public class Ejb3StatefulATest {
 	public void test_runTest_NamingException() throws Exception{
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
-		when(mockBeanLocator.locateBean(StatefulRemoteB.JNDI_LOOKUP)).thenThrow(new NamingException());
-		when(mockStatefulRemoteB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
-		ejb3StatefulA.runTest();
+		when(mockBeanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP)).thenThrow(new NamingException());
+		when(mockStatelessRemoteB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		ejb3StatelessA.runTest();
 	}
 	
 

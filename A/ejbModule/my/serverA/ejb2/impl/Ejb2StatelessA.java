@@ -13,10 +13,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.naming.NamingException;
 
+import my.remote.bean.locator.Ejb2BeanLocator;
 import my.remote.serverA.ejb2.api.RemoteHomeA;
 import my.remote.serverA.ejb2.api.RemoteObjectA;
 import my.remote.serverB.ejb2.api.RemoteObjectB;
-import my.serverA.common.CorbaUtil;
 import my.serverA.common.EjbBaseA;
 import my.test.api.TestCase;
 
@@ -35,7 +35,7 @@ public class Ejb2StatelessA extends EjbBaseA {
 
     private static final String EJB2_ADDRESS = "corbaname:iiop:localhost:3628#" + RemoteObjectB.IIOP_BINDING;
     private static final Logger LOG = LoggerFactory.getLogger(Ejb2StatelessA.class);    
-    private CorbaUtil corbaUtil = null;
+    private Ejb2BeanLocator corbaUtil = null;
     
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -45,7 +45,7 @@ public class Ejb2StatelessA extends EjbBaseA {
         try{
             String localValue = setCountryOfOrigin(IRELAND);
             createCorbaUtil();
-            RemoteObjectB ejb2StatelessB = corbaUtil.getEjb2RemoteObject(EJB2_ADDRESS);
+            RemoteObjectB ejb2StatelessB = corbaUtil.getRemoteObjectB(EJB2_ADDRESS);
             String remoteValue = ejb2StatelessB.getCountryOfOriginAndCreateCast(FILM_ID);
             //String remoteValue = ejb2StatelessB.getCountryOfOrigin(FILM_ID);
             //ejb2StatelessB.createCast(FILM_ID); 
@@ -66,7 +66,7 @@ public class Ejb2StatelessA extends EjbBaseA {
      */
     private void createCorbaUtil() throws NamingException{
     	if (corbaUtil == null){
-    		corbaUtil = new CorbaUtil();
+    		corbaUtil = new Ejb2BeanLocator();
     	}
     }
 

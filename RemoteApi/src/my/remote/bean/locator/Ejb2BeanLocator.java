@@ -9,7 +9,7 @@
  * program(s) have been supplied.
  *******************************************************************************
  *----------------------------------------------------------------------------*/
-package my.serverA.common;
+package my.remote.bean.locator;
 
 import java.rmi.RemoteException;
 
@@ -18,6 +18,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
+import my.remote.serverA.ejb2.api.RemoteHomeA;
+import my.remote.serverA.ejb2.api.RemoteObjectA;
 import my.remote.serverB.ejb2.api.RemoteHomeB;
 import my.remote.serverB.ejb2.api.RemoteObjectB;
 
@@ -28,9 +30,9 @@ import org.slf4j.LoggerFactory;
  * Utility class for dealing with the Corba handling methods.
  * 
  */
-public class CorbaUtil {
+public class Ejb2BeanLocator {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CorbaUtil.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Ejb2BeanLocator.class);
 	private InitialContext ctx;
 
 	/**
@@ -38,12 +40,12 @@ public class CorbaUtil {
 	 * 
 	 * @throws NamingException
 	 */
-	public CorbaUtil() throws NamingException{
+	public Ejb2BeanLocator() throws NamingException{
 		createInitialContext();
 	}
 
 	/**
-	 * Creates the Ejb2Remote object from the specified ejb address.
+	 * Creates the RemoteObjectB business object from the specified ejb address.
 	 * 
 	 * @param ejbAddress
 	 * @return the Ejb2RemoteObject business object
@@ -51,15 +53,39 @@ public class CorbaUtil {
 	 * @throws RemoteException
 	 * @throws CreateException
 	 */
-	public RemoteObjectB getEjb2RemoteObject(String ejbAddress) throws NamingException, RemoteException, CreateException{
+	public RemoteObjectB getRemoteObjectB(String ejbAddress) throws NamingException, RemoteException, CreateException{
 		LOG.info("Attempting remote lookup of [{}]", ejbAddress);
-		Object iiopObject = ctx.lookup(ejbAddress);
-		 RemoteHomeB ejb2RemoteHome = (RemoteHomeB) PortableRemoteObject
-                 .narrow(iiopObject, RemoteHomeB.class);
-		 RemoteObjectB ejb2RemoteObject = (RemoteObjectB)ejb2RemoteHome.create();
-		 LOG.info("Successfully created EJb2RemoteObject.");
-		 return ejb2RemoteObject;
-		 
+		Object iiopObject = doLookUp(ejbAddress);
+		RemoteHomeB ejb2RemoteHome = (RemoteHomeB) PortableRemoteObject
+				.narrow(iiopObject, RemoteHomeB.class);
+		RemoteObjectB remoteObjectB = (RemoteObjectB)ejb2RemoteHome.create();
+		LOG.info("Successfully created remoteObjectB.");
+		return remoteObjectB;
+
+	}
+	
+	/**
+	 * Creates the RemoteObjectA business object from the specified ejb address.
+	 * 
+	 * @param ejbAddress
+	 * @return
+	 * @throws NamingException
+	 * @throws RemoteException
+	 * @throws CreateException
+	 */
+	public RemoteObjectA getRemoteObjectA(String ejbAddress) throws NamingException, RemoteException, CreateException{
+		LOG.info("Attempting remote lookup of [{}]", ejbAddress);
+		Object iiopObject = doLookUp(ejbAddress);
+		RemoteHomeA ejb2RemoteHome = (RemoteHomeA) PortableRemoteObject
+				.narrow(iiopObject, RemoteHomeA.class);
+		RemoteObjectA remoteObjectA = (RemoteObjectA)ejb2RemoteHome.create();
+		LOG.info("Successfully created remoteObjectA.");
+		return remoteObjectA;
+
+	}
+
+	private Object doLookUp(String ejbAddress) throws NamingException{
+		return ctx.lookup(ejbAddress);
 	}
 
 	private void createInitialContext() throws NamingException{
