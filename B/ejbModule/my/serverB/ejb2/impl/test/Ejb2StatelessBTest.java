@@ -11,8 +11,16 @@
  *----------------------------------------------------------------------------*/
 package my.serverB.ejb2.impl.test;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+
+import java.rmi.RemoteException;
+
+import javax.ejb.CreateException;
+import javax.naming.NamingException;
+
 import my.remote.bean.locator.Ejb2BeanLocator;
 import my.remote.serverA.ejb2.api.RemoteObjectA;
 import my.serverB.ejb2.impl.Ejb2StatelessB;
@@ -65,6 +73,45 @@ public class Ejb2StatelessBTest {
 		verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
 	}
 	
+	@Test (expected = NamingException.class)
+	public void testGetCountryOfOriginAndCreateCast_NamingException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new NamingException("naming error"));
+		try{
+			ejb2StatelessB.getCountryOfOriginAndCreateCast(1L);
+		}catch (Exception ex){
+			verify(mockRemoteObjectA, never()).getCountryOfOrigin(1L);
+			verify(mockRemoteObjectA, never()).addCastToFilm();
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			throw ex;
+		}
+	}
+	
+	@Test (expected = CreateException.class)
+	public void testGetCountryOfOriginAndCreateCast_CreateException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new CreateException("create error"));
+		try{
+			ejb2StatelessB.getCountryOfOriginAndCreateCast(1L);
+		}catch (Exception ex){
+			verify(mockRemoteObjectA, never()).getCountryOfOrigin(1L);
+			verify(mockRemoteObjectA, never()).addCastToFilm();
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			throw ex;
+		}
+	}
+	
+	@Test (expected = RemoteException.class)
+	public void testGetCountryOfOriginAndCreateCast_RemoteException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new RemoteException("remote error"));
+		try{
+			ejb2StatelessB.getCountryOfOriginAndCreateCast(1L);
+		}catch (Exception ex){
+			verify(mockRemoteObjectA, never()).getCountryOfOrigin(1L);
+			verify(mockRemoteObjectA, never()).addCastToFilm();
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			throw ex;
+		}
+	}
+	
 
 	@Test
 	public void testgetCountryOfOrigin() throws Exception {
@@ -76,13 +123,110 @@ public class Ejb2StatelessBTest {
 		verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
 	}
 	
+	@Test (expected = NamingException.class)
+	public void testgetCountryOfOrigin_NamingException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new NamingException("naming error"));
+		try{
+			ejb2StatelessB.getCountryOfOrigin(1L);
+		}catch(Exception ex){
+			verify(mockRemoteObjectA, never()).getCountryOfOrigin(1L);
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			throw ex;
+		}
+	}
+	
+	@Test (expected = RemoteException.class)
+	public void testgetCountryOfOrigin_RemoteObjectA_RemoteException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenReturn(mockRemoteObjectA);
+		doThrow(new RemoteException("remote error")).when(mockRemoteObjectA).getCountryOfOrigin(1L);
+		try{
+			ejb2StatelessB.getCountryOfOrigin(1L);
+		}catch(Exception ex){
+			verify(mockRemoteObjectA).getCountryOfOrigin(1L);
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			throw ex;
+		}
+	}
+	
+	@Test (expected = CreateException.class)
+	public void testgetCountryOfOrigin_CreateException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new CreateException("create error"));
+		try{
+			ejb2StatelessB.getCountryOfOrigin(1L);
+		}catch(Exception ex){
+			verify(mockRemoteObjectA, never()).getCountryOfOrigin(1L);
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			throw ex;
+		}
+	}
+	
+	@Test (expected = RemoteException.class)
+	public void testgetCountryOfOrigin_RemoteException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new RemoteException("remote error"));
+		try{
+			ejb2StatelessB.getCountryOfOrigin(1L);
+		}catch(Exception ex){
+			verify(mockRemoteObjectA, never()).getCountryOfOrigin(1L);
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			throw ex;
+		}
+	}
+	
 	@Test
 	public void testCreateCast() throws Exception {
 		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenReturn(mockRemoteObjectA);
 		ejb2StatelessB.createCast(1L);
 		verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
 		verify(mockRemoteObjectA).addCastToFilm();
-		verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+	}
+	
+	@Test (expected = NamingException.class)
+	public void testCreateCast_Locator_NamingException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new NamingException("naming error"));
+		try{
+			ejb2StatelessB.createCast(1L);
+		}catch (Exception ex){
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			verify(mockRemoteObjectA, never()).addCastToFilm();
+			throw ex;
+		}
+	}
+	
+	@Test (expected = CreateException.class)
+	public void testCreateCast_Locator_CreateException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new CreateException("naming error"));
+		try{
+			ejb2StatelessB.createCast(1L);
+		}catch (Exception ex){
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			verify(mockRemoteObjectA, never()).addCastToFilm();
+			throw ex;
+		}
+	}
+	
+	@Test (expected = RemoteException.class)
+	public void testCreateCast_Locator_RemoteException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenThrow(new RemoteException("naming error"));
+		try{
+			ejb2StatelessB.createCast(1L);
+		}catch (Exception ex){
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			verify(mockRemoteObjectA, never()).addCastToFilm();
+			throw ex;
+		}
+	}
+	
+	@Test (expected = RemoteException.class)
+	public void testCreateCast_remoteObjectA_RemoteException() throws Exception {
+		when(mockEjb2BeanLocator.getRemoteObjectA(REMOTE_OBJECT_ADDRESS)).thenReturn(mockRemoteObjectA);
+		doThrow(new RemoteException("remote error")).when(mockRemoteObjectA).addCastToFilm();
+		try{
+			ejb2StatelessB.createCast(1L);
+		}catch (Exception ex){
+			verify(mockEjb2BeanLocator).getRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+			verify(mockRemoteObjectA).addCastToFilm();
+			throw ex;
+		}
 	}
 
 }

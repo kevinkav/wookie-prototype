@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/home/eeikkah/.m2/repository/org/jboss/spec/jboss-javaee-all-6.0/3.0.2.Final/jboss-javaee-all-6.0-3.0.2.Final.jar"/>
 	<classpathentry kind="lib" path="/home/eeikkah/.m2/repository/javax/javaee-api/6.0/javaee-api-6.0.jar">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>
@@ -10,6 +10,7 @@
 			<attribute name="maven.scope" value="provided"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
@@ -18,5 +19,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/eeikkah/.m2/repository/org/slf4j/slf4j-api/1.7.5/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="/home/eeikkah/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/home/eeikkah/.m2/repository/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -36,8 +36,10 @@ public class Ejb3BeanLocator implements Serializable {
 
 
     private void initContext() throws NamingException {
-        initProperties();
-        context = new InitialContext(props);
+        if (context == null){
+        	initProperties();
+        	context = new InitialContext(props);
+        }
     }
     
     private void initProperties() {

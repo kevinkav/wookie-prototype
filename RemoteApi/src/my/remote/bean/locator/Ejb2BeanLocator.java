@@ -33,7 +33,10 @@ import org.slf4j.LoggerFactory;
 public class Ejb2BeanLocator {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Ejb2BeanLocator.class);
+	
 	private InitialContext ctx;
+		
+	private PortableObjectHelper portableObjectHelper;
 
 	/**
 	 * Calling the constructor creates an initial context.
@@ -41,6 +44,7 @@ public class Ejb2BeanLocator {
 	 * @throws NamingException
 	 */
 	public Ejb2BeanLocator() throws NamingException{
+		this.portableObjectHelper = new PortableObjectHelper();
 		createInitialContext();
 	}
 
@@ -56,8 +60,7 @@ public class Ejb2BeanLocator {
 	public RemoteObjectB getRemoteObjectB(String ejbAddress) throws NamingException, RemoteException, CreateException{
 		LOG.info("Attempting remote lookup of [{}]", ejbAddress);
 		Object iiopObject = doLookUp(ejbAddress);
-		RemoteHomeB ejb2RemoteHome = (RemoteHomeB) PortableRemoteObject
-				.narrow(iiopObject, RemoteHomeB.class);
+		RemoteHomeB ejb2RemoteHome = (RemoteHomeB) portableObjectHelper.narrow(iiopObject, RemoteHomeB.class);
 		RemoteObjectB remoteObjectB = (RemoteObjectB)ejb2RemoteHome.create();
 		LOG.info("Successfully created remoteObjectB.");
 		return remoteObjectB;
@@ -76,8 +79,8 @@ public class Ejb2BeanLocator {
 	public RemoteObjectA getRemoteObjectA(String ejbAddress) throws NamingException, RemoteException, CreateException{
 		LOG.info("Attempting remote lookup of [{}]", ejbAddress);
 		Object iiopObject = doLookUp(ejbAddress);
-		RemoteHomeA ejb2RemoteHome = (RemoteHomeA) PortableRemoteObject
-				.narrow(iiopObject, RemoteHomeA.class);
+		//RemoteHomeA ejb2RemoteHome = (RemoteHomeA) narrow(iiopObject, RemoteHomeA.class);
+		RemoteHomeA ejb2RemoteHome = (RemoteHomeA) portableObjectHelper.narrow(iiopObject, RemoteHomeA.class);
 		RemoteObjectA remoteObjectA = (RemoteObjectA)ejb2RemoteHome.create();
 		LOG.info("Successfully created remoteObjectA.");
 		return remoteObjectA;
@@ -87,10 +90,14 @@ public class Ejb2BeanLocator {
 	private Object doLookUp(String ejbAddress) throws NamingException{
 		return ctx.lookup(ejbAddress);
 	}
-
+	
+	
 	private void createInitialContext() throws NamingException{
-		LOG.info("Creating intial context.");
-		ctx = new InitialContext();
-		LOG.info("Created intial context successfully.");
+		if (ctx == null){
+			LOG.info("Creating intial context.");
+			ctx = new InitialContext();
+			LOG.info("Created intial context successfully.");
+		}
 	}
+	
 }

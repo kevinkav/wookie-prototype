@@ -11,19 +11,17 @@
  *----------------------------------------------------------------------------*/
 package my.serverB.ejb3.impl.test;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
 
 import java.rmi.RemoteException;
 
 import javax.naming.NamingException;
 
 import my.remote.bean.locator.Ejb3BeanLocator;
-import my.remote.serverA.ejb3.api.StatefulRemoteA;
 import my.remote.serverA.ejb3.api.StatelessRemoteA;
-import my.remote.serverB.ejb3.api.StatelessRemoteB;
 import my.serverB.ejb3.impl.Ejb3StatelessB;
 
 import org.junit.After;
@@ -70,7 +68,7 @@ public class Ejb3StatelessBTest {
 	}
 
 	@Test (expected = NamingException.class)
-	public void testGetCountryOfOriginAndCreateCast_NamingException() throws Exception {
+	public void testGetCountryOfOriginAndCreateCast_Locator_NamingException() throws Exception {
 		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenThrow(new NamingException("Naming error"));
 		try{
 			mockEjb3StatelessB.getCountryOfOriginAndCreateCast(1L);
@@ -83,7 +81,7 @@ public class Ejb3StatelessBTest {
 	}
 
 	@Test (expected = RemoteException.class)
-	public void testGetCountryOfOriginAndCreateCast_RemoteException() throws Exception {
+	public void testGetCountryOfOriginAndCreateCast_StatelessRemoteA_RemoteException() throws Exception {
 		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenReturn(mockStatelessRemoteA);
 		when(mockStatelessRemoteA.getCountryOfOrigin(1L)).thenThrow(new RemoteException("Remote error"));
 		try{
@@ -107,7 +105,7 @@ public class Ejb3StatelessBTest {
 	}
 
 	@Test (expected = NamingException.class)
-	public void testGetCountryOfOrigin_NamingException() throws Exception {
+	public void testGetCountryOfOrigin_Locator_NamingException() throws Exception {
 		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenThrow(new NamingException("Naming error"));
 		try {
 			mockEjb3StatelessB.getCountryOfOrigin(1L);
@@ -121,7 +119,7 @@ public class Ejb3StatelessBTest {
 	}
 
 	@Test (expected = RemoteException.class)
-	public void testGetCountryOfOrigin_RemoteException() throws Exception {
+	public void testGetCountryOfOrigin_StatelessRemoteA_RemoteException() throws Exception {
 		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenReturn(mockStatelessRemoteA);
 		when(mockStatelessRemoteA.getCountryOfOrigin(1L)).thenThrow(new RemoteException("Remote error"));
 		try{
@@ -144,7 +142,7 @@ public class Ejb3StatelessBTest {
 	}
 
 	@Test (expected = NamingException.class)
-	public void testCreateCast_NamingException() throws Exception {
+	public void testCreateCast_Locator_NamingException() throws Exception {
 		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenThrow(new NamingException("Naming error"));
 		try{
 			mockEjb3StatelessB.createCast(1L);;
@@ -157,7 +155,7 @@ public class Ejb3StatelessBTest {
 	}
 
 	@Test (expected = RemoteException.class)
-	public void testCreateCast_RemoteException() throws Exception {
+	public void testCreateCast_StatelessRemoteA_RemoteException() throws Exception {
 		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenReturn(mockStatelessRemoteA);
 		doThrow(new RemoteException("Remote error")).when(mockStatelessRemoteA).addCastToFilm();	// for stubbing void methods
 		try{
