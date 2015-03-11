@@ -22,87 +22,95 @@ import my.test.api.TestCase;
 public class TestCaseManager {
 
     @EJB(beanName="Ejb2StatelessA")
-    TestCase ejb2StatelessA;
+    TestCase ejb2xStatelessA;
+    
+/*    @EJB(beanName="Ejb2StatefulA")
+    TestCase ejb2xStatefulA;*/
     
     @EJB(beanName="Ejb3StatelessA")
-    TestCase ejb3StatelessA;
+    TestCase ejb3xStatelessA;
     
     @EJB(beanName="Ejb3StatefulA")
-    TestCase ejb3StatefulA;
+    TestCase ejb3xStatefulA;
 
     private static final String EXECUTED_MSG = "[Executed Test]";
     private static final String DONE = "Done";
     private static final String FAILED = "Failed";
     
-    private String testResult1;
-    private String setupResult1;
-    private String teardownResult1;
-    private String info1 = "";
+    private String tc1_test_result;
+    private String tc1_setup_result;
+    private String tc1_teardown_result;
+    private String tc1_info = "";
     
-    private String testResult2;
-    private String setupResult2;
-    private String teardownResult2;
-    private String info2 = "";
+    private String tc2_test_result;
+    private String tc2_setup_result;
+    private String tc2_teardown_result;
+    private String tc2_info = "";
     
-    private String testResult3;
-    private String setupResult3;
-    private String teardownResult3;
-    private String info3 = "";
+    private String tc3_test_result;
+    private String tc3_setup_setUp_result;
+    private String tc3_teardown_result;
+    private String tc3_info = "";
+    
+    private String tc4_test_result;
+    private String tc4_setup_result;
+    private String tc4_teardown_result;
+    private String tc4_info = "";
     
     
     /* ********************************************
      * TC1 EJB3.1 Stateless
      ******************************************** */
     public String getTeardownResultTC1() {
-        return teardownResult1;
+        return tc1_teardown_result;
     }
 
     public void setTeardownResultTC1(String teardownResult) {
-        this.teardownResult1 = teardownResult;
+        this.tc1_teardown_result = teardownResult;
     }
 
     public String getSetupResultTC1() {
-        return setupResult1;
+        return tc1_setup_result;
     }
 
     public void setSetupResultTC1(String setupResult) {
-        this.setupResult1 = setupResult;
+        this.tc1_setup_result = setupResult;
     }
 
     public String getResultTC1() {
-        return testResult1;
+        return tc1_test_result;
     }
 
     public void setResultTC1(String result) {
-        this.testResult1 = result;
+        this.tc1_test_result = result;
     }
     
     public String getInfoTC1() {
-        return info1;
+        return tc1_info;
     }
 
     public void setInfoTC1(String info) {
-        this.info1 = info;
+        this.tc1_info = info;
     }
     
     public void setupTC1() { 
-        info1 = ejb3StatelessA.setUp();
-        setupResult1 = DONE;
+        tc1_info = ejb3xStatelessA.setUp();
+        tc1_setup_result = DONE;
     }
 
     public void tearDownTC1() {
-        info1 = ejb3StatelessA.tearDown();
-        teardownResult1 = DONE;
+        tc1_info = ejb3xStatelessA.tearDown();
+        tc1_teardown_result = DONE;
     }
 
 
     public void executeTC1() {
         try {
-        	testResult1 = ejb3StatelessA.runTest();
-            info1 = EXECUTED_MSG;
+        	tc1_test_result = ejb3xStatelessA.runTest();
+            tc1_info = EXECUTED_MSG;
         } catch (Exception e) {
-            info1 =  "[" + e.getMessage() + "]";
-            testResult1 = FAILED;
+            tc1_info =  "[" + e.getMessage() + "]";
+            tc1_test_result = FAILED;
         }
     }
     
@@ -110,112 +118,169 @@ public class TestCaseManager {
      * TC2 EJB 3.1 Statefull
      ******************************************** */
     public String getTeardownResultTC2() {
-        return teardownResult2;
+        return tc2_teardown_result;
     }
 
     public void setTeardownResultTC2(String teardownResult) {
-        this.teardownResult2 = teardownResult;
+        this.tc2_teardown_result = teardownResult;
     }
 
     public String getSetupResultTC2() {
-        return setupResult2;
+        return tc2_setup_result;
     }
 
     public void setSetupResultTC2(String setupResult) {
-        this.setupResult2 = setupResult;
+        this.tc2_setup_result = setupResult;
     }
 
     public String getResultTC2() {
-        return testResult2;
+        return tc2_test_result;
     }
 
     public void setResultTC2(String result) {
-        this.testResult2 = result;
+        this.tc2_test_result = result;
     }
     
     public String getInfoTC2() {
-        return info2;
+        return tc2_info;
     }
 
     public void setInfoTC2(String info) {
-        this.info2 = info;
+        this.tc2_info = info;
     }
     
     public void setupTC2() { 
-        info2 = ejb3StatefulA.setUp();
-        setupResult2 = DONE;
+        tc2_info = ejb3xStatefulA.setUp();
+        tc2_setup_result = DONE;
     }
 
     public void tearDownTC2() {
-        info2 = ejb3StatefulA.tearDown();
-        teardownResult2 = DONE;
+        tc2_info = ejb3xStatefulA.tearDown();
+        tc2_teardown_result = DONE;
     }
 
 
     public void executeTC2() {
         try {
-        	testResult2 = ejb3StatefulA.runTest();
-            info2 = EXECUTED_MSG;
+        	tc2_test_result = ejb3xStatefulA.runTest();
+            tc2_info = EXECUTED_MSG;
         } catch (Exception e) {
-            info2 = "[" + e.getMessage() + "]";
-            testResult2 = FAILED;
+            tc2_info = "[" + e.getMessage() + "]";
+            tc2_test_result = FAILED;
         }
     }
 
     /* ********************************************
-     * TC3 EJB2.1 
+     * TC3 EJB2.1 Stateless
      ******************************************** */
     
     public String getTeardownResultTC3() {
-        return teardownResult3;
+        return tc3_teardown_result;
     }
 
     public void setTeardownResultTC3(String teardownResult) {
-        this.teardownResult3 = teardownResult;
+        this.tc3_teardown_result = teardownResult;
     }
 
     public String getSetupResultTC3() {
-        return setupResult3;
+        return tc3_setup_setUp_result;
     }
 
     public void setSetupResultTC3(String setupResult) {
-        this.setupResult3 = setupResult;
+        this.tc3_setup_setUp_result = setupResult;
     }
 
     public String getResultTC3() {
-        return testResult3;
+        return tc3_test_result;
     }
 
     public void setResultTC3(String result) {
-        this.testResult3 = result;
+        this.tc3_test_result = result;
     }
     
     public String getInfoTC3() {
-        return info3;
+        return tc3_info;
     }
 
     public void setInfoTC3(String info) {
-        this.info3 = info;
+        this.tc3_info = info;
     }
     
     public void setupTC3() {
-        info3 = ejb2StatelessA.setUp();
-        setupResult3 = DONE;
+        tc3_info = ejb2xStatelessA.setUp();
+        tc3_setup_setUp_result = DONE;
     }
 
     public void tearDownTC3() {
-        info3 = ejb2StatelessA.tearDown();
-        teardownResult3 = DONE;
+        tc3_info = ejb2xStatelessA.tearDown();
+        tc3_teardown_result = DONE;
     }
 
 
     public void executeTC3() {
         try {
-        	testResult3 = ejb2StatelessA.runTest();
-            info3 = EXECUTED_MSG;
+        	tc3_test_result = ejb2xStatelessA.runTest();
+            tc3_info = EXECUTED_MSG;
         } catch (Exception e) {
-            info3 = "[" + e.getMessage() + "]";
-            testResult3 = FAILED;
+            tc3_info = "[" + e.getMessage() + "]";
+            tc3_test_result = FAILED;
         }
     }
+    
+    /* ********************************************
+     * TC4 EJB2.1 Stateful 
+     ******************************************** */
+    
+   /* public String getTeardownResultTC4() {
+        return tc4_teardown_result;
+    }
+
+    public void setTeardownResultTC4(String teardownResult) {
+        this.tc4_teardown_result = teardownResult;
+    }
+
+    public String getSetupResultTC4() {
+        return tc4_setup_result;
+    }
+
+    public void setSetupResultTC4(String setupResult) {
+        this.tc4_setup_result = setupResult;
+    }
+
+    public String getResultTC4() {
+        return tc4_test_result;
+    }
+
+    public void setResultTC4(String result) {
+        this.tc4_test_result = result;
+    }
+    
+    public String getInfoTC4() {
+        return tc4_info;
+    }
+
+    public void setInfoTC4(String info) {
+        this.tc4_info = info;
+    }
+    
+    public void setupTC4() {
+        tc4_info = ejb2xStatefulA.setUp();
+        tc4_setup_result = DONE;
+    }
+
+    public void tearDownTC4() {
+        tc4_info = ejb2xStatefulA.tearDown();
+        tc4_teardown_result = DONE;
+    }
+
+
+    public void executeTC4() {
+        try {
+        	tc4_test_result = ejb2xStatefulA.runTest();
+            tc4_info = EXECUTED_MSG;
+        } catch (Exception e) {
+            tc4_info = "[" + e.getMessage() + "]";
+            tc4_test_result = FAILED;
+        }
+    }*/
 }

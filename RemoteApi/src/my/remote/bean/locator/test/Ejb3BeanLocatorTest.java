@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
-import my.remote.bean.locator.Ejb3BeanLocator;
+import my.remote.bean.locator.Ejb3xBeanLocator;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class Ejb3BeanLocatorTest {
 	private Context mockContext;
 	
 	@InjectMocks
-	private Ejb3BeanLocator ejb3BeanLocator = new Ejb3BeanLocator();
+	private Ejb3xBeanLocator ejb3BeanLocator = new Ejb3xBeanLocator();
 	
 	private static final String EJB3_ADDRESS = "ejb3_address";
 

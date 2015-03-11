@@ -13,12 +13,12 @@ import javax.naming.NamingException;
  * Note it implements serializable because the stateful ejb cannot
  * be passivated unless this class is serializable.
  */
-public class Ejb3BeanLocator implements Serializable {
+public class Ejb3xBeanLocator implements Serializable {
 
     private static final long serialVersionUID = -520152991172756468L;
     private Hashtable<Object, Object> props;
     private Context context;
-    private static final Logger LOG = Logger.getLogger(Ejb3BeanLocator.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(Ejb3xBeanLocator.class.getCanonicalName());
 
     /**
      * Method used to locate a remote EJB bean.

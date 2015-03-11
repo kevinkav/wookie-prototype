@@ -19,7 +19,7 @@ import java.rmi.RemoteException;
 import javax.ejb.CreateException;
 import javax.ejb.EJB;
 import javax.ejb.RemoteHome;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -31,32 +31,33 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
 import my.remote.bean.locator.Ejb2xBeanLocator;
-import my.remote.serverA.ejb2.api.StatelessRemoteObjectA;
-import my.remote.serverB.ejb2.api.StatelessRemoteHomeB;
-import my.remote.serverB.ejb2.api.StatelessRemoteObjectB;
+import my.remote.serverA.ejb2.api.StatefulRemoteObjectA;
+import my.remote.serverB.ejb2.api.StatefulRemoteHomeB;
+import my.remote.serverB.ejb2.api.StatefulRemoteObjectB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RemoteHome(StatelessRemoteHomeB.class)
-@EJB(name = StatelessRemoteObjectB.IIOP_BINDING, beanInterface = StatelessRemoteObjectB.class)
-@Stateless
-public class Ejb2StatelessB {
+
+@RemoteHome(StatefulRemoteHomeB.class)
+@EJB(name = StatefulRemoteObjectB.IIOP_BINDING, beanInterface = StatefulRemoteObjectB.class)
+@Stateful
+public class Ejb2StatefulB {
+
+private static final String EJB2_STATEFUL_ADDRESS = "corbaname:iiop:localhost:3528#" + StatefulRemoteObjectA.IIOP_BINDING;     
     
-    private static final String REMOTE_OBJECT_ADDRESS = "corbaname:iiop:localhost:3528#" + StatelessRemoteObjectA.IIOP_BINDING;     
-    
-    private static final Logger LOG = LoggerFactory.getLogger(Ejb2StatelessB.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb2StatefulB.class);
     
     @Inject
-    private Ejb2xBeanLocator ejb2beanLocator;
+    private Ejb2xBeanLocator ejb2xBeanLocator;
     
 
     public String getCountryOfOriginAndCreateCast(long id) throws RemoteException, NamingException, CreateException {
     	LOG.info("[{}] getCountryOfOriginAndCreateCast invoked with id [{}]: ", SERVER_B, id);
-    	StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2beanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
-    	String countryOfOriginFromA = ejb2StatelessA.getCountryOfOrigin(id);
+    	StatefulRemoteObjectA ejb2StatefulA = (StatefulRemoteObjectA) ejb2xBeanLocator.getStatefulRemoteObjectA(EJB2_STATEFUL_ADDRESS);
+    	String countryOfOriginFromA = ejb2StatefulA.getCountryOfOrigin(id);
         LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
-        ejb2StatelessA.addCastToFilm();
+        ejb2StatefulA.addCastToFilm();
 		return countryOfOriginFromA;
     }
     
@@ -64,8 +65,8 @@ public class Ejb2StatelessB {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String getCountryOfOrigin(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         LOG.info("[{}] getCountryOfOrigin invoked with id [{}]: ", SERVER_B, id);
-        StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2beanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
-        String countryOfOriginFromA = ejb2StatelessA.getCountryOfOrigin(id);
+        StatefulRemoteObjectA ejb2StatefulA = (StatefulRemoteObjectA) ejb2xBeanLocator.getStatefulRemoteObjectA(EJB2_STATEFUL_ADDRESS);
+        String countryOfOriginFromA = ejb2StatefulA.getCountryOfOrigin(id);
         LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
         return countryOfOriginFromA;
     }
@@ -73,9 +74,8 @@ public class Ejb2StatelessB {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void createCast(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         LOG.info("[{}] createCast invoked with id [{}]", SERVER_B, id);
-        StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2beanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
-        ejb2StatelessA.addCastToFilm();
+        StatefulRemoteObjectA ejb2StatefulA = (StatefulRemoteObjectA) ejb2xBeanLocator.getStatefulRemoteObjectA(EJB2_STATEFUL_ADDRESS);
+        ejb2StatefulA.addCastToFilm();
     }
 
-    
 }

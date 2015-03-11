@@ -26,7 +26,7 @@ import javax.persistence.Query;
 
 import my.database.entity.Cast;
 import my.database.entity.Film;
-import my.remote.bean.locator.Ejb3BeanLocator;
+import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.remote.serverB.ejb3.api.StatelessRemoteB;
 import my.serverA.ejb3.impl.Ejb3StatelessA;
 
@@ -58,7 +58,7 @@ public class Ejb3StatelessATest {
 	private StatelessRemoteB mockStatelessRemoteB;
 	
 	@Mock
-	Ejb3BeanLocator mockBeanLocator;
+	Ejb3xBeanLocator mockBeanLocator;
 	
 	@InjectMocks
 	private Ejb3StatelessA ejb3StatelessA = new Ejb3StatelessA();

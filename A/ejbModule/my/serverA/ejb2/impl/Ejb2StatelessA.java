@@ -13,10 +13,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.naming.NamingException;
 
-import my.remote.bean.locator.Ejb2BeanLocator;
-import my.remote.serverA.ejb2.api.RemoteHomeA;
-import my.remote.serverA.ejb2.api.RemoteObjectA;
-import my.remote.serverB.ejb2.api.RemoteObjectB;
+import my.remote.bean.locator.Ejb2xBeanLocator;
+import my.remote.serverA.ejb2.api.StatelessRemoteHomeA;
+import my.remote.serverA.ejb2.api.StatelessRemoteObjectA;
+import my.remote.serverB.ejb2.api.StatelessRemoteObjectB;
 import my.serverA.common.EjbBaseA;
 import my.test.api.TestCase;
 
@@ -25,17 +25,17 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Session Bean implementation class Ejb1
+ * EJB2.x Stateless Session Bean
  */
 @Stateless
 @Local(TestCase.class)
-@RemoteHome(RemoteHomeA.class)
-@EJB(name = RemoteObjectA.IIOP_BINDING, beanInterface = RemoteObjectA.class)
+@RemoteHome(StatelessRemoteHomeA.class)
+@EJB(name = StatelessRemoteObjectA.IIOP_BINDING, beanInterface = StatelessRemoteObjectA.class)
 public class Ejb2StatelessA extends EjbBaseA {
 
-    private static final String EJB2_ADDRESS = "corbaname:iiop:localhost:3628#" + RemoteObjectB.IIOP_BINDING;
+    private static final String EJB2_ADDRESS = "corbaname:iiop:localhost:3628#" + StatelessRemoteObjectB.IIOP_BINDING;
     private static final Logger LOG = LoggerFactory.getLogger(Ejb2StatelessA.class);    
-    private Ejb2BeanLocator corbaUtil = null;
+    private Ejb2xBeanLocator ejb2xBeanLocator = null;
     
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -44,8 +44,8 @@ public class Ejb2StatelessA extends EjbBaseA {
     	String testResult = "failed";
         try{
             String localValue = setCountryOfOrigin(IRELAND);
-            createCorbaUtil();
-            RemoteObjectB ejb2StatelessB = corbaUtil.getRemoteObjectB(EJB2_ADDRESS);
+            createBeanFinder();
+            StatelessRemoteObjectB ejb2StatelessB = ejb2xBeanLocator.getStatelessRemoteObjectB(EJB2_ADDRESS);
             String remoteValue = ejb2StatelessB.getCountryOfOriginAndCreateCast(FILM_ID);
             //String remoteValue = ejb2StatelessB.getCountryOfOrigin(FILM_ID);
             //ejb2StatelessB.createCast(FILM_ID); 
@@ -64,9 +64,9 @@ public class Ejb2StatelessA extends EjbBaseA {
     /*
      * Getter method to aid junit testing.
      */
-    private void createCorbaUtil() throws NamingException{
-    	if (corbaUtil == null){
-    		corbaUtil = new Ejb2BeanLocator();
+    private void createBeanFinder() throws NamingException{
+    	if (ejb2xBeanLocator == null){
+    		ejb2xBeanLocator = new Ejb2xBeanLocator();
     	}
     }
 

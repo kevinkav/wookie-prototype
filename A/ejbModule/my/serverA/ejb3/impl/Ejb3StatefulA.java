@@ -14,7 +14,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import my.remote.bean.locator.Ejb3BeanLocator;
+import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.remote.serverA.ejb3.api.StatefulRemoteA;
 import my.remote.serverB.ejb3.api.StatefulRemoteB;
 import my.serverA.common.EjbBaseA;
@@ -32,7 +32,7 @@ public class Ejb3StatefulA extends EjbBaseA implements StatefulRemoteA {
     private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatefulA.class);
     
     @Inject
-    Ejb3BeanLocator beanLocator;
+    Ejb3xBeanLocator ejb3xBeanLocator;
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @Override
@@ -41,7 +41,7 @@ public class Ejb3StatefulA extends EjbBaseA implements StatefulRemoteA {
     	String testResult = "Failed";
         try {
             String localValue = setCountryOfOrigin(IRELAND);
-            StatefulRemoteB ejb3StatefulRemoteB = (StatefulRemoteB) beanLocator.locateBean(StatefulRemoteB.JNDI_LOOKUP);
+            StatefulRemoteB ejb3StatefulRemoteB = (StatefulRemoteB) ejb3xBeanLocator.locateBean(StatefulRemoteB.JNDI_LOOKUP);
             String remoteValue = ejb3StatefulRemoteB.getCountryOfOriginAndCreateCast(FILM_ID);
             //String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
             //ejb2.createCast(FILM_ID);

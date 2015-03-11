@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ COPYRIGHT Ericsson 2013
-  ~
-  ~ The copyright to the computer program(s) herein is the property of
-  ~ Ericsson Inc. The programs may be used and/or copied only with written
-  ~ permission from Ericsson Inc. or in accordance with the terms and
-  ~ conditions stipulated in the agreement/contract under which the
-  ~ program(s) have been supplied.
-  -->
-<!--suppress XmlPathReference -->
- <jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee"
+<jboss:ejb-jar xmlns:jboss="http://www.jboss.com/xml/ns/javaee"
                xmlns="http://java.sun.com/xml/ns/javaee"
                xmlns:iiop="urn:iiop"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,10 +12,18 @@
         <iiop:iiop>
              <ejb-name>Ejb2StatelessA</ejb-name>
              <iiop:binding-name>jts/Ejb2StatelessA</iiop:binding-name>
-        </iiop:iiop>
+        </iiop:iiop>  
         <iiop:iiop>
              <ejb-name>Ejb2StatelessB</ejb-name>
              <iiop:binding-name>jts/Ejb2StatelessB</iiop:binding-name>
         </iiop:iiop>
+        <!-- <iiop:iiop>
+             <ejb-name>Ejb2StatefulA</ejb-name>
+             <iiop:binding-name>jts/Ejb2StatefulA</iiop:binding-name>
+        </iiop:iiop>
+        <iiop:iiop>
+             <ejb-name>Ejb2StatefulB</ejb-name>
+             <iiop:binding-name>jts/Ejb2StatefulB</iiop:binding-name>
+        </iiop:iiop> -->
     </assembly-descriptor>
 </jboss:ejb-jar> 

@@ -4,12 +4,12 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBObject;
 
-public interface RemoteObjectA extends EJBObject {
+public interface StatelessRemoteObjectA extends EJBObject {
 
     /**
      * String used to bind Ejb2StatelessA bean to a IIOP naming service name.
      */
-    String IIOP_BINDING = "jts/Ejb2StatelessA";
+    public static String IIOP_BINDING = "jts/Ejb2StatelessA";
      
     /**
      * Gets the CountryOfOrigin attribute from the Film object.

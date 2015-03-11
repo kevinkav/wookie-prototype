@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import my.remote.bean.locator.Ejb3BeanLocator;
+import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.remote.serverA.ejb3.api.StatelessRemoteA;
 import my.remote.serverB.ejb3.api.StatelessRemoteB;
 
@@ -38,7 +38,7 @@ import my.remote.serverB.ejb3.api.StatelessRemoteB;
 public class Ejb3StatelessB implements StatelessRemoteB{
 
 	@Inject
-    private Ejb3BeanLocator beanLocator;
+    private Ejb3xBeanLocator beanLocator;
 	    
     private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatelessB.class);
     

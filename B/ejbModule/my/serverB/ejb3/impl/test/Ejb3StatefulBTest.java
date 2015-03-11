@@ -21,7 +21,7 @@ import java.rmi.RemoteException;
 
 import javax.naming.NamingException;
 
-import my.remote.bean.locator.Ejb3BeanLocator;
+import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.remote.serverA.ejb3.api.StatefulRemoteA;
 import my.serverB.ejb3.impl.Ejb3StatefulB;
 
@@ -43,7 +43,7 @@ public class Ejb3StatefulBTest {
 	private StatefulRemoteA mockStatefulRemoteA;
 	
 	@Mock
-	private Ejb3BeanLocator mockEjb3BeanLocator;
+	private Ejb3xBeanLocator mockEjb3BeanLocator;
 	
 	@InjectMocks
 	private Ejb3StatefulB mockEjb3StatefulB = new Ejb3StatefulB();

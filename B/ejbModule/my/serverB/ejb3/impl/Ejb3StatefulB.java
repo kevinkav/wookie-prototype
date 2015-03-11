@@ -21,7 +21,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import my.remote.bean.locator.Ejb3BeanLocator;
+import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.remote.serverA.ejb3.api.StatefulRemoteA;
 import my.remote.serverB.ejb3.api.StatefulRemoteB;
 
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class Ejb3StatefulB implements StatefulRemoteB{
 
 	@Inject
-    private Ejb3BeanLocator beanLocator;
+    private Ejb3xBeanLocator beanLocator;
 		
     private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatefulB.class);
 

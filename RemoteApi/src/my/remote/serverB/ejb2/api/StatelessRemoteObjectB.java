@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBObject;
 
-public interface RemoteObjectB extends EJBObject{
+public interface StatelessRemoteObjectB extends EJBObject{
 
     /**
      * String used to bind Ejb2StatelessB bean to a IIOP naming service name.

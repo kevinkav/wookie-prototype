@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 
-public interface RemoteHomeA extends EJBHome{
+public interface StatelessRemoteHomeA extends EJBHome{
     
     /**
      * Method that creates a RemoteObjectA.
@@ -14,5 +14,5 @@ public interface RemoteHomeA extends EJBHome{
      * @throws RemoteException
      * @throws CreateException
      */
-    RemoteObjectA create() throws RemoteException, CreateException;
+    StatelessRemoteObjectA create() throws RemoteException, CreateException;
 }

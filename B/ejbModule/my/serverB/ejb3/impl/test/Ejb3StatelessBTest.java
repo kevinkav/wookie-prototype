@@ -20,7 +20,7 @@ import java.rmi.RemoteException;
 
 import javax.naming.NamingException;
 
-import my.remote.bean.locator.Ejb3BeanLocator;
+import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.remote.serverA.ejb3.api.StatelessRemoteA;
 import my.serverB.ejb3.impl.Ejb3StatelessB;
 
@@ -42,7 +42,7 @@ public class Ejb3StatelessBTest {
 	private StatelessRemoteA mockStatelessRemoteA;
 
 	@Mock
-	private Ejb3BeanLocator mockEjb3BeanLocator;
+	private Ejb3xBeanLocator mockEjb3BeanLocator;
 
 	@InjectMocks
 	private Ejb3StatelessB mockEjb3StatelessB = new Ejb3StatelessB();
