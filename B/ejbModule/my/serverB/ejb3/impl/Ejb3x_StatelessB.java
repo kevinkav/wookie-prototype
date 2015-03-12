@@ -35,12 +35,12 @@ import my.remote.serverB.ejb3.api.StatelessRemoteB;
 @Remote(StatelessRemoteB.class)
 @Stateless
 @EJB(name=StatelessRemoteB.JNDI_LOOKUP, beanInterface=StatelessRemoteB.class)
-public class Ejb3StatelessB implements StatelessRemoteB{
+public class Ejb3x_StatelessB implements StatelessRemoteB{
 
 	@Inject
-    private Ejb3xBeanLocator beanLocator;
+    private Ejb3xBeanLocator ejb3xBeanLocator;
 	    
-    private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatelessB.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb3x_StatelessB.class);
     
 
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -48,7 +48,7 @@ public class Ejb3StatelessB implements StatelessRemoteB{
         LOG.info("Called with id: " + id);
         String countryOfOriginFromA = "";
         try {
-        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
+        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) ejb3xBeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
             countryOfOriginFromA = ejb3StatelessRemoteA.getCountryOfOrigin(id);
             LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
             ejb3StatelessRemoteA.addCastToFilm();
@@ -65,7 +65,7 @@ public class Ejb3StatelessB implements StatelessRemoteB{
 		LOG.info("[{}] getCountryOfOrigin invoked with id [{}]: ", SERVER_B, id);
 		String countryOfOriginEjb1 = "";
         try {
-        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
+        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) ejb3xBeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
             countryOfOriginEjb1 = ejb3StatelessRemoteA.getCountryOfOrigin(id);
             LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginEjb1, SERVER_A);
             ejb3StatelessRemoteA.addCastToFilm();
@@ -81,7 +81,7 @@ public class Ejb3StatelessB implements StatelessRemoteB{
 	public void createCast(long id) throws Exception {
     	LOG.info("[{}] createCast invoked with id [{}]", SERVER_B, id);
         try {
-        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) beanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
+        	StatelessRemoteA ejb3StatelessRemoteA = (StatelessRemoteA) ejb3xBeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP);
         	ejb3StatelessRemoteA.addCastToFilm();
         } catch (Exception e) {
             LOG.error("Exception occurred rolling back transaction, error message [{}]", e.getMessage());

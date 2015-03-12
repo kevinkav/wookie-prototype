@@ -22,7 +22,7 @@ import my.database.entity.Cast;
 import my.database.entity.Film;
 import my.remote.bean.locator.Ejb2xBeanLocator;
 import my.remote.serverB.ejb2.api.StatelessRemoteObjectB;
-import my.serverA.ejb2.impl.Ejb2StatelessA;
+import my.serverA.ejb2.impl.Ejb2x_StatelessA;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -34,7 +34,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Ejb2StatelessATest {
+public class Ejb2x_StatelessATest {
 
 	private static final String EJB2_ADDRESS = 
 			"corbaname:iiop:localhost:3628#" + StatelessRemoteObjectB.IIOP_BINDING;
@@ -58,7 +58,7 @@ public class Ejb2StatelessATest {
 	private Ejb2xBeanLocator mockEjb2BeanLocator;
 	
 	@InjectMocks
-	private Ejb2StatelessA ejb_v2 = new Ejb2StatelessA();
+	private Ejb2x_StatelessA ejb_2x = new Ejb2x_StatelessA();
 
 
 	/**
@@ -80,7 +80,7 @@ public class Ejb2StatelessATest {
 
 	@Test
 	public void test_setUp() throws Exception {
-		String actualResult = ejb_v2.setUp();
+		String actualResult = ejb_2x.setUp();
 		verify(mockEm).persist(any(Film.class));
 		Assert.assertTrue("Expected a film created message!", actualResult.contains("created"));
 	}
@@ -96,7 +96,7 @@ public class Ejb2StatelessATest {
 		when(mockCast.getLeadActor()).thenReturn(HARRISON_FORD);
 		when(mockCast.getId()).thenReturn(CAST_ID);
 
-		String testResult = ejb_v2.runTest();
+		String testResult = ejb_2x.runTest();
 
 		Assert.assertEquals("Expected a pass message!", "Passed", testResult);
 		//verify(mockEjb2, times(1)).createCast(FILM_ID);
@@ -116,7 +116,7 @@ public class Ejb2StatelessATest {
 		when(mockEjb2BeanLocator.getStatelessRemoteObjectB(EJB2_ADDRESS)).thenThrow(new NamingException());
 		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
 
-		ejb_v2.runTest();
+		ejb_2x.runTest();
 	}
 	
 	@Test (expected = CreateException.class)
@@ -127,7 +127,7 @@ public class Ejb2StatelessATest {
 		when(mockEjb2BeanLocator.getStatelessRemoteObjectB(EJB2_ADDRESS)).thenThrow(new CreateException());
 		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
 
-		ejb_v2.runTest();
+		ejb_2x.runTest();
 	}
 	
 	@Test (expected = RemoteException.class)
@@ -138,7 +138,7 @@ public class Ejb2StatelessATest {
 		when(mockEjb2BeanLocator.getStatelessRemoteObjectB(EJB2_ADDRESS)).thenThrow(new RemoteException());
 		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
 
-		ejb_v2.runTest();
+		ejb_2x.runTest();
 	}
 
 	@Test
@@ -147,7 +147,7 @@ public class Ejb2StatelessATest {
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
 		
-		String countryOfOrigin = ejb_v2.getCountryOfOrigin(FILM_ID);
+		String countryOfOrigin = ejb_2x.getCountryOfOrigin(FILM_ID);
 
 		Assert.assertEquals("Expected to get " + IRELAND,  IRELAND, countryOfOrigin);
 		verify(mockEm).find(my.database.entity.Film.class, 1l);
@@ -159,7 +159,7 @@ public class Ejb2StatelessATest {
 		
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		
-		ejb_v2.addCastToFilm();
+		ejb_2x.addCastToFilm();
 		
 		verify(mockEm).find(my.database.entity.Film.class, 1l);
 		verify(mockFilm).setCast(any(Cast.class));
@@ -177,7 +177,7 @@ public class Ejb2StatelessATest {
 		when(mockQuery.getResultList()).thenReturn(castList).thenReturn(filmList); // stubbing consecutive calls
 		when(mockFilm.getId()).thenReturn(FILM_ID);
 		when(mockCast.getId()).thenReturn(CAST_ID);
-		String message = ejb_v2.tearDown();
+		String message = ejb_2x.tearDown();
 
 		verify(mockEm, times(2)).remove(any(Long.class));
 		Assert.assertTrue("Expected deleted message!", message.contains("Deleted"));

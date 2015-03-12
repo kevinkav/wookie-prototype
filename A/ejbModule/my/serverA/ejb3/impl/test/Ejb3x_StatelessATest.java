@@ -28,7 +28,7 @@ import my.database.entity.Cast;
 import my.database.entity.Film;
 import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.remote.serverB.ejb3.api.StatelessRemoteB;
-import my.serverA.ejb3.impl.Ejb3StatelessA;
+import my.serverA.ejb3.impl.Ejb3x_StatelessA;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -40,7 +40,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Ejb3StatelessATest {
+public class Ejb3x_StatelessATest {
 
 	@Mock
 	private Film mockFilm;
@@ -61,7 +61,7 @@ public class Ejb3StatelessATest {
 	Ejb3xBeanLocator mockBeanLocator;
 	
 	@InjectMocks
-	private Ejb3StatelessA ejb3StatelessA = new Ejb3StatelessA();
+	private Ejb3x_StatelessA ejb3StatelessA = new Ejb3x_StatelessA();
 
 	@Before
 	public void setUp() throws Exception {

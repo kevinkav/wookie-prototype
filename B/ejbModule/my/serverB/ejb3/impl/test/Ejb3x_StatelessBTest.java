@@ -22,7 +22,7 @@ import javax.naming.NamingException;
 
 import my.remote.bean.locator.Ejb3xBeanLocator;
 import my.remote.serverA.ejb3.api.StatelessRemoteA;
-import my.serverB.ejb3.impl.Ejb3StatelessB;
+import my.serverB.ejb3.impl.Ejb3x_StatelessB;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -34,7 +34,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Ejb3StatelessBTest {
+public class Ejb3x_StatelessBTest {
 
 	private static final String IRELAND = "IRELAND";
 
@@ -45,7 +45,7 @@ public class Ejb3StatelessBTest {
 	private Ejb3xBeanLocator mockEjb3BeanLocator;
 
 	@InjectMocks
-	private Ejb3StatelessB mockEjb3StatelessB = new Ejb3StatelessB();
+	private Ejb3x_StatelessB mockEjb3StatelessB = new Ejb3x_StatelessB();
 
 	@Before
 	public void setUp() throws Exception {

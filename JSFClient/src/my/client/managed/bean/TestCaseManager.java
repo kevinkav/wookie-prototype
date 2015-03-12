@@ -21,17 +21,17 @@ import my.test.api.TestCase;
 @ManagedBean(name = "tc")
 public class TestCaseManager {
 
-    @EJB(beanName="Ejb2StatelessA")
-    TestCase ejb2xStatelessA;
+    @EJB(beanName="Ejb2x_StatelessA")
+    TestCase ejb2x_StatelessA;
     
 /*    @EJB(beanName="Ejb2StatefulA")
     TestCase ejb2xStatefulA;*/
     
-    @EJB(beanName="Ejb3StatelessA")
-    TestCase ejb3xStatelessA;
+    @EJB(beanName="Ejb3x_StatelessA")
+    TestCase ejb3x_StatelessA;
     
-    @EJB(beanName="Ejb3StatefulA")
-    TestCase ejb3xStatefulA;
+    @EJB(beanName="Ejb3x_StatefulA")
+    TestCase ejb3x_StatefulA;
 
     private static final String EXECUTED_MSG = "[Executed Test]";
     private static final String DONE = "Done";
@@ -94,19 +94,19 @@ public class TestCaseManager {
     }
     
     public void setupTC1() { 
-        tc1_info = ejb3xStatelessA.setUp();
+        tc1_info = ejb3x_StatelessA.setUp();
         tc1_setup_result = DONE;
     }
 
     public void tearDownTC1() {
-        tc1_info = ejb3xStatelessA.tearDown();
+        tc1_info = ejb3x_StatelessA.tearDown();
         tc1_teardown_result = DONE;
     }
 
 
     public void executeTC1() {
         try {
-        	tc1_test_result = ejb3xStatelessA.runTest();
+        	tc1_test_result = ejb3x_StatelessA.runTest();
             tc1_info = EXECUTED_MSG;
         } catch (Exception e) {
             tc1_info =  "[" + e.getMessage() + "]";
@@ -150,19 +150,19 @@ public class TestCaseManager {
     }
     
     public void setupTC2() { 
-        tc2_info = ejb3xStatefulA.setUp();
+        tc2_info = ejb3x_StatefulA.setUp();
         tc2_setup_result = DONE;
     }
 
     public void tearDownTC2() {
-        tc2_info = ejb3xStatefulA.tearDown();
+        tc2_info = ejb3x_StatefulA.tearDown();
         tc2_teardown_result = DONE;
     }
 
 
     public void executeTC2() {
         try {
-        	tc2_test_result = ejb3xStatefulA.runTest();
+        	tc2_test_result = ejb3x_StatefulA.runTest();
             tc2_info = EXECUTED_MSG;
         } catch (Exception e) {
             tc2_info = "[" + e.getMessage() + "]";
@@ -207,19 +207,19 @@ public class TestCaseManager {
     }
     
     public void setupTC3() {
-        tc3_info = ejb2xStatelessA.setUp();
+        tc3_info = ejb2x_StatelessA.setUp();
         tc3_setup_setUp_result = DONE;
     }
 
     public void tearDownTC3() {
-        tc3_info = ejb2xStatelessA.tearDown();
+        tc3_info = ejb2x_StatelessA.tearDown();
         tc3_teardown_result = DONE;
     }
 
 
     public void executeTC3() {
         try {
-        	tc3_test_result = ejb2xStatelessA.runTest();
+        	tc3_test_result = ejb2x_StatelessA.runTest();
             tc3_info = EXECUTED_MSG;
         } catch (Exception e) {
             tc3_info = "[" + e.getMessage() + "]";

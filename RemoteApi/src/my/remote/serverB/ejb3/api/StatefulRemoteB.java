@@ -16,7 +16,7 @@ import javax.ejb.Remote;
 @Remote
 public interface StatefulRemoteB {
 
-    String JNDI_LOOKUP = "ejb:Ear2/B/Ejb3StatefulB!my.remote.serverB.ejb3.api.StatefulRemoteB?stateful";
+    String JNDI_LOOKUP = "ejb:Ear2/B/Ejb3x_StatefulB!my.remote.serverB.ejb3.api.StatefulRemoteB?stateful";
 
     String getCountryOfOriginAndCreateCast(long id) throws Exception;
     

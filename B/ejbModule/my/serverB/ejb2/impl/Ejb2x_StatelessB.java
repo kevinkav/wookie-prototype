@@ -41,19 +41,19 @@ import org.slf4j.LoggerFactory;
 @RemoteHome(StatelessRemoteHomeB.class)
 @EJB(name = StatelessRemoteObjectB.IIOP_BINDING, beanInterface = StatelessRemoteObjectB.class)
 @Stateless
-public class Ejb2StatelessB {
+public class Ejb2x_StatelessB {
     
     private static final String REMOTE_OBJECT_ADDRESS = "corbaname:iiop:localhost:3528#" + StatelessRemoteObjectA.IIOP_BINDING;     
     
-    private static final Logger LOG = LoggerFactory.getLogger(Ejb2StatelessB.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb2x_StatelessB.class);
     
     @Inject
-    private Ejb2xBeanLocator ejb2beanLocator;
+    private Ejb2xBeanLocator ejb2xBeanLocator;
     
 
     public String getCountryOfOriginAndCreateCast(long id) throws RemoteException, NamingException, CreateException {
     	LOG.info("[{}] getCountryOfOriginAndCreateCast invoked with id [{}]: ", SERVER_B, id);
-    	StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2beanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+    	StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2xBeanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
     	String countryOfOriginFromA = ejb2StatelessA.getCountryOfOrigin(id);
         LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
         ejb2StatelessA.addCastToFilm();
@@ -64,7 +64,7 @@ public class Ejb2StatelessB {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String getCountryOfOrigin(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         LOG.info("[{}] getCountryOfOrigin invoked with id [{}]: ", SERVER_B, id);
-        StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2beanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+        StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2xBeanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
         String countryOfOriginFromA = ejb2StatelessA.getCountryOfOrigin(id);
         LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
         return countryOfOriginFromA;
@@ -73,7 +73,7 @@ public class Ejb2StatelessB {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void createCast(long id) throws RemoteException, NamingException, CreateException, NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
         LOG.info("[{}] createCast invoked with id [{}]", SERVER_B, id);
-        StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2beanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
+        StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2xBeanLocator.getStatelessRemoteObjectA(REMOTE_OBJECT_ADDRESS);
         ejb2StatelessA.addCastToFilm();
     }
 

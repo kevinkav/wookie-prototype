@@ -8,32 +8,33 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
-import javax.ejb.Remove;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
-import my.remote.bean.locator.Ejb3xBeanLocator;
-import my.remote.serverA.ejb3.api.StatefulRemoteA;
-import my.remote.serverB.ejb3.api.StatefulRemoteB;
-import my.serverA.common.EjbBaseA;
-import my.test.api.TestCase;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Local(TestCase.class)
-@Remote(StatefulRemoteA.class)
-@Stateful
-@EJB(name=StatefulRemoteA.JNDI_LOOKUP, beanInterface=StatefulRemoteA.class)
-public class Ejb3StatefulA extends EjbBaseA implements StatefulRemoteA {
+import my.remote.bean.locator.Ejb3xBeanLocator;
+import my.remote.serverA.ejb3.api.StatelessRemoteA;
+import my.remote.serverB.ejb3.api.StatelessRemoteB;
+import my.serverA.common.EjbBaseA;
+import my.test.api.TestCase;
 
-    private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatefulA.class);
+
+@Stateless
+@Local(TestCase.class)
+@Remote(StatelessRemoteA.class)
+@EJB(name=StatelessRemoteA.JNDI_LOOKUP, beanInterface=StatelessRemoteA.class)
+public class Ejb3x_StatelessA extends EjbBaseA implements StatelessRemoteA {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb3x_StatelessA.class);
     
     @Inject
     Ejb3xBeanLocator ejb3xBeanLocator;
     
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @Override
     public String runTest() throws Exception {
@@ -41,8 +42,8 @@ public class Ejb3StatefulA extends EjbBaseA implements StatefulRemoteA {
     	String testResult = "Failed";
         try {
             String localValue = setCountryOfOrigin(IRELAND);
-            StatefulRemoteB ejb3StatefulRemoteB = (StatefulRemoteB) ejb3xBeanLocator.locateBean(StatefulRemoteB.JNDI_LOOKUP);
-            String remoteValue = ejb3StatefulRemoteB.getCountryOfOriginAndCreateCast(FILM_ID);
+            StatelessRemoteB ejb3StatelessRemoteB = (StatelessRemoteB) ejb3xBeanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP);
+            String remoteValue = ejb3StatelessRemoteB.getCountryOfOriginAndCreateCast(FILM_ID);
             //String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
             //ejb2.createCast(FILM_ID);
             if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){
@@ -55,24 +56,9 @@ public class Ejb3StatefulA extends EjbBaseA implements StatefulRemoteA {
         LOG.info("[{}] Commiting transaction", SERVER_A);
         return testResult;
     }
-
-    @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public String tearDown() {
-        String str = super.tearDown();
-        destroyBean();
-        return str;
-    }
     
-    @Remove
-    private void destroyBean(){
-        LOG.info("[{}] destroying stateful bean", SERVER_A);
-    }
-
     @PostConstruct
     private void startup(){
         LOG.info("[{}] created", SERVER_A);
     }
-
- 
 }

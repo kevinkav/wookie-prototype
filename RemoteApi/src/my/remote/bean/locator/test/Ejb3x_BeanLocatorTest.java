@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Ejb3BeanLocatorTest {
+public class Ejb3x_BeanLocatorTest {
 
 	@Mock
 	private Context mockContext;

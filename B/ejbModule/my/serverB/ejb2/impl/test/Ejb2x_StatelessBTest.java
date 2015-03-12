@@ -23,7 +23,7 @@ import javax.naming.NamingException;
 
 import my.remote.bean.locator.Ejb2xBeanLocator;
 import my.remote.serverA.ejb2.api.StatelessRemoteObjectA;
-import my.serverB.ejb2.impl.Ejb2StatelessB;
+import my.serverB.ejb2.impl.Ejb2x_StatelessB;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -35,7 +35,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Ejb2StatelessBTest {
+public class Ejb2x_StatelessBTest {
 
 	private static final String REMOTE_OBJECT_ADDRESS = "corbaname:iiop:localhost:3528#" + StatelessRemoteObjectA.IIOP_BINDING;
 	
@@ -48,7 +48,7 @@ public class Ejb2StatelessBTest {
 	private Ejb2xBeanLocator mockEjb2BeanLocator;
 	
 	@InjectMocks
-	private Ejb2StatelessB ejb2StatelessB = new Ejb2StatelessB();
+	private Ejb2x_StatelessB ejb2StatelessB = new Ejb2x_StatelessB();
 	
 			
 

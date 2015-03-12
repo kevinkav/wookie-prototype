@@ -37,7 +37,7 @@ import org.mockito.internal.util.reflection.Whitebox;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Ejb2BeanLocatorTest {
+public class Ejb2x_BeanLocatorTest {
 
 	@Mock
 	private InitialContext mockInitialContext;

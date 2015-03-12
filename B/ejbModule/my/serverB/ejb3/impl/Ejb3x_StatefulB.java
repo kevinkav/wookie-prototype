@@ -35,12 +35,12 @@ import org.slf4j.LoggerFactory;
 @Remote(StatefulRemoteB.class)
 @Stateful
 @EJB(name=StatefulRemoteB.JNDI_LOOKUP, beanInterface=StatefulRemoteB.class)
-public class Ejb3StatefulB implements StatefulRemoteB{
+public class Ejb3x_StatefulB implements StatefulRemoteB{
 
 	@Inject
-    private Ejb3xBeanLocator beanLocator;
+    private Ejb3xBeanLocator ejb3xBeanLocator;
 		
-    private static final Logger LOG = LoggerFactory.getLogger(Ejb3StatefulB.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb3x_StatefulB.class);
 
 
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -49,7 +49,7 @@ public class Ejb3StatefulB implements StatefulRemoteB{
     	LOG.info("Called with id: " + id);
         String countryOfOriginFromA = "";
         try {
-        	StatefulRemoteA statefulRemoteA = (StatefulRemoteA) beanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP);
+        	StatefulRemoteA statefulRemoteA = (StatefulRemoteA) ejb3xBeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP);
             countryOfOriginFromA = statefulRemoteA.getCountryOfOrigin(id);
             LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
             statefulRemoteA.addCastToFilm();
@@ -66,7 +66,7 @@ public class Ejb3StatefulB implements StatefulRemoteB{
     	LOG.info("[{}] getCountryOfOrigin invoked with id [{}]: ", SERVER_B, id);
 		String countryOfOriginFromA = "";
         try {
-        	StatefulRemoteA statefulRemoteA = (StatefulRemoteA) beanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP);
+        	StatefulRemoteA statefulRemoteA = (StatefulRemoteA) ejb3xBeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP);
             countryOfOriginFromA = statefulRemoteA.getCountryOfOrigin(id);
             LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
             statefulRemoteA.addCastToFilm();
@@ -82,7 +82,7 @@ public class Ejb3StatefulB implements StatefulRemoteB{
 	public void createCast(long id) throws Exception {
     	LOG.info("[{}] createCast invoked with id [{}]", SERVER_B, id);
         try {
-        	StatefulRemoteA statefulRemoteA = (StatefulRemoteA) beanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP);
+        	StatefulRemoteA statefulRemoteA = (StatefulRemoteA) ejb3xBeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP);
         	statefulRemoteA.addCastToFilm();
         } catch (Exception e) {
             LOG.error("Exception occurred rolling back transaction, error message [{}]", e.getMessage());

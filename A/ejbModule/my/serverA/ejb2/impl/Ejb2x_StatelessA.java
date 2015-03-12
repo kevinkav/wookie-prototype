@@ -31,10 +31,10 @@ import org.slf4j.LoggerFactory;
 @Local(TestCase.class)
 @RemoteHome(StatelessRemoteHomeA.class)
 @EJB(name = StatelessRemoteObjectA.IIOP_BINDING, beanInterface = StatelessRemoteObjectA.class)
-public class Ejb2StatelessA extends EjbBaseA {
+public class Ejb2x_StatelessA extends EjbBaseA {
 
     private static final String EJB2_ADDRESS = "corbaname:iiop:localhost:3628#" + StatelessRemoteObjectB.IIOP_BINDING;
-    private static final Logger LOG = LoggerFactory.getLogger(Ejb2StatelessA.class);    
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb2x_StatelessA.class);    
     private Ejb2xBeanLocator ejb2xBeanLocator = null;
     
 
