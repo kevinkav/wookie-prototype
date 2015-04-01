@@ -17,7 +17,8 @@
 	</dependencies>
 	
 	<build>
-		<finalName>jsf-web-client-a</finalName>
+		<!-- <finalName>jsf-web-client-a</finalName> -->
+		<finalName>JSFClient</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
