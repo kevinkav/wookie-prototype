@@ -83,7 +83,6 @@
 				<version>2.4</version>
 				<configuration>
 					<ejbVersion>3.0</ejbVersion>
-					<jarName>${project.artifactId}</jarName>
 				</configuration>
 			</plugin>
 			<plugin>
