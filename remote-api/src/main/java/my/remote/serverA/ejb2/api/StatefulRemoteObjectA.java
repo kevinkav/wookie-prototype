@@ -20,7 +20,7 @@ public interface StatefulRemoteObjectA extends EJBObject {
     /**
      * String used to bind Ejb2StatefullA bean to a IIOP naming service name.
      */
-    public static String IIOP_BINDING = "jts/Ejb2StatefulA";
+    public static String IIOP_BINDING = "jts/Ejb2x_StatefulA";
      
     /**
      * Gets the CountryOfOrigin attribute from the Film object.

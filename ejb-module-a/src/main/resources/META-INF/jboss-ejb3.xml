@@ -14,8 +14,8 @@
              <iiop:binding-name>jts/Ejb2x_StatelessA</iiop:binding-name>
         </iiop:iiop>  
         <iiop:iiop>
-             <ejb-name>Ejb2x_StatelessB</ejb-name>
-             <iiop:binding-name>jts/Ejb2x_StatelessB</iiop:binding-name>
+             <ejb-name>Ejb2x_StatefulA</ejb-name>
+             <iiop:binding-name>jts/Ejb2x_StatefulA</iiop:binding-name>
         </iiop:iiop>
     </assembly-descriptor>
 </jboss:ejb-jar> 

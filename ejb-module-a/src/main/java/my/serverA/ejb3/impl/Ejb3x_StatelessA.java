@@ -43,9 +43,9 @@ public class Ejb3x_StatelessA extends EjbBaseA implements StatelessRemoteA {
         try {
             String localValue = setCountryOfOrigin(IRELAND);
             StatelessRemoteB ejb3StatelessRemoteB = (StatelessRemoteB) ejb3xBeanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP);
-            String remoteValue = ejb3StatelessRemoteB.getCountryOfOriginAndCreateCast(FILM_ID);
-            //String remoteValue = ejb2.getCountryOfOrigin(FILM_ID);
-            //ejb2.createCast(FILM_ID);
+            //String remoteValue = ejb3StatelessRemoteB.getCountryOfOriginAndCreateCast(FILM_ID);
+            String remoteValue = ejb3StatelessRemoteB.getCountryOfOrigin(FILM_ID);
+            ejb3StatelessRemoteB.createCast(FILM_ID);
             if (verifyCast() && verifyCountryOfOrigin(localValue, remoteValue)){
             	testResult = "Passed";
             }

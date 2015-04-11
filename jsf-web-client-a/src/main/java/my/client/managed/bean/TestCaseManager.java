@@ -24,8 +24,8 @@ public class TestCaseManager {
     @EJB(beanName="Ejb2x_StatelessA")
     TestCase ejb2x_StatelessA;
     
-/*    @EJB(beanName="Ejb2StatefulA")
-    TestCase ejb2xStatefulA;*/
+    @EJB(beanName="Ejb2x_StatefulA")
+    TestCase ejb2x_StatefulA;
     
     @EJB(beanName="Ejb3x_StatelessA")
     TestCase ejb3x_StatelessA;
@@ -231,7 +231,7 @@ public class TestCaseManager {
      * TC4 EJB2.1 Stateful 
      ******************************************** */
     
-   /* public String getTeardownResultTC4() {
+    public String getTeardownResultTC4() {
         return tc4_teardown_result;
     }
 
@@ -264,23 +264,23 @@ public class TestCaseManager {
     }
     
     public void setupTC4() {
-        tc4_info = ejb2xStatefulA.setUp();
+        tc4_info = ejb2x_StatefulA.setUp();
         tc4_setup_result = DONE;
     }
 
     public void tearDownTC4() {
-        tc4_info = ejb2xStatefulA.tearDown();
+        tc4_info = ejb2x_StatefulA.tearDown();
         tc4_teardown_result = DONE;
     }
 
 
     public void executeTC4() {
         try {
-        	tc4_test_result = ejb2xStatefulA.runTest();
+        	tc4_test_result = ejb2x_StatefulA.runTest();
             tc4_info = EXECUTED_MSG;
         } catch (Exception e) {
             tc4_info = "[" + e.getMessage() + "]";
             tc4_test_result = FAILED;
         }
-    }*/
+    }
 }

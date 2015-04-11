@@ -9,13 +9,14 @@
                version="3.1"
                impl-version="2.0">
     <assembly-descriptor>
-    	<iiop:iiop>
-             <ejb-name>Ejb2x_StatelessA</ejb-name>
-             <iiop:binding-name>jts/Ejb2x_StatelessA</iiop:binding-name>
-        </iiop:iiop>
         <iiop:iiop>
              <ejb-name>Ejb2x_StatelessB</ejb-name>
              <iiop:binding-name>jts/Ejb2x_StatelessB</iiop:binding-name>
         </iiop:iiop>
+        <iiop:iiop>
+             <ejb-name>Ejb2x_StatefulB</ejb-name>
+             <iiop:binding-name>jts/Ejb2x_StatefulB</iiop:binding-name>
+        </iiop:iiop>
+
     </assembly-descriptor>
 </jboss:ejb-jar> 

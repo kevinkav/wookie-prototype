@@ -9,16 +9,7 @@ public interface StatefulRemoteObjectB extends EJBObject {
     /**
      * String used to bind Ejb2StatelessB bean to a IIOP naming service name.
      */
-    public static String IIOP_BINDING = "jts/Ejb2StatefulB";
-    
-    /**
-     * Gets the CountryOfOrigin attribute and creates Cast object.
-     * 
-     * @param id
-     * @return
-     * @throws RemoteException
-     */
-    String getCountryOfOriginAndCreateCast(long id) throws RemoteException;
+    public static String IIOP_BINDING = "jts/Ejb2x_StatefulB";
     
     /**
      * Gets the CountryOfOrigin attribute.

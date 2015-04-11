@@ -10,7 +10,7 @@ public interface StatefulRemoteA {
     /**
      * JNDI used for lookup 
      */
-    String JNDI_LOOKUP = "ejb:Ear1/A/Ejb3x_StatefulA!my.remote.serverA.ejb3.api.StatefulRemoteA?stateful";
+    String JNDI_LOOKUP = "ejb:ear-module-a-1.0-SNAPSHOT/ejb-module-a-1.0-SNAPSHOT/Ejb3x_StatefulA!my.remote.serverA.ejb3.api.StatefulRemoteA?stateful";
 
     
     /**

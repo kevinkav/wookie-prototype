@@ -1,3 +1,14 @@
+/*------------------------------------------------------------------------------
+ *******************************************************************************
+ * COPYRIGHT Ericsson 2012
+ *
+ * The copyright to the computer program(s) herein is the property of
+ * Ericsson Inc. The programs may be used and/or copied only with written
+ * permission from Ericsson Inc. or in accordance with the terms and
+ * conditions stipulated in the agreement/contract under which the
+ * program(s) have been supplied.
+ *******************************************************************************
+ *----------------------------------------------------------------------------*/
 package my.serverA.ejb2.impl;
 
 import static my.remote.common.Constants.SERVER_A;
@@ -6,46 +17,42 @@ import static my.serverA.common.Constants.IRELAND;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.Init;
 import javax.ejb.Local;
 import javax.ejb.RemoteHome;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.naming.NamingException;
 
 import my.remote.bean.locator.Ejb2xBeanLocator;
-import my.remote.serverA.ejb2.api.StatelessRemoteHomeA;
-import my.remote.serverA.ejb2.api.StatelessRemoteObjectA;
-import my.remote.serverB.ejb2.api.StatelessRemoteObjectB;
+import my.remote.serverA.ejb2.api.StatefulRemoteHomeA;
+import my.remote.serverA.ejb2.api.StatefulRemoteObjectA;
+import my.remote.serverB.ejb2.api.StatefulRemoteObjectB;
 import my.serverA.common.EjbBaseA;
 import my.test.api.TestCase;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-/**
- * EJB2.x Stateless Session Bean
- */
-@Stateless
+@Stateful
 @Local(TestCase.class)
-@RemoteHome(StatelessRemoteHomeA.class)
-@EJB(name = StatelessRemoteObjectA.IIOP_BINDING, beanInterface = StatelessRemoteObjectA.class)
-public class Ejb2x_StatelessA extends EjbBaseA {
+@RemoteHome(StatefulRemoteHomeA.class)
+@EJB(name = StatefulRemoteObjectA.IIOP_BINDING, beanInterface = StatefulRemoteObjectA.class)
+public class Ejb2x_StatefulA extends EjbBaseA{
 
-    private static final String EJB2x_STATELESS_ADDRESS = "corbaname:iiop:localhost:3628#" + StatelessRemoteObjectB.IIOP_BINDING;
-    private static final Logger LOG = LoggerFactory.getLogger(Ejb2x_StatelessA.class);    
+    private static final String EJB2X_STATEFUL_ADDRESS = "corbaname:iiop:localhost:3628#" + StatefulRemoteObjectB.IIOP_BINDING;
+    private static final Logger LOG = LoggerFactory.getLogger(Ejb2x_StatefulA.class);    
     private Ejb2xBeanLocator ejb2xBeanLocator = null;
-    
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public String runTest() throws Exception {
-    	LOG.info("[{}] running test", SERVER_A);
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public String runTest() throws Exception {
+		LOG.info("[{}] running test", SERVER_A);
     	String testResult = "failed";
         try{
             String localValue = setCountryOfOrigin(IRELAND);
             createBeanFinder();
-            StatelessRemoteObjectB ejb2StatelessB = ejb2xBeanLocator.getStatelessRemoteObjectB(EJB2x_STATELESS_ADDRESS);
+            StatefulRemoteObjectB ejb2StatelessB = ejb2xBeanLocator.getStatefulRemoteObjectB(EJB2X_STATEFUL_ADDRESS);
             //String remoteValue = ejb2StatelessB.getCountryOfOriginAndCreateCast(FILM_ID);
             String remoteValue = ejb2StatelessB.getCountryOfOrigin(FILM_ID);
             ejb2StatelessB.createCast(FILM_ID); 
@@ -58,9 +65,8 @@ public class Ejb2x_StatelessA extends EjbBaseA {
         }
         LOG.info("[{}] commiting transaction", SERVER_A);
         return testResult;
-    }
-
-
+	}
+	
     /*
      * Getter method to aid junit testing.
      */
@@ -69,13 +75,14 @@ public class Ejb2x_StatelessA extends EjbBaseA {
     		ejb2xBeanLocator = new Ejb2xBeanLocator();
     	}
     }
-
-
+    
     @PostConstruct
     private void startup(){
     	LOG.info("[{}] created", SERVER_A);
     }
+    
+    @Init
+    public void init(){	
+    }
 
 }
-
-

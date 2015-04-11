@@ -91,7 +91,8 @@ public class Ejb2x_StatelessATest {
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
 		when(mockEjb2BeanLocator.getStatelessRemoteObjectB(EJB2_ADDRESS)).thenReturn(mockmockRemoteObjectB);
 		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
-		when(mockmockRemoteObjectB.getCountryOfOriginAndCreateCast(1l)).thenReturn(IRELAND);
+		//when(mockmockRemoteObjectB.getCountryOfOriginAndCreateCast(1l)).thenReturn(IRELAND);
+		when(mockmockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
 		when(mockFilm.getCast()).thenReturn(mockCast);
 		when(mockCast.getLeadActor()).thenReturn(HARRISON_FORD);
 		when(mockCast.getId()).thenReturn(CAST_ID);
@@ -99,9 +100,9 @@ public class Ejb2x_StatelessATest {
 		String testResult = ejb_2x.runTest();
 
 		Assert.assertEquals("Expected a pass message!", "Passed", testResult);
-		//verify(mockEjb2, times(1)).createCast(FILM_ID);
-		//verify(mockFilm, times(2)).getCountryOfOrigin();
-		verify(mockmockRemoteObjectB, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
+		//verify(mockmockRemoteObjectB, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
+		verify(mockmockRemoteObjectB, times(1)).getCountryOfOrigin(FILM_ID);
+		verify(mockmockRemoteObjectB, times(1)).createCast(FILM_ID);
 		verify(mockEjb2BeanLocator).getStatelessRemoteObjectB(EJB2_ADDRESS);
 		verify(mockCast).getId();
 		verify(mockCast).getLeadActor();
