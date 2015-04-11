@@ -52,18 +52,10 @@ public class Ejb2x_StatefulB {
     @Inject
     private Ejb2xBeanLocator ejb2xBeanLocator;
     
-    public String getCountryOfOriginAndCreateCast(long id) throws RemoteException {
+    public String getCountryOfOriginAndCreateCast(long id) throws RemoteException, NamingException, CreateException {
     	LOG.info("[{}] getCountryOfOriginAndCreateCast invoked with id [{}]: ", SERVER_B, id);
     	StatefulRemoteObjectA ejb2StatefulA = null;
-		try {
-			ejb2StatefulA = (StatefulRemoteObjectA) ejb2xBeanLocator.getStatefulRemoteObjectA((REMOTE_OBJECT_ADDRESS));
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CreateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ejb2StatefulA = (StatefulRemoteObjectA) ejb2xBeanLocator.getStatefulRemoteObjectA((REMOTE_OBJECT_ADDRESS));
     	String countryOfOriginFromA = ejb2StatefulA.getCountryOfOrigin(id);
         LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
         ejb2StatefulA.addCastToFilm();
