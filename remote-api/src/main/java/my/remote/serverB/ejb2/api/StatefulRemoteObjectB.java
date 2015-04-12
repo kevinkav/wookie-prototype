@@ -12,19 +12,21 @@ public interface StatefulRemoteObjectB extends EJBObject {
     public static String IIOP_BINDING = "jts/Ejb2x_StatefulB";
     
     /**
-     * Gets the CountryOfOrigin attribute.
+     * Gets the countryOfOrigin attribute.
      * 
      * @param id
+     * @param portOffsetServerA
      * @return
      * @throws RemoteException
      */
-    String getCountryOfOrigin(long id) throws RemoteException;
+    String getCountryOfOrigin(long id, int portOffsetServerA) throws RemoteException;
     
     /**
      * Creates a Cast object associated with a film.
      * 
      * @param id
+     * @param portOffsetServerA
      * @throws RemoteException
      */
-    void createCast(long id) throws RemoteException;
+    void createCast(long id, int portOffsetServerA) throws RemoteException;
 }

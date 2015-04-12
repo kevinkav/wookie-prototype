@@ -92,19 +92,17 @@ public class Ejb2x_StatefulATest {
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
 		when(mockEjb2BeanLocator.getStatefulRemoteObjectB(EJB2_ADDRESS)).thenReturn(mockRemoteObjectB);
-		when(mockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
-		//when(mockmockRemoteObjectB.getCountryOfOriginAndCreateCast(1l)).thenReturn(IRELAND);
-		when(mockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockRemoteObjectB.getCountryOfOrigin(1l, 0)).thenReturn(IRELAND);
+		when(mockRemoteObjectB.getCountryOfOrigin(1l, 0)).thenReturn(IRELAND);
 		when(mockFilm.getCast()).thenReturn(mockCast);
 		when(mockCast.getLeadActor()).thenReturn(HARRISON_FORD);
 		when(mockCast.getId()).thenReturn(CAST_ID);
 
-		String testResult = ejb_2x.runTest();
+		String testResult = ejb_2x.runTest(0, 100);
 
 		Assert.assertEquals("Expected a pass message!", "Passed", testResult);
-		//verify(mockmockRemoteObjectB, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
-		verify(mockRemoteObjectB, times(1)).getCountryOfOrigin(FILM_ID);
-		verify(mockRemoteObjectB, times(1)).createCast(FILM_ID);
+		verify(mockRemoteObjectB, times(1)).getCountryOfOrigin(FILM_ID, 0);
+		verify(mockRemoteObjectB, times(1)).createCast(FILM_ID, 0);
 		verify(mockEjb2BeanLocator).getStatefulRemoteObjectB(EJB2_ADDRESS);
 		verify(mockCast).getId();
 		verify(mockCast).getLeadActor();
@@ -117,9 +115,9 @@ public class Ejb2x_StatefulATest {
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
 		when(mockEjb2BeanLocator.getStatefulRemoteObjectB(EJB2_ADDRESS)).thenThrow(new NamingException());
-		when(mockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockRemoteObjectB.getCountryOfOrigin(1l, 100)).thenReturn(IRELAND);
 
-		ejb_2x.runTest();
+		ejb_2x.runTest(0, 100);
 	}
 	
 	@Test (expected = CreateException.class)
@@ -128,9 +126,9 @@ public class Ejb2x_StatefulATest {
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
 		when(mockEjb2BeanLocator.getStatefulRemoteObjectB(EJB2_ADDRESS)).thenThrow(new CreateException());
-		when(mockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockRemoteObjectB.getCountryOfOrigin(1l, 100)).thenReturn(IRELAND);
 
-		ejb_2x.runTest();
+		ejb_2x.runTest(0, 100);
 	}
 	
 	@Test (expected = RemoteException.class)
@@ -139,9 +137,9 @@ public class Ejb2x_StatefulATest {
 		when(mockEm.find(any(Class.class), any(Object.class))).thenReturn(mockFilm);
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
 		when(mockEjb2BeanLocator.getStatefulRemoteObjectB(EJB2_ADDRESS)).thenThrow(new RemoteException());
-		when(mockRemoteObjectB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
+		when(mockRemoteObjectB.getCountryOfOrigin(1l, 100)).thenReturn(IRELAND);
 
-		ejb_2x.runTest();
+		ejb_2x.runTest(0, 100);
 	}
 
 	@Test

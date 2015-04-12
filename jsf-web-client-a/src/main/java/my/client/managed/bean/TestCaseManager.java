@@ -14,7 +14,7 @@ package my.client.managed.bean;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 
-import my.test.api.TestCase;
+import my.test.api.TestCaseLocal;
 
 
 
@@ -22,16 +22,19 @@ import my.test.api.TestCase;
 public class TestCaseManager {
 
     @EJB(beanName="Ejb2x_StatelessA")
-    TestCase ejb2x_StatelessA;
+    TestCaseLocal ejb2x_StatelessA;
     
     @EJB(beanName="Ejb2x_StatefulA")
-    TestCase ejb2x_StatefulA;
+    TestCaseLocal ejb2x_StatefulA;
     
     @EJB(beanName="Ejb3x_StatelessA")
-    TestCase ejb3x_StatelessA;
+    TestCaseLocal ejb3x_StatelessA;
     
     @EJB(beanName="Ejb3x_StatefulA")
-    TestCase ejb3x_StatefulA;
+    TestCaseLocal ejb3x_StatefulA;
+    
+    private static final int PORT_OFFSET_SERVER_A = 0;
+    private static final int PORT_OFFSET_SERVER_B = 100;
 
     private static final String EXECUTED_MSG = "[Executed Test]";
     private static final String DONE = "Done";
@@ -106,7 +109,7 @@ public class TestCaseManager {
 
     public void executeTC1() {
         try {
-        	tc1_test_result = ejb3x_StatelessA.runTest();
+        	tc1_test_result = ejb3x_StatelessA.runTest(PORT_OFFSET_SERVER_A, PORT_OFFSET_SERVER_B);
             tc1_info = EXECUTED_MSG;
         } catch (Exception e) {
             tc1_info =  "[" + e.getMessage() + "]";
@@ -162,7 +165,7 @@ public class TestCaseManager {
 
     public void executeTC2() {
         try {
-        	tc2_test_result = ejb3x_StatefulA.runTest();
+        	tc2_test_result = ejb3x_StatefulA.runTest(PORT_OFFSET_SERVER_A, PORT_OFFSET_SERVER_B);
             tc2_info = EXECUTED_MSG;
         } catch (Exception e) {
             tc2_info = "[" + e.getMessage() + "]";
@@ -219,7 +222,7 @@ public class TestCaseManager {
 
     public void executeTC3() {
         try {
-        	tc3_test_result = ejb2x_StatelessA.runTest();
+        	tc3_test_result = ejb2x_StatelessA.runTest(PORT_OFFSET_SERVER_A, PORT_OFFSET_SERVER_B);
             tc3_info = EXECUTED_MSG;
         } catch (Exception e) {
             tc3_info = "[" + e.getMessage() + "]";
@@ -276,7 +279,7 @@ public class TestCaseManager {
 
     public void executeTC4() {
         try {
-        	tc4_test_result = ejb2x_StatefulA.runTest();
+        	tc4_test_result = ejb2x_StatefulA.runTest(PORT_OFFSET_SERVER_A, PORT_OFFSET_SERVER_B);
             tc4_info = EXECUTED_MSG;
         } catch (Exception e) {
             tc4_info = "[" + e.getMessage() + "]";

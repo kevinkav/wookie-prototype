@@ -82,7 +82,7 @@ public class Ejb3x_StatelessATest {
 		when(mockCast.getId()).thenReturn(CAST_ID);
 		//when(mockStatelessRemoteB.getCountryOfOriginAndCreateCast(FILM_ID)).thenReturn(IRELAND);
 		when(mockStatelessRemoteB.getCountryOfOrigin(FILM_ID)).thenReturn(IRELAND);
-		String testResult = ejb3StatelessA.runTest();	// execute test
+		String testResult = ejb3StatelessA.runTest(0, 100);	// execute test
 		Assert.assertEquals("Expected a pass message!", "Passed", testResult);
 		//verify(mockStatelessRemoteB, times(1)).getCountryOfOriginAndCreateCast(FILM_ID);
 		verify(mockStatelessRemoteB, times(1)).getCountryOfOrigin(FILM_ID);
@@ -98,7 +98,7 @@ public class Ejb3x_StatelessATest {
 		when(mockFilm.getCountryOfOrigin()).thenReturn(IRELAND);
 		when(mockBeanLocator.locateBean(StatelessRemoteB.JNDI_LOOKUP)).thenThrow(new NamingException());
 		when(mockStatelessRemoteB.getCountryOfOrigin(1l)).thenReturn(IRELAND);
-		ejb3StatelessA.runTest();
+		ejb3StatelessA.runTest(0, 100);
 	}
 	
 

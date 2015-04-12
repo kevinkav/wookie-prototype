@@ -11,8 +11,8 @@
  *----------------------------------------------------------------------------*/
 package my.serverB.ejb3.impl;
 
-import static my.remote.common.Constants.SERVER_A;
-import static my.remote.common.Constants.SERVER_B;
+import static my.remote.common.RemoteConstants.SERVER_A;
+import static my.remote.common.RemoteConstants.SERVER_B;
 
 import javax.ejb.EJB;
 import javax.ejb.Remote;

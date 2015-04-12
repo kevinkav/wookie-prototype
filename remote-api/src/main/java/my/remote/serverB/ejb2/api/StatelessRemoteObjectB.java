@@ -15,16 +15,18 @@ public interface StatelessRemoteObjectB extends EJBObject{
      * Gets the CountryOfOrigin attribute.
      * 
      * @param id
+     * @param portOffsetSeverA
      * @return
      * @throws RemoteException
      */
-    String getCountryOfOrigin(long id) throws RemoteException;
+    String getCountryOfOrigin(long id, int portOffsetSeverA) throws RemoteException;
     
     /**
      * Creates a Cast object associated with a film.
      * 
      * @param id
+     * @param portOffsetSeverA
      * @throws RemoteException
      */
-    void createCast(long id) throws RemoteException;
+    void createCast(long id, int portOffsetSeverA) throws RemoteException;
 }

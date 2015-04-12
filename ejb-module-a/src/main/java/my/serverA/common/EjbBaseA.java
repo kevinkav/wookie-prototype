@@ -1,6 +1,6 @@
 package my.serverA.common;
 
-import static my.remote.common.Constants.SERVER_A;
+import static my.remote.common.RemoteConstants.SERVER_A;
 import static my.serverA.common.Constants.CAST_ID;
 import static my.serverA.common.Constants.FILM_ID;
 import static my.serverA.common.Constants.GEORGE_LUCAS;
@@ -21,13 +21,14 @@ import javax.persistence.Query;
 
 import my.database.entity.Cast;
 import my.database.entity.Film;
-import my.test.api.TestCase;
+import my.test.api.TestCaseLocal;
+import my.test.api.TestCaseRemote;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public abstract class EjbBaseA implements TestCase{
+public abstract class EjbBaseA implements TestCaseLocal, TestCaseRemote{
 
     private static final Logger LOG = LoggerFactory.getLogger(EjbBaseA.class);  
     
@@ -69,9 +70,8 @@ public abstract class EjbBaseA implements TestCase{
         return sb.toString();
     }
     
-
     @Override
-    public abstract String runTest() throws Exception;
+    public abstract String runTest(int portOffsetServerA, int portOffsetServerB) throws Exception;
     
     /**
      * Method thats called from server-B to get the current
