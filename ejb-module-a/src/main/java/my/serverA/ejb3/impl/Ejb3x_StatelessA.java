@@ -60,6 +60,6 @@ public class Ejb3x_StatelessA extends EjbBaseA implements StatelessRemoteA {
     
     @PostConstruct
     private void startup(){
-        LOG.info("[{}] created", SERVER_A);
+        LOG.info("[{}] instantiated", SERVER_A);
     }
 }

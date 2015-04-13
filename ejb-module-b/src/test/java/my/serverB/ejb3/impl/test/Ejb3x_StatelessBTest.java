@@ -57,44 +57,6 @@ public class Ejb3x_StatelessBTest {
 	}
 
 	@Test
-	public void testGetCountryOfOriginAndCreateCast() throws Exception {
-		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenReturn(mockStatelessRemoteA);
-		when(mockStatelessRemoteA.getCountryOfOrigin(1L)).thenReturn(IRELAND);
-		String result = mockEjb3StatelessB.getCountryOfOriginAndCreateCast(1L);
-		Assert.assertEquals("Expected to get value Ireland", IRELAND, result);
-		verify(mockStatelessRemoteA).getCountryOfOrigin(1L);
-		verify(mockStatelessRemoteA).addCastToFilm();
-		verify(mockEjb3BeanLocator).locateBean(StatelessRemoteA.JNDI_LOOKUP);
-	}
-
-	@Test (expected = NamingException.class)
-	public void testGetCountryOfOriginAndCreateCast_Locator_NamingException() throws Exception {
-		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenThrow(new NamingException("Naming error"));
-		try{
-			mockEjb3StatelessB.getCountryOfOriginAndCreateCast(1L);
-		}catch(Exception ex){
-			verify(mockStatelessRemoteA, never()).getCountryOfOrigin(1L);
-			verify(mockStatelessRemoteA, never()).addCastToFilm();
-			verify(mockEjb3BeanLocator).locateBean(StatelessRemoteA.JNDI_LOOKUP);
-			throw ex;
-		}
-	}
-
-	@Test (expected = RemoteException.class)
-	public void testGetCountryOfOriginAndCreateCast_StatelessRemoteA_RemoteException() throws Exception {
-		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenReturn(mockStatelessRemoteA);
-		when(mockStatelessRemoteA.getCountryOfOrigin(1L)).thenThrow(new RemoteException("Remote error"));
-		try{
-			mockEjb3StatelessB.getCountryOfOriginAndCreateCast(1L);
-		}catch(Exception ex){
-			verify(mockStatelessRemoteA).getCountryOfOrigin(1L);
-			verify(mockStatelessRemoteA, never()).addCastToFilm();
-			verify(mockEjb3BeanLocator).locateBean(StatelessRemoteA.JNDI_LOOKUP);
-			throw ex;
-		}
-	}
-
-	@Test
 	public void testGetCountryOfOrigin() throws Exception {
 		when(mockEjb3BeanLocator.locateBean(StatelessRemoteA.JNDI_LOOKUP)).thenReturn(mockStatelessRemoteA);
 		when(mockStatelessRemoteA.getCountryOfOrigin(1L)).thenReturn(IRELAND);

@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 @EJB(name = StatelessRemoteObjectA.IIOP_BINDING, beanInterface = StatelessRemoteObjectA.class)
 public class Ejb2x_StatelessA extends EjbBaseA {
 
-    //private static final String EJB2x_STATELESS_ADDRESS = "corbaname:iiop:localhost:3628#" + StatelessRemoteObjectB.IIOP_BINDING;
     private static final Logger LOG = LoggerFactory.getLogger(Ejb2x_StatelessA.class);    
     private Ejb2xBeanLocator ejb2xBeanLocator = null;
     
@@ -57,7 +56,8 @@ public class Ejb2x_StatelessA extends EjbBaseA {
             	testResult = "Passed";
             }
         }catch (Exception e){
-            LOG.error("Exception occurred rolling back transaction - exception msg [{}]", e.getMessage());
+        	LOG.error("[{}] occurred so rolling back transaction - exception msg [{}]", 
+        			e.getClass().getSimpleName(), e.getMessage());
             throw e;
         }
         LOG.info("[{}] commiting transaction", SERVER_A);
@@ -76,8 +76,8 @@ public class Ejb2x_StatelessA extends EjbBaseA {
 
 
     @PostConstruct
-    private void startup(){
-    	LOG.info("[{}] created", SERVER_A);
+    private void startUp(){
+    	LOG.info("[{}] instantiated", SERVER_A);
     }
 
 }

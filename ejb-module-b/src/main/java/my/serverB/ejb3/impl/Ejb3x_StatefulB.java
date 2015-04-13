@@ -45,23 +45,6 @@ public class Ejb3x_StatefulB implements StatefulRemoteB{
 
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
 	@Override
-	public String getCountryOfOriginAndCreateCast(long id) throws Exception {
-    	LOG.info("Called with id: " + id);
-        String countryOfOriginFromA = "";
-        try {
-        	StatefulRemoteA statefulRemoteA = (StatefulRemoteA) ejb3xBeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP);
-            countryOfOriginFromA = statefulRemoteA.getCountryOfOrigin(id);
-            LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
-            statefulRemoteA.addCastToFilm();
-        } catch (Exception e) {
-        	LOG.error("Exception occurred rolling back transaction, error message [{}]", e.getMessage());
-            throw e;
-        }
-        return countryOfOriginFromA;
-	}
-
-    @TransactionAttribute(TransactionAttributeType.MANDATORY)
-	@Override
 	public String getCountryOfOrigin(long id) throws Exception {
     	LOG.info("[{}] getCountryOfOrigin invoked with id [{}]: ", SERVER_B, id);
 		String countryOfOriginFromA = "";
@@ -71,7 +54,8 @@ public class Ejb3x_StatefulB implements StatefulRemoteB{
             LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
             statefulRemoteA.addCastToFilm();
         } catch (Exception e) {
-        	LOG.error("Exception occurred rolling back transaction, error message [{}]", e.getMessage());
+        	LOG.error("[{}] occurred so rolling back transaction - exception msg [{}]", 
+        			e.getClass().getSimpleName(), e.getMessage());
             throw e;
         }
         return countryOfOriginFromA;
@@ -85,7 +69,8 @@ public class Ejb3x_StatefulB implements StatefulRemoteB{
         	StatefulRemoteA statefulRemoteA = (StatefulRemoteA) ejb3xBeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP);
         	statefulRemoteA.addCastToFilm();
         } catch (Exception e) {
-            LOG.error("Exception occurred rolling back transaction, error message [{}]", e.getMessage());
+        	LOG.error("[{}] occurred so rolling back transaction - exception msg [{}]", 
+        			e.getClass().getSimpleName(), e.getMessage());
             throw e;
         }
 	}

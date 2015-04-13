@@ -57,46 +57,7 @@ public class Ejb3x_StatefulBTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-	
-	@Test
-	public void testGetCountryOfOriginAndCreateCast() throws Exception {
-		when(mockEjb3BeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP)).thenReturn(mockStatefulRemoteA);
-		when(mockStatefulRemoteA.getCountryOfOrigin(1L)).thenReturn(IRELAND);
-		String result = mockEjb3StatefulB.getCountryOfOriginAndCreateCast(1L);
-		Assert.assertEquals("Expected to get value Ireland", IRELAND, result);
-		verify(mockStatefulRemoteA).getCountryOfOrigin(1L);
-		verify(mockStatefulRemoteA).addCastToFilm();
-		verify(mockEjb3BeanLocator).locateBean(StatefulRemoteA.JNDI_LOOKUP);
-	}
-
-	@Test (expected = NamingException.class)
-	public void testGetCountryOfOriginAndCreateCast_Locator_NamingException() throws Exception {
-		when(mockEjb3BeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP)).thenThrow(new NamingException("Naming error"));
-		try{
-			mockEjb3StatefulB.getCountryOfOriginAndCreateCast(1L);
-		}catch(Exception ex){
-			verify(mockStatefulRemoteA, never()).getCountryOfOrigin(1L);
-			verify(mockStatefulRemoteA, never()).addCastToFilm();
-			verify(mockEjb3BeanLocator).locateBean(StatefulRemoteA.JNDI_LOOKUP);
-			throw ex;
-		}
-	}
-	
-	@Test (expected = RemoteException.class)
-	public void testGetCountryOfOriginAndCreateCast_StatefulRemoteA_RemoteException() throws Exception {
-		when(mockEjb3BeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP)).thenReturn(mockStatefulRemoteA);
-		when(mockStatefulRemoteA.getCountryOfOrigin(1L)).thenThrow(new RemoteException("Remote error"));
-		try{
-			mockEjb3StatefulB.getCountryOfOriginAndCreateCast(1L);
-		}catch(Exception ex){
-			verify(mockStatefulRemoteA).getCountryOfOrigin(1L);
-			verify(mockStatefulRemoteA, never()).addCastToFilm();
-			verify(mockEjb3BeanLocator).locateBean(StatefulRemoteA.JNDI_LOOKUP);
-			throw ex;
-		}
-	}
-	
-	
+		
 	@Test
 	public void testGetCountryOfOrigin() throws Exception {
 		when(mockEjb3BeanLocator.locateBean(StatefulRemoteA.JNDI_LOOKUP)).thenReturn(mockStatefulRemoteA);
