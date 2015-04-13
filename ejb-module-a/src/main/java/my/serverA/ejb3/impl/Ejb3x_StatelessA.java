@@ -50,7 +50,8 @@ public class Ejb3x_StatelessA extends EjbBaseA implements StatelessRemoteA {
             	testResult = "Passed";
             }
         } catch (Exception e) {
-        	LOG.error("Exception occurred rolling back transaction - exception msg [{}]", e.getMessage());
+        	LOG.error("[{}] occurred so rolling back transaction - exception msg [{}]", 
+        			e.getClass().getSimpleName(), e.getMessage());
             throw e;
         }
         LOG.info("[{}] Commiting transaction", SERVER_A);

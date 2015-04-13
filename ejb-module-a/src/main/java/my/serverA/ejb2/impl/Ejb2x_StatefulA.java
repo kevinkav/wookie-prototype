@@ -52,7 +52,7 @@ public class Ejb2x_StatefulA extends EjbBaseA{
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public String runTest(int portOffsetServerA, int portOffsetServerB) throws Exception {
 		LOG.info("[{}] running test", SERVER_A);
-    	String testResult = "failed";
+    	String testResult = "Failed";
         try{
             String localValue = setCountryOfOrigin(IRELAND);
             createBeanFinder();
