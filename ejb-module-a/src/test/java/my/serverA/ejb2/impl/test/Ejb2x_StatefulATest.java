@@ -22,9 +22,7 @@ import my.database.entity.Cast;
 import my.database.entity.Film;
 import my.remote.bean.locator.Ejb2xBeanLocator;
 import my.remote.serverB.ejb2.api.StatefulRemoteObjectB;
-import my.remote.serverB.ejb2.api.StatelessRemoteObjectB;
 import my.serverA.ejb2.impl.Ejb2x_StatefulA;
-import my.serverA.ejb2.impl.Ejb2x_StatelessA;
 
 import org.junit.After;
 import org.junit.Assert;

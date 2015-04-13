@@ -12,7 +12,6 @@
 package my.serverA.ejb2.impl;
 
 import static my.remote.common.RemoteConstants.SERVER_A;
-import static my.remote.common.RemoteConstants.SERVER_B;
 import static my.serverA.common.Constants.FILM_ID;
 import static my.serverA.common.Constants.IRELAND;
 
@@ -46,7 +45,6 @@ import org.slf4j.LoggerFactory;
 @EJB(name = StatefulRemoteObjectA.IIOP_BINDING, beanInterface = StatefulRemoteObjectA.class)
 public class Ejb2x_StatefulA extends EjbBaseA{
 
-    //private static final String EJB2X_STATEFUL_ADDRESS = "corbaname:iiop:localhost:3628#" + StatefulRemoteObjectB.IIOP_BINDING;
     private static final Logger LOG = LoggerFactory.getLogger(Ejb2x_StatefulA.class);    
     private Ejb2xBeanLocator ejb2xBeanLocator = null;
 	
