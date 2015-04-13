@@ -56,8 +56,7 @@ public class Ejb2x_StatelessA extends EjbBaseA {
             	testResult = "Passed";
             }
         }catch (Exception e){
-        	LOG.error("[{}] occurred so rolling back transaction - exception msg [{}]", 
-        			e.getClass().getSimpleName(), e.getMessage());
+        	LOG.error("[{}] [{}],  exception msg [{}]", SERVER_A, e.getClass().getCanonicalName(), e.getMessage());
             throw e;
         }
         LOG.info("[{}] commiting transaction", SERVER_A);

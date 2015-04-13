@@ -59,8 +59,7 @@ public class Ejb2x_StatelessB {
 			countryOfOriginFromA = ejb2StatelessA.getCountryOfOrigin(id);
 			LOG.info("[{}] received CountryOfOrigin value [{}] from [{}]", SERVER_B, countryOfOriginFromA, SERVER_A);
 		} catch (Exception e) {
-			LOG.error("[{}] occurred so rolling back transaction - exception msg [{}]", 
-					e.getClass().getSimpleName(), e.getMessage());
+        	LOG.error("[{}] [{}],  exception msg [{}]", SERVER_B, e.getClass().getCanonicalName(), e.getMessage());
 			throw e;
 		}
 		return countryOfOriginFromA;
@@ -74,8 +73,7 @@ public class Ejb2x_StatelessB {
 			StatelessRemoteObjectA ejb2StatelessA = (StatelessRemoteObjectA) ejb2xBeanLocator.getStatelessRemoteObjectA(address);
 			ejb2StatelessA.addCastToFilm();
 		} catch (Exception e) {
-			LOG.error("[{}] occurred so rolling back transaction - exception msg [{}]", 
-					e.getClass().getSimpleName(), e.getMessage());
+        	LOG.error("[{}] [{}],  exception msg [{}]", SERVER_B, e.getClass().getCanonicalName(), e.getMessage());
 			throw e;
 		}
 	}

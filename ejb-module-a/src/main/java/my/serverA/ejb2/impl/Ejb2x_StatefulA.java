@@ -12,6 +12,7 @@
 package my.serverA.ejb2.impl;
 
 import static my.remote.common.RemoteConstants.SERVER_A;
+import static my.remote.common.RemoteConstants.SERVER_B;
 import static my.serverA.common.Constants.FILM_ID;
 import static my.serverA.common.Constants.IRELAND;
 
@@ -64,8 +65,7 @@ public class Ejb2x_StatefulA extends EjbBaseA{
             	testResult = "Passed";
             }
         }catch (Exception e){
-        	LOG.error("[{}] occurred so rolling back transaction - exception msg [{}]", 
-        			e.getClass().getSimpleName(), e.getMessage());
+        	LOG.error("[{}] [{}],  exception msg [{}]", SERVER_A, e.getClass().getCanonicalName(), e.getMessage());
             throw e;
         }
         LOG.info("[{}] commiting transaction", SERVER_A);

@@ -36,13 +36,13 @@ import org.slf4j.LoggerFactory;
  */
 public class Ejb2xBeanLocator implements Serializable{
 
-	
+
 	private static final long serialVersionUID = -4891443888344085154L;
 
 	private static final Logger LOG = LoggerFactory.getLogger(Ejb2xBeanLocator.class);
-	
+
 	private InitialContext ctx;
-		
+
 	private PortableObjectHelper portableObjectHelper;
 
 	/**
@@ -54,7 +54,7 @@ public class Ejb2xBeanLocator implements Serializable{
 		this.portableObjectHelper = new PortableObjectHelper();
 		createInitialContext();
 	}
-	
+
 	/**
 	 * Creates the StatelessRemoteObjectA business object from the specified ejb address.
 	 * 
@@ -66,14 +66,20 @@ public class Ejb2xBeanLocator implements Serializable{
 	 */
 	public StatelessRemoteObjectA getStatelessRemoteObjectA(String ejbAddress) throws NamingException, RemoteException, CreateException{
 		LOG.info("Attempting remote lookup of [{}]", ejbAddress);
-		Object iiopObject = doLookUp(ejbAddress);
-		StatelessRemoteHomeA remoteHome = (StatelessRemoteHomeA) portableObjectHelper.narrow(iiopObject, StatelessRemoteHomeA.class);
-		StatelessRemoteObjectA remoteObjectA = (StatelessRemoteObjectA)remoteHome.create();
-		LOG.info("Successfully created StatelessRemoteObjectA.");
+		StatelessRemoteObjectA remoteObjectA = null;
+		try{
+			Object iiopObject = doLookUp(ejbAddress);
+			StatelessRemoteHomeA remoteHome = (StatelessRemoteHomeA) portableObjectHelper.narrow(iiopObject, StatelessRemoteHomeA.class);
+			remoteObjectA = (StatelessRemoteObjectA)remoteHome.create();
+			LOG.info("Successfully created StatelessRemoteObjectA.");
+		}catch (Exception e){
+			LOG.error("Exception [{}],  exception msg [{}]", e.getClass().getCanonicalName(), e.getMessage());
+			throw e;
+		}
 		return remoteObjectA;
 
 	}
-	
+
 	/**
 	 * Creates the StatefulRemoteObjectA business object from the specified ejb address.
 	 * 
@@ -85,10 +91,16 @@ public class Ejb2xBeanLocator implements Serializable{
 	 */
 	public StatefulRemoteObjectA getStatefulRemoteObjectA(String ejbAddress) throws NamingException, RemoteException, CreateException{
 		LOG.info("Attempting remote lookup of [{}]", ejbAddress);
-		Object iiopObject = doLookUp(ejbAddress);
-		StatefulRemoteHomeA remoteHome = (StatefulRemoteHomeA) portableObjectHelper.narrow(iiopObject, StatefulRemoteHomeA.class);
-		StatefulRemoteObjectA remoteObjectA = (StatefulRemoteObjectA)remoteHome.create();
-		LOG.info("Successfully created StatefulRemoteObjectA.");
+		StatefulRemoteObjectA remoteObjectA = null;
+		try{
+			Object iiopObject = doLookUp(ejbAddress);
+			StatefulRemoteHomeA remoteHome = (StatefulRemoteHomeA) portableObjectHelper.narrow(iiopObject, StatefulRemoteHomeA.class);
+			remoteObjectA = (StatefulRemoteObjectA)remoteHome.create();
+			LOG.info("Successfully created StatefulRemoteObjectA.");
+		}catch (Exception e){
+			LOG.error("Exception [{}],  exception msg [{}]", e.getClass().getCanonicalName(), e.getMessage());
+			throw e;
+		}
 		return remoteObjectA;
 
 	}
@@ -104,14 +116,20 @@ public class Ejb2xBeanLocator implements Serializable{
 	 */
 	public StatelessRemoteObjectB getStatelessRemoteObjectB(String ejbAddress) throws NamingException, RemoteException, CreateException{
 		LOG.info("Attempting remote lookup of [{}]", ejbAddress);
-		Object iiopObject = doLookUp(ejbAddress);
-		StatelessRemoteHomeB remoteHome = (StatelessRemoteHomeB) portableObjectHelper.narrow(iiopObject, StatelessRemoteHomeB.class);
-		StatelessRemoteObjectB statelessRemoteObjectB = (StatelessRemoteObjectB)remoteHome.create();
-		LOG.info("Successfully created StatelessRemoteObjectB.");
+		StatelessRemoteObjectB statelessRemoteObjectB = null;
+		try{
+			Object iiopObject = doLookUp(ejbAddress);
+			StatelessRemoteHomeB remoteHome = (StatelessRemoteHomeB) portableObjectHelper.narrow(iiopObject, StatelessRemoteHomeB.class);
+			statelessRemoteObjectB = (StatelessRemoteObjectB)remoteHome.create();
+			LOG.info("Successfully created StatelessRemoteObjectB.");
+		}catch (Exception e){
+			LOG.error("Exception [{}],  exception msg [{}]", e.getClass().getCanonicalName(), e.getMessage());
+			throw e;
+		}
 		return statelessRemoteObjectB;
 
 	}
-	
+
 	/**
 	 * Creates the StatefulRemoteObjectB business object from the specified ejb address.
 	 * 
@@ -123,21 +141,26 @@ public class Ejb2xBeanLocator implements Serializable{
 	 */
 	public StatefulRemoteObjectB getStatefulRemoteObjectB(String ejbAddress) throws NamingException, RemoteException, CreateException{
 		LOG.info("Attempting remote lookup of [{}]", ejbAddress);
-		Object iiopObject = doLookUp(ejbAddress);
-		StatefulRemoteHomeB remoteHome = (StatefulRemoteHomeB) portableObjectHelper.narrow(iiopObject, StatefulRemoteHomeB.class);
-		StatefulRemoteObjectB statelessRemoteObjectB = (StatefulRemoteObjectB)remoteHome.create();
-		LOG.info("Successfully created StatefulRemoteObjectB.");
+		StatefulRemoteObjectB statelessRemoteObjectB = null;
+		try{
+			Object iiopObject = doLookUp(ejbAddress);
+			StatefulRemoteHomeB remoteHome = (StatefulRemoteHomeB) portableObjectHelper.narrow(iiopObject, StatefulRemoteHomeB.class);
+			statelessRemoteObjectB = (StatefulRemoteObjectB)remoteHome.create();
+			LOG.info("Successfully created StatefulRemoteObjectB.");
+		}	catch (Exception e){
+			LOG.error("Exception [{}],  exception msg [{}]", e.getClass().getCanonicalName(), e.getMessage());
+			throw e;
+		}
 		return statelessRemoteObjectB;
-
 	}
-	
+
 
 
 	private Object doLookUp(String ejbAddress) throws NamingException{
 		return ctx.lookup(ejbAddress);
 	}
-	
-	
+
+
 	private void createInitialContext() throws NamingException{
 		if (ctx == null){
 			LOG.info("Creating intial context.");
@@ -145,5 +168,5 @@ public class Ejb2xBeanLocator implements Serializable{
 			LOG.info("Created intial context successfully.");
 		}
 	}
-	
+
 }
